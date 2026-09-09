@@ -1,4 +1,4 @@
-# PR Execution Roadmap
+# Modernization & Sprint Execution Roadmap
 
 **Author:** Dinakar Prasad Maurya
 **Target Role:** Mobile Lead Engineer/EM
@@ -7,7 +7,7 @@
 
 ## 1. Strategy Overview
 
-**Approach:** Documentation First, Then Code PRs
+**Approach:** Documentation First, Then Code Implementation
 
 **Why This Order?**
 1. Shows problem-solving approach before jumping to code
@@ -101,37 +101,37 @@ flowchart TD
 
 ## 3. Master Sprint & Milestone Traceability Matrix
 
-| Sprint | Target Issue | Branch Name | Title (Conventional Commit) | Closes |
+| Sprint | Target Issue | Focus Area / Workstream | Deliverables & Acceptance Focus | Closes |
 |:---|:---|:---|:---|:---:|
-| **Sprint 1** | **Infra Setup** | `feature/setup-ci-and-version-catalog` | `ci: setup automated GitHub Actions CI and Version Catalog` | *(CI Gate)* |
-| **Sprint 1** | **Issue #1** | `feature/issue-1-naming-conventions` | `refactor: fix naming conventions and clean up Hungarian notation` | - |
-| **Sprint 1** | **Issue #1** | `feature/issue-1-code-style-editorconfig` | `style: apply .editorconfig standards and clean wildcard imports` | **Closes #1** |
-| **Sprint 1** | **Issue #2** | `feature/issue-2-null-safety-assertions` | `refactor: eliminate forced !! assertions and safely handle nulls` | - |
-| **Sprint 1** | **Issue #2** | `feature/issue-2-process-death-resilience` | `fix: prevent lateinit crash on process death and handle recreation` | **Closes #2** |
-| **Sprint 1** | **Issue #3** | `feature/issue-3-forks-typo-and-runblocking` | `fix: correct forks_conut typo and remove runBlocking from main thread` | - |
-| **Sprint 1** | **Issue #3** | `feature/issue-3-viewbinding-context-leaks` | `fix: clear ViewBinding in onDestroyView and prevent Context memory leaks` | **Closes #3** |
-| **Sprint 2** | **Issue #4** | `feature/issue-4-extract-viewmodel-logic` | `refactor: extract search and data logic from Fragment to ViewModel` | **Closes #4** |
-| **Sprint 2** | **Issue #5** | `feature/issue-5-headless-kmp-data-domain` | `refactor: separate Domain entities, Repository interface, and Ktor Data layer` | **Closes #5** |
-| **Sprint 2** | **Issue #6** | `feature/issue-6-clean-architecture-hilt-udf` | `feat: implement Clean Architecture with Hilt DI and StateFlow UDF` | **Closes #6** |
-| **Sprint 3** | **Issue #7** | `feature/issue-7-viewmodel-and-network-tests` | `test: add unit tests for ViewModel, Coroutines, and Ktor MockEngine` | **Closes #7** |
-| **Sprint 3** | **Issue #8** | `feature/issue-8-compose-material3-ui` | `feat: migrate UI from XML Views to 100% Jetpack Compose & Material 3` | - |
-| **Sprint 3** | **Issue #8** | `feature/issue-8-dark-mode-keyboard-i18n` | `feat: add Dark theme, auto-keyboard dismiss, error states, and bilingual i18n` | **Closes #8** |
-| **Sprint 4** | **Issue #9** | `feature/issue-9-customtabs-and-repo-sorting` | `feat: add Chrome Custom Tabs, repository sorting, and search filters` | **Closes #9** |
-| **Sprint 4** | **Release** | `feature/release-v1.0.0` | `release: package v1.0.0 release APK and finalize architecture documentation` | *(Milestone)* |
+| **Sprint 1** | **Infra Setup** | CI & Dependency Management | Automated GitHub Actions CI, Version Catalog (`libs.versions.toml`) | *(CI Gate)* |
+| **Sprint 1** | **Issue #1** | Code Readability & Style | Fix naming conventions, clean up Hungarian notation | - |
+| **Sprint 1** | **Issue #1** | Code Formatting & Linting | Apply `.editorconfig` standards, remove wildcard imports | **Closes #1** |
+| **Sprint 1** | **Issue #2** | Null Safety Hardening | Eliminate forced `!!` assertions, implement safe unpack and guards | - |
+| **Sprint 1** | **Issue #2** | State Resilience | Prevent `lateinit` crashes on process death and handle recreation | **Closes #2** |
+| **Sprint 1** | **Issue #3** | Bug Fixes & Coroutines | Correct `forks_conut` typo, remove `runBlocking` from main thread | - |
+| **Sprint 1** | **Issue #3** | Memory Leak Prevention | Clear ViewBinding in `onDestroyView`, eliminate Context leaks | **Closes #3** |
+| **Sprint 2** | **Issue #4** | MVVM Decomposition | Extract search and data logic from Fragment to ViewModel | **Closes #4** |
+| **Sprint 2** | **Issue #5** | Architecture & Layering | Separate Domain entities, Repository interface, and Ktor Data layer | **Closes #5** |
+| **Sprint 2** | **Issue #6** | DI & Unidirectional Data Flow | Implement Clean Architecture with Hilt DI and StateFlow UDF | **Closes #6** |
+| **Sprint 3** | **Issue #7** | Automated Testing | Unit tests for ViewModel, Coroutines dispatcher, and Ktor MockEngine | **Closes #7** |
+| **Sprint 3** | **Issue #8** | Modern Declarative UI | Migrate UI from XML Views to 100% Jetpack Compose & Material 3 | - |
+| **Sprint 3** | **Issue #8** | UX Polish & Internationalization | Dark theme, auto-keyboard dismiss, empty/error states, bilingual i18n | **Closes #8** |
+| **Sprint 4** | **Issue #9** | Bonus Enhancements | Chrome Custom Tabs, repository sorting, search filter chips | **Closes #9** |
+| **Sprint 4** | **Release** | Production Packaging | Package release APK, R8 minification, native iOS sample verification | *(Milestone)* |
 
 **Total Sprints:** 4 Sprints  
-**Approach:** Atomic, single-responsibility Pull Requests  
+**Approach:** Incremental, single-responsibility Pull Requests  
 **Issues Addressed:** 9 Challenge Issues + CI Infrastructure + Production Release  
 
 ---
 
-## 4. Execution Workflow: From Feature Branch to Merged PR
+## 4. Execution Workflow: From Topic Branch to Merge
 
-Each feature branch is created from `main`, developed, verified against local quality gates, and submitted via a Pull Request:
+Each topic branch is created from `main`, developed, verified against local quality gates, and submitted for review:
 
 ```bash
 # 1. Create semantic feature branch
-git checkout -b feature/issue-1-naming-conventions main
+git checkout -b <type>/<short-description> main
 
 # 2. Implement changes, then verify quality gates
 ./gradlew detekt
@@ -139,7 +139,7 @@ git checkout -b feature/issue-1-naming-conventions main
 ./gradlew assembleDevDebug
 
 # 3. Push feature branch and open Pull Request
-git push origin feature/issue-1-naming-conventions
+git push origin <type>/<short-description>
 gh pr create --base main --fill
 ```
 
@@ -147,7 +147,7 @@ gh pr create --base main --fill
 
 ## 5. Success Criteria (Final Validation)
 
-After all PRs merged:
+After all milestones are merged:
 
 ### Code Quality
 - [ ] Zero Detekt violations
@@ -174,7 +174,7 @@ After all PRs merged:
 - [ ] Production APK built (`./gradlew assembleProdRelease`)
 - [ ] Screenshots captured (light/dark, EN/JA)
 - [ ] README updated with badges
-- [ ] All PRs have detailed descriptions
+- [ ] All deliverables have clear acceptance evidence
 
 ---
 

@@ -24,7 +24,7 @@ class RepositoryDetailFragment : Fragment(R.layout.fragment_two) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("LastSearchDate", lastSearchDate.toString())
+        Log.d("LastSearchDate", lastSearchDate?.toString() ?: "No search performed yet")
 
         _binding = FragmentTwoBinding.bind(view)
 

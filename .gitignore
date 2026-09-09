@@ -1,4 +1,9 @@
-# https://github.com/github/gitignore/blob/master/Android.gitignore
+# macOS & OS metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
 # Built application files
 *.apk
 *.aar
@@ -91,3 +96,8 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
+
+temp/
+.agents/
+.claude/
+

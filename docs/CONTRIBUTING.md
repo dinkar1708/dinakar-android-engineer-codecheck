@@ -68,39 +68,115 @@ test: add unit tests for Repository layer
 
 ---
 
-## 🔄 Development Workflow
+### 🔀 Branching Strategy: Multi-Environment Branching Model
 
-### 1. Create a Branch
+This project follows an **Enterprise Multi-Environment Git Workflow** structured around three persistent branch tiers: `dev`, `stg`, and `main`.
 
-```bash
-# Create and checkout new branch
-git checkout -b feature/your-feature-name
+### Branch Hierarchy
+
+| Branch | Environment | Purpose | Target for PRs |
+|:---|:---|:---|:---|
+| **`main`** | **Production** | Production-ready code and release milestone tags (`v1.0.0`). Only accepts PRs from `stg`. | PRs from `stg` |
+| **`stg`** | **Staging / QA** | Pre-release validation, staging builds, and E2E regression testing. | PRs from `dev` |
+| **`dev`** | **Development** | Main integration branch for active development. | PRs from topic branches (`feature/*`, `fix/*`, etc.) |
+| **Topic Branches** | **Working** | Day-to-day work branches (`feature/*`, `fix/*`, `refactor/*`, `chore/*`, `docs/*`). | Branch from `dev`, merge into `dev` |
+
+### Promotion Pipeline Diagram
+
+```
+Topic Branches
+(feature/*, fix/*, refactor/*, chore/*, docs/*)
+      │
+      └─── (PR) ───► dev (Development Integration)
+                      │
+                      └─── (Release PR) ───► stg (Staging / Pre-Release Testing)
+                                              │
+                                              └─── (Production PR) ───► main (Production Release & Tags)
 ```
 
-### 2. Make Changes
+---
 
-```bash
-# Make your changes
-# Add and commit
-git add .
-git commit -m "feat: add your feature"
-```
+## 🔄 Development Workflow (Step-by-Step Lifecycle)
 
-### 3. Push to Remote
+All code changes follow this 3-phase promotion lifecycle:
 
-```bash
-# Push branch to remote
-git push -u origin feature/your-feature-name
-```
+### Phase 1: Feature & Bugfix Development (Topic Branch → `dev`)
 
-### 4. Create Pull Request
+All day-to-day work (features, bug fixes, refactorings, tests) branches from and merges into `dev`:
 
-```bash
-# Using GitHub CLI
-gh pr create --base main --title "feat: add your feature" --body "Description of changes"
+1. **Update local `dev` branch**:
+   ```bash
+   git checkout dev
+   git pull origin dev
+   ```
 
-# Or create PR via GitHub web interface
-```
+2. **Create topic branch from `dev`**:
+   ```bash
+   git checkout -b <type>/<descriptive-name>
+   # Examples:
+   #   git checkout -b refactor/naming-conventions
+   #   git checkout -b fix/memory-leaks
+   #   git checkout -b feature/compose-ui
+   ```
+
+3. **Implement & verify locally**:
+   ```bash
+   # Verify build
+   ./gradlew clean assembleDebug
+
+   # Run tests
+   ./gradlew test
+   ```
+
+4. **Commit with Conventional Commits**:
+   ```bash
+   git add .
+   git commit -m "<type>: <concise description>"
+   ```
+
+5. **Push and create PR targeting `dev`**:
+   ```bash
+   git push -u origin <type>/<descriptive-name>
+
+   # Create PR targeting dev
+   gh pr create --base dev --title "<type>: <concise description>"
+   ```
+
+6. **Complete review checklist and merge into `dev`**.
+
+---
+
+### Phase 2: Staging Promotion (`dev` → `stg`)
+
+When a milestone or sprint of features in `dev` is ready for pre-release validation:
+
+1. Ensure all feature PRs are merged into `dev`.
+2. Open a Pull Request from `dev` targeting `stg`:
+   ```bash
+   gh pr create --base stg --head dev --title "chore: promote dev to staging for QA validation"
+   ```
+3. Run comprehensive staging builds and integration tests on `stg`.
+4. Merge `dev` into `stg`.
+
+---
+
+### Phase 3: Production Release (`stg` → `main`)
+
+When staging verification passes and the release criteria are met:
+
+1. Open a Pull Request from `stg` targeting `main`:
+   ```bash
+   gh pr create --base main --head stg --title "release: v1.0.0 production release"
+   ```
+2. Verify all CI quality gates pass.
+3. Merge `stg` into `main`.
+4. Tag the production release milestone:
+   ```bash
+   git checkout main
+   git pull origin main
+   git tag -a v1.0.0 -m "Release v1.0.0"
+   git push origin v1.0.0
+   ```
 
 ---
 

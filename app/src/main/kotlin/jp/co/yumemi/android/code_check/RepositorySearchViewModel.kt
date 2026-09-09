@@ -5,6 +5,7 @@ package jp.co.yumemi.android.code_check
 
 import android.content.Context
 import android.os.Parcelable
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
@@ -32,50 +33,81 @@ class RepositorySearchViewModel(
     /**
      * Search GitHub repositories by keyword using the GitHub API
      * @param inputText Search keyword
-     * @return List of repository items matching the search query
+     * @return List of repository items matching the search query, or empty list on error
      */
     fun searchResults(inputText: String): List<RepositoryItem> = runBlocking {
+        // Validate input
+        if (inputText.isBlank()) {
+            Log.w(TAG, "Search query is empty")
+            return@runBlocking emptyList()
+        }
+
         val client = HttpClient(Android)
 
         return@runBlocking GlobalScope.async {
-            val response: HttpResponse = client?.get("https://api.github.com/search/repositories") {
-                header("Accept", "application/vnd.github.v3+json")
-                parameter("q", inputText)
-            }
+            try {
+                val response: HttpResponse = client.get("https://api.github.com/search/repositories") {
+                    header("Accept", "application/vnd.github.v3+json")
+                    parameter("q", inputText)
+                }
 
-            val jsonBody = JSONObject(response.receive<String>())
+                val responseBody = response.receive<String>()
+                val jsonBody = JSONObject(responseBody)
 
-            val jsonItems = jsonBody.optJSONArray("items") ?: return@async emptyList()
+                // Validate JSON structure
+                if (!jsonBody.has("items")) {
+                    Log.w(TAG, "API response missing 'items' field")
+                    return@async emptyList()
+                }
 
-            val items = mutableListOf<RepositoryItem>()
+                val jsonItems = jsonBody.optJSONArray("items") ?: return@async emptyList()
 
-            for (i in 0 until jsonItems.length()) {
-                val jsonItem = jsonItems.optJSONObject(i) ?: continue
-                val name = jsonItem.optString("full_name")
-                val ownerIconUrl = jsonItem.optJSONObject("owner")?.optString("avatar_url") ?: ""
-                val language = jsonItem.optString("language")
-                val stargazersCount = jsonItem.optLong("stargazers_count")
-                val watchersCount = jsonItem.optLong("watchers_count")
-                val forksCount = jsonItem.optLong("forks_count")
-                val openIssuesCount = jsonItem.optLong("open_issues_count")
+                val items = mutableListOf<RepositoryItem>()
 
-                items.add(
-                    RepositoryItem(
-                        name = name,
-                        ownerIconUrl = ownerIconUrl,
-                        language = context.getString(R.string.written_language, language),
-                        stargazersCount = stargazersCount,
-                        watchersCount = watchersCount,
-                        forksCount = forksCount,
-                        openIssuesCount = openIssuesCount
+                for (i in 0 until jsonItems.length()) {
+                    val jsonItem = jsonItems.optJSONObject(i) ?: continue
+
+                    // Validate required fields
+                    val name = jsonItem.optString("full_name")
+                    if (name.isEmpty()) {
+                        Log.w(TAG, "Repository item missing full_name, skipping")
+                        continue
+                    }
+
+                    val ownerIconUrl = jsonItem.optJSONObject("owner")?.optString("avatar_url") ?: ""
+                    val language = jsonItem.optString("language")
+                    val stargazersCount = jsonItem.optLong("stargazers_count")
+                    val watchersCount = jsonItem.optLong("watchers_count")
+                    val forksCount = jsonItem.optLong("forks_count")
+                    val openIssuesCount = jsonItem.optLong("open_issues_count")
+
+                    items.add(
+                        RepositoryItem(
+                            name = name,
+                            ownerIconUrl = ownerIconUrl,
+                            language = context.getString(R.string.written_language, language),
+                            stargazersCount = stargazersCount,
+                            watchersCount = watchersCount,
+                            forksCount = forksCount,
+                            openIssuesCount = openIssuesCount
+                        )
                     )
-                )
+                }
+
+                TopActivity.lastSearchDate = Date()
+
+                return@async items.toList()
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to search repositories: ${e.message}", e)
+                return@async emptyList()
+            } finally {
+                client.close()
             }
-
-            TopActivity.lastSearchDate = Date()
-
-            return@async items.toList()
         }.await()
+    }
+
+    companion object {
+        private const val TAG = "RepositorySearchVM"
     }
 }
 

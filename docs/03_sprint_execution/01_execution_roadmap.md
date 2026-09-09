@@ -95,33 +95,34 @@ flowchart TD
 
 #### Sprint 4: Bonus Features & Multiplatform Release (Issue #9 & Release)
 - **Custom Tabs & Filtering:** In-app browser via Chrome Custom Tabs, repository sorting chips (Stars, Forks, Watchers), and product flavors (`dev`, `mock`, `stg`, `prod`). *(Closes Issue #9)*
-- **Release Packaging & iOS Sample:** Production release APK packaging, ProGuard/R8 minification, and native iOS SwiftUI client (`IOS-SAMPLE1/`) consuming the shared KMP core. *(Milestone v1.0.0)*
+- **Release Packaging & iOS Sample:** Production release APK packaging, ProGuard/R8 minification, and native iOS SwiftUI client (`iosApp/`) consuming the shared KMP core. *(Milestone v1.0.0)*
 
 ---
 
 ## 3. Master Sprint & Milestone Traceability Matrix
 
-| Sprint | Target Issue | Focus Area / Workstream | Deliverables & Acceptance Focus | Closes |
-|:---|:---|:---|:---|:---:|
-| **Sprint 1** | **Infra Setup** | CI & Dependency Management | Automated GitHub Actions CI, Version Catalog (`libs.versions.toml`) | *(CI Gate)* |
-| **Sprint 1** | **Issue #1** | Code Readability & Style | Fix naming conventions, clean up Hungarian notation | - |
-| **Sprint 1** | **Issue #1** | Code Formatting & Linting | Apply `.editorconfig` standards, remove wildcard imports | **Closes #1** |
-| **Sprint 1** | **Issue #2** | Null Safety Hardening | Eliminate forced `!!` assertions, implement safe unpack and guards | - |
-| **Sprint 1** | **Issue #2** | State Resilience | Prevent `lateinit` crashes on process death and handle recreation | **Closes #2** |
-| **Sprint 1** | **Issue #3** | Bug Fixes & Coroutines | Correct `forks_conut` typo, remove `runBlocking` from main thread | - |
-| **Sprint 1** | **Issue #3** | Memory Leak Prevention | Clear ViewBinding in `onDestroyView`, eliminate Context leaks | **Closes #3** |
-| **Sprint 2** | **Issue #4** | MVVM Decomposition | Extract search and data logic from Fragment to ViewModel | **Closes #4** |
-| **Sprint 2** | **Issue #5** | Architecture & Layering | Separate Domain entities, Repository interface, and Ktor Data layer | **Closes #5** |
-| **Sprint 2** | **Issue #6** | DI & Unidirectional Data Flow | Implement Clean Architecture with Hilt DI and StateFlow UDF | **Closes #6** |
-| **Sprint 3** | **Issue #7** | Automated Testing | Unit tests for ViewModel, Coroutines dispatcher, and Ktor MockEngine | **Closes #7** |
-| **Sprint 3** | **Issue #8** | Modern Declarative UI | Migrate UI from XML Views to 100% Jetpack Compose & Material 3 | - |
-| **Sprint 3** | **Issue #8** | UX Polish & Internationalization | Dark theme, auto-keyboard dismiss, empty/error states, bilingual i18n | **Closes #8** |
-| **Sprint 4** | **Issue #9** | Bonus Enhancements | Chrome Custom Tabs, repository sorting, search filter chips | **Closes #9** |
-| **Sprint 4** | **Release** | Production Packaging | Package release APK, R8 minification, native iOS sample verification | *(Milestone)* |
+> **📊 Live Tracking:** [GitHub Project Board - Mobile Platform Engineering](https://github.com/users/dinkar1708/projects/1/views/1)
+>
+> **📋 Issue Details:** For comprehensive issue specifications, see [Issues Summary](./03_issues_summary.md)
 
-**Total Sprints:** 4 Sprints  
-**Approach:** Incremental, single-responsibility Pull Requests  
-**Issues Addressed:** 9 Challenge Issues + CI Infrastructure + Production Release  
+| Sprint | Target Issue | Focus Area | Closes |
+|:---|:---|:---|:---:|
+| **Sprint 1** | **Infra Setup** | CI/CD & Dependency Management | *(CI Gate)* |
+| **Sprint 1** | [**Issue #1**](./03_issues_summary.md#issue-1) | Code Readability & Style | **✓** |
+| **Sprint 1** | [**Issue #2**](./03_issues_summary.md#issue-2) | Null Safety & State Resilience | **✓** |
+| **Sprint 1** | [**Issue #3**](./03_issues_summary.md#issue-3) | Bug Fixes & Memory Leaks | **✓** |
+| **Sprint 2** | [**Issue #4**](./03_issues_summary.md#issue-4) | MVVM Decomposition | **✓** |
+| **Sprint 2** | [**Issue #5**](./03_issues_summary.md#issue-5) | Architecture & Layering | **✓** |
+| **Sprint 2** | [**Issue #6**](./03_issues_summary.md#issue-6) | DI & Unidirectional Data Flow | **✓** |
+| **Sprint 3** | [**Issue #7**](./03_issues_summary.md#issue-7) | Automated Testing | **✓** |
+| **Sprint 3** | [**Issue #8**](./03_issues_summary.md#issue-8) | Jetpack Compose & UX Polish | **✓** |
+| **Sprint 4** | [**Issue #9**](./03_issues_summary.md#issue-9) | Bonus Features & Multiplatform | **✓** |
+| **Sprint 4** | **Release v1.0.0** | Production Packaging & iOS Sample | *(Milestone)* |
+
+**Total Sprints:** 4 Sprints
+**Approach:** Incremental, single-responsibility Pull Requests
+**Issues Addressed:** 9 Challenge Issues + CI Infrastructure + Production Release
+**Issue Details:** See comprehensive breakdown in [Issues Summary Document](./03_issues_summary.md)  
 
 ---
 

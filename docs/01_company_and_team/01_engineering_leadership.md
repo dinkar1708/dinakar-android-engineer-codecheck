@@ -19,16 +19,16 @@ Technical leadership in enterprise mobile engineering requires coupling software
 
 ## 2. Strategic Decision Framework
 
-Every architectural decision in this repository was evaluated using an enterprise leadership framework balancing team velocity, business value, risk mitigation, and platform longevity:
+Every architectural standard across our mobile engineering organization is evaluated using a leadership framework balancing team velocity, business value, risk mitigation, and platform longevity:
 
-| Strategic Architectural Decision | Organizational Problem Addressed | Leadership Rationale & Value Delivered | Architectural Reference |
+| Strategic Architectural Standard | Organizational Problem Addressed | Leadership Rationale & Value Delivered | Enterprise Governance Standard |
 |:---|:---|:---|:---:|
-| **100% Declarative Jetpack Compose** | Fragment ViewBinding leaks, brittle XML inflation, slow UI iteration | 50% less UI code, eliminates Fragment lifecycle crashes, accelerates UI previewing and hiring modern mobile talent | [ADR-006](../02_inception/adr/006_jetpack_compose_migration.md) |
-| **Multi-Module Clean Architecture** | Monolithic merge conflicts, 3+ minute build times, tight coupling | Decouples feature teams, enables parallel feature development, and isolates test execution | [ADR-001](../02_inception/adr/001_multi_module_architecture.md) |
-| **Gradle Convention Plugins (`build-logic`)** | 45+ lines of duplicated Gradle script per module, configuration drift | Centralizes build governance, eliminates 70% of build script boilerplate, and enables rapid module creation | [ADR-002](../02_inception/adr/002_gradle_convention_plugins.md) |
-| **Headless Kotlin Multiplatform Core** | Siloed duplicate business logic between Android and iOS | 100% shared domain models and networking with native iOS SwiftUI client (`IOS-SAMPLE1/`), halving multiplatform maintenance | [ADR-004](../02_inception/adr/004_headless_kmp_boundary.md) |
-| **Multi-Tier Product Flavors (`dev`, `mock`, `stg`, `prod`)** | Fragile integration tests and rate-limiting during client demos | Complete environment isolation; 100% deterministic offline mock mode for instant developer setup and CI execution | [ADR-005](../02_inception/adr/005_product_flavors_strategy.md) |
-| **Zero-Tolerance Detekt Quality Gates** | Inconsistent coding styles, hidden memory leaks, and unchecked complexity | Automated compile-time quality verification in GitHub Actions CI with zero manual linter friction | [ADR-003](../02_inception/adr/003_detekt_static_analysis.md) |
+| **100% Declarative Modern UI** | ViewBinding leaks, brittle layout inflation, slow UI iteration | 50% less UI boilerplate, eliminates lifecycle view crashes, accelerates interactive previewing, and attracts modern talent | **Declarative UI Standard**<br/>*(Compose / SwiftUI)* |
+| **Multi-Module Clean Architecture** | Monolithic merge conflicts, 3+ minute build times, tight coupling | Decouples feature teams, enables parallel feature development, and isolates test execution | **Modularity Policy**<br/>*(Feature / Core Decoupling)* |
+| **Gradle Convention Plugins (`build-logic`)** | 45+ lines of duplicated build scripts per module, configuration drift | Centralizes build governance, eliminates 70% of build boilerplate, and enables rapid module creation | **Build Governance Standard**<br/>*(Single Source of Truth)* |
+| **Headless Multiplatform Core** | Siloed duplicate business logic between Android and iOS | 100% shared domain models and networking with native UI clients (`iosApp/`), halving multiplatform maintenance | **Headless Core Standard**<br/>*(Shared Logic, 100% Native UI)* |
+| **Multi-Tier Environment Flavors (`dev`, `mock`, `stg`, `prod`)** | Fragile integration tests and rate-limiting during client demos | Complete environment isolation; 100% deterministic offline mock mode for instant developer setup and CI execution | **Environment Isolation Policy**<br/>*(Contract-First Mock Mode)* |
+| **Zero-Tolerance Quality Gates** | Inconsistent coding styles, hidden memory leaks, and unchecked complexity | Automated compile-time quality verification in CI pipelines with zero manual linter friction | **CI Quality Gate Policy**<br/>*(Zero-Warning Enforcement)* |
 
 ---
 

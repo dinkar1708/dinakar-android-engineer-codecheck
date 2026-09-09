@@ -17,10 +17,10 @@ As an Engineering Lead and Product Engineering Manager, technical excellence mus
 ## 1. Architectural & Process Alignment
 
 This management playbook builds upon the engineering foundations established across our technical specifications:
-- **Platform Architecture & Decisions:** See [Engineering Leadership Strategy](./02_engineering_leadership.md) and [Architecture Overview](../ARCHITECTURE_OVERVIEW.md).
-- **Contract-First Parallel Delivery:** Detailed in [Engineering Leadership Strategy](./02_engineering_leadership.md#3-team-scalability--parallel-delivery-model).
-- **Code Review Standards & SLAs:** Detailed in [Code Review Guidelines](../02_inception/team/code_review_guidelines.md) and [Yumemi Review Culture](../02_inception/team/yumemi_pr_review_culture.md).
-- **Quality Gates & Definition of Done:** Detailed in [Definition of Done](../02_inception/team/definition_of_done.md) and [Engineering Guardrails](../02_inception/team/engineering_guardrails_and_policies.md).
+- **Platform Architecture & Decisions:** See [Engineering Leadership Strategy](./01_engineering_leadership.md) and [Operating Model Overview](./readme.md).
+- **Contract-First Parallel Delivery:** Detailed in [Engineering Leadership Strategy](./01_engineering_leadership.md#3-team-scalability--parallel-delivery-model).
+- **Code Review Standards & SLAs:** Detailed in [Code Review Guidelines](./04_code_review_guidelines.md) and [Yumemi Review Culture](./09_yumemi_review_culture.md).
+- **Quality Gates & Definition of Done:** Detailed in [Definition of Done](./05_definition_of_done.md) and [Engineering Guardrails](./06_engineering_guardrails.md).
 
 With technical guardrails automated via CI, engineering leadership focuses on **people enablement, operational efficiency, structured mentorship, and data-driven management**.
 

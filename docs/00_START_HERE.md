@@ -11,8 +11,20 @@
 |:---|:---|
 | **Get started quickly** | [Getting Started](./GETTING_STARTED.md) ⭐ |
 | **Understand the architecture** | [Architecture Overview](./ARCHITECTURE_OVERVIEW.md) ⭐ |
-| **See what's been done** | [Issues Summary](./ISSUES_SUMMARY.md) ⭐ |
+| **See what's been done** | [Issues Summary](./03_sprint_execution/03_issues_summary.md) ⭐ |
 | **Full project overview** | [Root README.md](../README.md) |
+
+---
+
+## 📚 Documentation Classification & Governance
+
+This repository organizes documentation into three distinct operational tiers to separate **Company & Team Standards** (portable across any mobile project) from **Project Architecture** and **Challenge Execution**:
+
+| Documentation Tier | Scope & Focus | Key References | Portability & Corporate Usage |
+|:---|:---|:---|:---:|
+| **🏢 1. Company & Team Governance**<br/>`docs/01_company_and_team/` | Universal team standards: 30-60-90 day onboarding, 24h/4h review SLAs, Definition of Done, AI coding guardrails, secret management, Firebase QA distribution, and engineering career tracks. | [Operating Model Overview](./01_company_and_team/readme.md)<br/>[Leadership Strategy](./01_company_and_team/01_engineering_leadership.md)<br/>[Team Onboarding](./01_company_and_team/03_team_onboarding.md)<br/>[Code Review Guidelines](./01_company_and_team/04_code_review_guidelines.md)<br/>[CI/CD & Delivery Policy](./01_company_and_team/07_cicd_and_delivery_standards.md) | **100% Turnkey Portable**<br/>*(Ready for direct export to **Company Confluence / Notion** to govern all mobile projects)* |
+| **📱 2. Project Architecture & Specs**<br/>`docs/02_project_architecture/` | Technical blueprints: Multi-module Clean Architecture, KMP shared core, 4 product flavors (`dev`, `mock`, `stg`, `prod`), ADRs 001–006, and GitHub Search API contracts. | [Architecture Index](./02_project_architecture/readme.md)<br/>[Clean Architecture & UDF](./02_project_architecture/architecture/01_clean_architecture_and_udf.md)<br/>[ADR Index](./02_project_architecture/adr/readme.md)<br/>[API Specification](./02_project_architecture/api_spec/readme.md)<br/>[Project Setup](./02_project_architecture/setup/01_project_setup.md) | **Project-Specific**<br/>*(Technical blueprints implementing Tier 1 standards for this application)* |
+| **🎯 3. Challenge Issue Execution**<br/>`docs/03_sprint_execution/` | End-to-end resolution and verification tracking for all 9 Yumemi code check issues across 4 structured agile sprints. | [Sprint Delivery Portal](./03_sprint_execution/readme.md)<br/>[Execution Roadmap](./03_sprint_execution/01_execution_roadmap.md)<br/>[Issue-to-Ticket Mapping](./03_sprint_execution/02_how_to_proceed_and_issue_mapping.md)<br/>[Issues Summary](./03_sprint_execution/03_issues_summary.md) | **Assessment-Specific**<br/>*(Agile sprint delivery & acceptance tracking)* |
 
 ---
 
@@ -25,7 +37,7 @@ This solution addresses all **9 Yumemi challenge issues** through a structured, 
 - **Testing & Modern UI** (Issues #7–8): Comprehensive test coverage (Turbine + MockEngine) and complete Jetpack Compose migration.
 - **Bonus Capabilities** (Issue #9): Production enhancements including Chrome Custom Tabs, repository sorting, and offline resilience.
 
-👉 For the detailed breakdown and progress tracking of each issue, see **[Issues Summary](./ISSUES_SUMMARY.md)**.
+👉 For the detailed breakdown and progress tracking of each issue, see **[Issues Summary](./03_sprint_execution/03_issues_summary.md)**.
 👉 For technical architecture and data flow design, see **[Architecture Overview](./ARCHITECTURE_OVERVIEW.md)**.
 
 ---

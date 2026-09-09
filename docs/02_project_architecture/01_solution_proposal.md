@@ -154,7 +154,7 @@ Not just #1-#3, but everything through bonus #9.
 | **Bonus** | Production Features | #9 (Custom Tabs, sorting, iOS) |
 | **Release** | Production Packaging | Release APK & Documentation |
 
-**Detailed execution plan:** See [PR Execution Roadmap](./04_pr_execution_roadmap.md)
+**Detailed execution plan:** See [Execution Roadmap](../03_sprint_execution/01_execution_roadmap.md)
 
 ---
 
@@ -186,7 +186,7 @@ From analyzing failures in competitive submissions and documentation:
 10. **Instant locale switching** (without Activity recreation)
 11. **Network resilience** (exponential backoff with jitter)
 
-**Detailed solutions:** See [Architecture Overview](../ARCHITECTURE_OVERVIEW.md) and [Issues Summary](../ISSUES_SUMMARY.md)
+**Detailed solutions:** See [Architecture Overview](../ARCHITECTURE_OVERVIEW.md) and [Issues Summary](../03_sprint_execution/03_issues_summary.md)
 
 ---
 
@@ -302,11 +302,11 @@ I will document:
 - Engineering governance (team enablement, velocity metrics, and delivery ROI)
 
 **Reference Documents:**
-- PR Execution Plan: [04_pr_execution_roadmap.md](./04_pr_execution_roadmap.md)
-- Issue Documentation: [Issues Summary](../ISSUES_SUMMARY.md)
-- EM Perspective: [02_engineering_leadership.md](./02_engineering_leadership.md)
-- Architecture: [docs/architecture/](../02_inception/architecture/)
-- ADRs: [docs/adr/](../02_inception/adr/)
+- Execution Plan: [01_execution_roadmap.md](../03_sprint_execution/01_execution_roadmap.md)
+- Issue Documentation: [Issues Summary](../03_sprint_execution/03_issues_summary.md)
+- EM Perspective: [01_engineering_leadership.md](../01_company_and_team/01_engineering_leadership.md)
+- Architecture: [docs/02_project_architecture/architecture/](./architecture/)
+- ADRs: [docs/02_project_architecture/adr/](./adr/)
 
 ---
 

@@ -218,7 +218,7 @@ Every decision and Pull Request executed in this repository is directly substant
 
 ## 7. Related Architectural Documents
 
-- [Solution Proposal](01_solution_proposal.md) - High-level project vision and problem-solution breakdown
-- [Technical Leadership & Architecture Strategy](03_technical_leadership_and_decisions.md) - Leadership rationale and engineering standards
-- [Architecture Decision Records (ADRs)](../02_inception/adr/) - Detailed ADR index (ADR 001 - 006)
-- [Developer Workflow & Ticket Playbook](../02_inception/team/developer_workflow_and_ticket_guide.md) - Engineering execution and ticket lifecycle
+- [Solution Proposal](../02_project_architecture/01_solution_proposal.md) - High-level project vision and problem-solution breakdown
+- [Engineering Leadership Strategy](../01_company_and_team/01_engineering_leadership.md) - Leadership rationale and engineering standards
+- [Architecture Decision Records (ADRs)](../02_project_architecture/adr/readme.md) - Detailed ADR index (ADR 001 - 006)
+- [Developer Workflow & Ticket Playbook](../01_company_and_team/08_developer_workflow.md) - Engineering execution and ticket lifecycle

@@ -3,6 +3,8 @@
 **Author:** Dinakar Prasad Maurya
 **Target Role:** Mobile Lead Engineer/EM
 
+> **For detailed issue descriptions, see [Issues Summary](./03_issues_summary.md)**
+
 ---
 
 ## 1. Strategy Overview
@@ -23,10 +25,7 @@ A common architectural trap in legacy modernization is the **"Big-Bang Rewrite"*
 
 ### 2.1 The "Big Bang Rewrite" Trap:
 If we deleted all XML and Fragments in an early rewrite:
-1. **Evaluators cannot see us fixing the legacy bugs:**
-   - **Issue #1 (Readability):** Evaluators want to see Hungarian prefixes (`_binding`, `_viewModel`) removed, `topActivity.kt` renamed to `TopActivity.kt`, and wildcard imports cleaned up in the existing code.
-   - **Issue #2 (Safety):** Evaluators want to see forced `!!` unwraps eliminated from Fragment lifecycle methods and `SavedStateHandle` applied to prevent process-death crashes.
-   - **Issue #3 (Bugs):** Evaluators want to see the `forks_conut` typo fixed, `runBlocking` removed from the Main thread, and the ViewBinding lifecycle memory leak (`_binding = null` in `onDestroyView()`) properly diagnosed and eliminated.
+1. **Evaluators cannot see us fixing the legacy bugs:** Issues #1-3 (readability, safety, bugs) need to be fixed in existing code first
 2. **Deleting files bypasses the challenge:** If you delete `OneFragment.kt` immediately, you didn't fix the memory leak or threading bug — you simply deleted the file. That does not demonstrate Senior/Lead engineering rigor.
 
 ---
@@ -70,59 +69,43 @@ flowchart TD
 
 ### 2.3 Detailed Sprint & Milestone Objectives
 
-#### Sprint 1: Foundation, Code Health & Safety (Issues #1, #2, #3)
-- **Codebase State:** Keeps legacy XML layouts and Fragment navigation intact.
-- **CI & Tooling:** CI/CD automated quality gate (`.github/workflows/ci.yml`) and Gradle Version Catalog (`gradle/libs.versions.toml`).
-- **PascalCase Naming:** Fix PascalCase naming (`topActivity.kt` &rarr; `TopActivity.kt`, `data class item` &rarr; `RepositoryItem`) and remove Hungarian prefixes.
-- **Code Style & Imports:** Enforce `.editorconfig` style rules and eliminate wildcard imports. *(Closes Issue #1)*
-- **Null Safety Assertions:** Eliminate all forced `!!` unwraps from Fragment and Activity layers.
-- **Process Death Resilience:** Implement `SavedStateHandle` to survive background process death. *(Closes Issue #2)*
-- **API Typo & Threading:** Correct `forks_conut` typo in API DTO; remove `runBlocking` from UI thread to prevent ANRs.
-- **Memory Leaks & ViewBinding:** Clear ViewBinding references in `onDestroyView()` and eliminate Context memory leaks. *(Closes Issue #3)*
+#### Sprint 1: Foundation, Code Health & Safety
+- **Codebase State:** Keeps legacy XML layouts and Fragment navigation intact
+- **CI & Tooling:** CI/CD automated quality gate and Gradle Version Catalog
+- Fix naming, style, imports
+- Eliminate `!!` operators, add `SavedStateHandle`
+- Fix typos, threading, memory leaks
 
-#### Sprint 2: Architecture & Modularity (Issues #4, #5, #6)
-- **ViewModel Extraction:** Extract search operations, input validation, and data formatting from `OneFragment` into `SearchViewModel`. *(Closes Issue #4)*
-- **Modularization & KMP Core:** Decompose into cohesive modules (`:core:domain`, `:core:data`, `:core:network`, `:shared`). *(Closes Issue #5)*
-- **Clean Architecture & Hilt DI:** Configure compile-time Hilt DI (`@HiltAndroidApp`, `@HiltViewModel`) and implement Unidirectional Data Flow via sealed `StateFlow`. *(Closes Issue #6)*
+#### Sprint 2: Architecture & Modularity
+- Extract ViewModels from Fragments
+- Multi-module architecture with KMP core
+- Clean Architecture, Hilt DI, UDF with StateFlow
 
-#### Sprint 3: Quality Testing & Jetpack Compose UI Migration (Issues #7, #8)
-- **Turbine & Network Testing:** Build automated unit tests with CashApp Turbine, Ktor MockEngine, and MainDispatcherRule. *(Closes Issue #7)*
-- **Compose UI Migration:** **This is the exact milestone where XML is converted to Compose.**
-  - Delete legacy XML layouts (`activity_top.xml`, `fragment_one.xml`, `fragment_two.xml`, `layout_item.xml`).
-  - Delete legacy Fragments (`OneFragment.kt`, `TwoFragment.kt`).
-  - Implement declarative Composables: `SearchScreen.kt`, `DetailScreen.kt`, and `AppNavHost.kt` with Material Design 3. *(Addresses Issue #8)*
-- **Theme, Localization & Error Polish:** Add dynamic Material 3 Dark theme, software keyboard auto-dismiss, error banners, and Japanese/English localization. *(Closes Issue #8)*
+#### Sprint 3: Quality Testing & Jetpack Compose UI Migration
+- Unit tests with Turbine & MockEngine
+- **Compose UI Migration:** Delete XML layouts/Fragments, implement Composables
+- Material 3 Dark theme, i18n, accessibility
 
-#### Sprint 4: Bonus Features & Multiplatform Release (Issue #9 & Release)
-- **Custom Tabs & Filtering:** In-app browser via Chrome Custom Tabs, repository sorting chips (Stars, Forks, Watchers), and product flavors (`dev`, `mock`, `stg`, `prod`). *(Closes Issue #9)*
-- **Release Packaging & iOS Sample:** Production release APK packaging, ProGuard/R8 minification, and native iOS SwiftUI client (`iosApp/`) consuming the shared KMP core. *(Milestone v1.0.0)*
+#### Sprint 4: Bonus Features & Multiplatform Release
+- Chrome Custom Tabs, sorting, product flavors
+- Production APK & iOS SwiftUI client *(v1.0.0)*
 
 ---
 
-## 3. Master Sprint & Milestone Traceability Matrix
+## 3. Master Sprint & Milestone Traceability
 
 > **📊 Live Tracking:** [GitHub Project Board - Mobile Platform Engineering](https://github.com/users/dinkar1708/projects/1/views/1)
 >
-> **📋 Issue Details:** For comprehensive issue specifications, see [Issues Summary](./03_issues_summary.md)
+> **📋 Issue Details:** See [Issues Summary](./03_issues_summary.md) for complete issue breakdown
 
-| Sprint | Target Issue | Focus Area | Closes |
-|:---|:---|:---|:---:|
-| **Sprint 1** | **Infra Setup** | CI/CD & Dependency Management | *(CI Gate)* |
-| **Sprint 1** | [**Issue #1**](./03_issues_summary.md#issue-1) | Code Readability & Style | **✓** |
-| **Sprint 1** | [**Issue #2**](./03_issues_summary.md#issue-2) | Null Safety & State Resilience | **✓** |
-| **Sprint 1** | [**Issue #3**](./03_issues_summary.md#issue-3) | Bug Fixes & Memory Leaks | **✓** |
-| **Sprint 2** | [**Issue #4**](./03_issues_summary.md#issue-4) | MVVM Decomposition | **✓** |
-| **Sprint 2** | [**Issue #5**](./03_issues_summary.md#issue-5) | Architecture & Layering | **✓** |
-| **Sprint 2** | [**Issue #6**](./03_issues_summary.md#issue-6) | DI & Unidirectional Data Flow | **✓** |
-| **Sprint 3** | [**Issue #7**](./03_issues_summary.md#issue-7) | Automated Testing | **✓** |
-| **Sprint 3** | [**Issue #8**](./03_issues_summary.md#issue-8) | Jetpack Compose & UX Polish | **✓** |
-| **Sprint 4** | [**Issue #9**](./03_issues_summary.md#issue-9) | Bonus Features & Multiplatform | **✓** |
-| **Sprint 4** | **Release v1.0.0** | Production Packaging & iOS Sample | *(Milestone)* |
+| Sprint | Focus Area | Status |
+|:---|:---|:---:|
+| **Sprint 1** | CI/CD Setup + Code Health | ✓ |
+| **Sprint 2** | Architecture & Modularity | ✓ |
+| **Sprint 3** | Testing & Compose Migration | ✓ |
+| **Sprint 4** | Bonus Features & Release | ✓ |
 
-**Total Sprints:** 4 Sprints
-**Approach:** Incremental, single-responsibility Pull Requests
-**Issues Addressed:** 9 Challenge Issues + CI Infrastructure + Production Release
-**Issue Details:** See comprehensive breakdown in [Issues Summary Document](./03_issues_summary.md)  
+**Total:** 4 Sprints covering 9 issues + CI/CD + Production Release  
 
 ---
 

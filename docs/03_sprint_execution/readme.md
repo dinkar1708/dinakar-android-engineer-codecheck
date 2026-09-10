@@ -12,21 +12,21 @@ To prove true Mobile Engineering Leadership, this project strictly rejects the c
 
 ```mermaid
 flowchart LR
-    S1["Sprint 1: Code Health & Bugs<br/>(Issues #1, #2, #3 on XML)"] --> S2["Sprint 2: Architecture & DI<br/>(Issues #4, #5, #6 Multi-Module)"]
-    S2 --> S3["Sprint 3: Tests & Compose<br/>(Issues #7, #8 UI Migration)"]
-    S3 --> S4["Sprint 4: Senior Bonus & iOS<br/>(Issue #9 & v1.0.0 Release)"]
+    S1["Sprint 1:<br/>Code Health & Bugs"] --> S2["Sprint 2:<br/>Architecture & DI"]
+    S2 --> S3["Sprint 3:<br/>Tests & Compose"]
+    S3 --> S4["Sprint 4:<br/>Bonus & Release"]
 ```
 
 ---
 
 ## 📑 Directory Contents
 
-| Document | Purpose & Core Content | Addressed Challenge Scope |
-|:---|:---|:---:|
-| **[01_execution_roadmap.md](./01_execution_roadmap.md)** | Master 4-Sprint execution sequence, sprint deliverables, quality gates, and final success criteria | Sprints 1–4 |
-| **[02_how_to_proceed_and_issue_mapping.md](./02_how_to_proceed_and_issue_mapping.md)** | Bidirectional traceability matrix: 9 Yumemi issues &rarr; Agile tickets &rarr; Fibonacci story points (63 SP total) | Issues #1–#9 |
-| **[03_issues_summary.md](./03_issues_summary.md)** | Authoritative specification, root-cause analysis, and objective acceptance criteria for all 9 challenge issues | Issues #1–#9 |
-| **[04_platform_references.md](./04_platform_references.md)** | Technical deep-dives into Android platform pitfalls (Process death, ViewBinding leaks, ANRs, rate limits) | Engineering Rigor |
+| Document | Purpose & Core Content |
+|:---|:---|
+| **[01_execution_roadmap.md](./01_execution_roadmap.md)** | Master 4-Sprint execution sequence, sprint deliverables, quality gates, and final success criteria |
+| **[02_how_to_proceed_and_issue_mapping.md](./02_how_to_proceed_and_issue_mapping.md)** | Bidirectional traceability matrix: 9 Yumemi issues → Agile tickets → Story points |
+| **[03_issues_summary.md](./03_issues_summary.md)** | ⭐ **Master issue list** - Authoritative specification and acceptance criteria for all 9 issues |
+| **[04_platform_references.md](./04_platform_references.md)** | Technical deep-dives into Android platform pitfalls and best practices |
 
 ---
 

@@ -200,19 +200,21 @@ graph TD
 
 Every decision and Pull Request executed in this repository is directly substantiated by these official references:
 
-| Project Decision / Feature | Problem Addressed | Official Reference Source |
-|:---|:---|:---|
-| **CI Quality Gates** | Broken builds, regression leakage | [Android CI & Gradle Best Practices](https://developer.android.com/build) |
-| **PascalCase Naming & Style** | Inconsistent naming, `topActivity.kt` CI failure | [Kotlin Coding Conventions](https://kotlinlang.org/docs/coding-conventions.html) |
-| **Null Safety & Safe Unwrapping** | `NullPointerException` via `!!` crashes | [Kotlin Null Safety Guide](https://kotlinlang.org/docs/null-safety.html) |
-| **Headless KMP Multiplatform** | Logic duplication between Android & iOS | [JetBrains KMP Architecture Guide](https://kotlinlang.org/multiplatform/#choose-share-what-logic-native-ui) |
-| **UDF & Sealed UI State** | Fragment spaghetti & unpredictable view state | [Android UI Layer Guide](https://developer.android.com/topic/architecture/ui-layer) |
-| **Jetpack Compose + Material 3** | Fragment ViewBinding memory leaks & outdated UI | [Material 3 Design Guidelines](https://m3.material.io/) |
-| **Virtual Time Coroutine Tests** | Flaky asynchronous unit tests | [Kotlinx Coroutines Test API](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/) |
-| **Process Death State Recovery** | Query loss on background app kill | [Android SavedStateHandle](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate) |
-| **Custom Tabs & Settings** | External browser context switching | [Chrome Custom Tabs Guide](https://developer.chrome.com/docs/android/custom-tabs/) |
-| **SwiftUI Native Client** | Cross-platform UI degradation on iOS | [Apple HIG & SwiftUI Guidelines](https://developer.apple.com/design/human-interface-guidelines/) |
-| **Build Flavors & Offline Mocking** | Fragile API tests & rate-limiting during demo | [Android Product Flavors Guide](https://developer.android.com/build/build-variants) |
+| Official Recommendation | Official Doc Source | Project Implementation | Addressed In |
+|:---|:---|:---|:---|
+| **Automated CI Quality Gate** | [Android CI Best Practices](https://developer.android.com/build) | GitHub Actions `.github/workflows/ci.yml` running lint, detekt & tests | **PR #1 / Issue #1** |
+| **PascalCase Naming & Style** | [Kotlin Coding Conventions](https://kotlinlang.org/docs/coding-conventions.html) | `MainActivity.kt`, `RepositoryItem`, remove `_binding` & Hungarian notation | **PR #2 / Issue #1** |
+| **Null Safety & Safe Unwrapping** | [Kotlin Null Safety Guide](https://kotlinlang.org/docs/null-safety.html) | Eliminate `!!` assertions, safe arguments extraction, resilient null defaults | **PR #3 / Issue #2** |
+| **Process Death State Restoration** | [ViewModel SavedState](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate) | `SavedStateHandle` restoring query and selection state after process kill | **PR #3 / Issue #2** |
+| **Defensive Error & Leak Prevention** | [Android Architecture Guide](https://developer.android.com/topic/architecture) | Fix `forks_count`, remove `runBlocking`, eliminate Fragment ViewBinding leaks | **PR #4 / Issue #3** |
+| **Single Responsibility & VM Separation** | [Guide to App Architecture](https://developer.android.com/topic/architecture) | Extract `SearchViewModel` from Fragment, introduce `GitHubRepository` contract | **PR #5 / Issue #4** |
+| **Share Logic, Keep UI Native (`logic-native-ui`)** | [JetBrains KMP Architecture](https://kotlinlang.org/multiplatform/#choose-share-what-logic-native-ui) | Headless `:core:domain`, `:core:network`, `:core:data`, umbrella `:shared-core` | **PR 8.1 - 8.2 / Issues #5, #8** |
+| **Unidirectional Data Flow (UDF)** | [Android UI Layer](https://developer.android.com/topic/architecture/ui-layer) | Immutable `SearchUiState` (`Idle`, `Loading`, `Success`, `Empty`, `Error`) + `StateFlow` | **PR 8.3 / Issue #8** |
+| **Declarative UI with Material 3** | [Material 3 Compose](https://developer.android.com/jetpack/compose/designsystems/material3) | 100% Jetpack Compose `SearchScreen`, `DetailScreen`, `CodeCheckTheme` tokens | **PR 8.3 / Issues #8, #10** |
+| **Compile-Time Dependency Injection** | [Hilt for Android](https://developer.android.com/training/dependency-injection/hilt-android) | Dagger Hilt (`@HiltAndroidApp`, `@AndroidEntryPoint`, `@HiltViewModel`, `@Module`) | **PR 8.3 / Issue #8** |
+| **Navigation & Compose Scoping** | [Navigation Compose](https://developer.android.com/jetpack/compose/navigation) | `AppNavHost` with type-safe routing and `hiltViewModel()` navigation scoping | **PR 8.3 / Issue #8** |
+| **Coroutine Testing with Virtual Time** | [Kotlinx Coroutines Test](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/) | `runTest`, `StandardTestDispatcher`, Turbine assertions, Ktor `MockEngine` | **Issue #9 (Next)** |
+| **Custom Tabs, Sorting & Bonus Features** | [Chrome Custom Tabs](https://developer.chrome.com/docs/android/custom-tabs/) | `CustomTabsIntent`, sorting chips, pagination, offline mock flavor, iOS client | **Issue #11 (Bonus)** |
 
 ---
 

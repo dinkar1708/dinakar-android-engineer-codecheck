@@ -1,82 +1,70 @@
-# Architecture Specification: Kotlin Multiplatform (KMP) Shared Engine
+# Architecture Specification: Kotlin Multiplatform (KMP) Shared Core
 
 ## 1. Executive Summary & Design Pattern
 
-The core data and business logic of the application is packaged in a standalone Kotlin Multiplatform module: **`:shared`**.
+The core data, networking, and business domain logic of the application are architected across modular Kotlin Multiplatform modules:
+- **`:core:domain`**: Pure Kotlin models, repository interfaces, and use cases.
+- **`:core:network`**: Multiplatform Ktor HTTP client, DTOs, mappers, and expect/actual engine provider.
+- **`:core:data`**: Repository implementation (`GitHubRepositoryImpl`), in-memory caching, and error mapping.
+- **`:shared-core`**: Umbrella KMP module that consolidates all core modules into a single unified framework exportable for iOS.
 
-Following JetBrains' official **Pattern 2: "Share logic, keep UI native" (`logic-native-ui`)**, all networking, DTO serialization, domain modeling, and data caching are shared across platforms, while leaving Android UI 100% native in Jetpack Compose and iOS UI native in SwiftUI.
+Following JetBrains' official **Pattern 2: "Share logic, keep UI native" (`logic-native-ui`)**, 70% of the non-UI business logic is shared, while presentation is 100% native: Jetpack Compose on Android and SwiftUI on iOS.
 
 ```mermaid
 graph TD
-    subgraph Multiplatform Shared Engine (:shared)
-        CM[commonMain: Entities, Repository, Ktor, Serialization]
-        CT[commonTest: Ktor MockEngine Unit Tests]
+    subgraph MultiplatformSharedCore [Headless KMP Shared Core]
+        CD[":core:domain<br/>(Pure Kotlin Entities, Repo Contract, Use Cases)"]
+        CN[":core:network<br/>(Ktor HTTP Client, DTOs, Serialization, Logging)"]
+        CDA[":core:data<br/>(Repo Impl, In-Memory Caching, Retry Coordination)"]
+        SC[":shared-core<br/>(Umbrella KMP Framework Exporter)"]
+
+        CDA --> CD
+        CDA --> CN
+        CN --> CD
+        SC --> CD
+        SC --> CN
+        SC --> CDA
     end
 
-    subgraph Android Native Consumer (:app)
-        AAR[shared.aar]
-        COMP[Jetpack Compose UI & Hilt DI]
+    subgraph AndroidNativeConsumer [Android Native App]
+        APP[":app + :feature:*<br/>(Jetpack Compose UI & Hilt DI)"]
     end
 
-    subgraph iOS Native Consumer (SwiftUI)
-        FW[shared.framework / XCFramework]
-        SWIFT[SwiftUI Views & Swift Concurrency]
+    subgraph iOSNativeConsumer [iOS Native App]
+        SWIFT["iosApp<br/>(SwiftUI Views & Swift Concurrency)"]
     end
 
-    CM --> AAR
-    CM --> FW
-    AAR --> COMP
-    FW --> SWIFT
+    CDA --> APP
+    CD --> APP
+    SC --> SWIFT
 ```
 
 ---
 
-## 2. Multiplatform Targets & Build Configuration (`shared/build.gradle`)
+## 2. Multiplatform Targets & Convention Plugin
 
-The `:shared` module configures both Android library and Apple iOS targets:
+All KMP modules apply the custom convention plugin `codecheck.kotlin.multiplatform` (`build-logic/convention/src/main/kotlin/KotlinMultiplatformConventionPlugin.kt`), which configures:
+1. **Android Library Target**: `androidTarget { compilations.all { kotlinOptions { jvmTarget = "17" } } }`
+2. **Apple iOS Framework Targets**: `iosX64()`, `iosArm64()`, `iosSimulatorArm64()`
+3. **Common Source Sets**: Coroutines Core, Kotlinx Serialization, and Ktor Core.
 
-```groovy
+```kotlin
+// shared-core/build.gradle.kts
 plugins {
-    id 'org.jetbrains.kotlin.multiplatform'
-    id 'com.android.library'
-    id 'kotlinx-serialization'
+    alias(libs.plugins.codecheck.kotlin.multiplatform)
 }
 
 android {
-    namespace 'jp.co.yumemi.android.code_check.shared'
-    compileSdk 34
-    defaultConfig {
-        minSdk 24
-    }
+    namespace = "jp.co.yumemi.android.codecheck.shared"
 }
 
 kotlin {
-    androidTarget {
-        compilations.all {
-            kotlinOptions { jvmTarget = '17' }
-        }
-    }
-
-    // Apple Silicon & Intel iOS Framework Targets
-    [iosX64(), iosArm64(), iosSimulatorArm64()].each { target ->
-        target.binaries.framework {
-            baseName = 'shared'
-            isStatic = true
-        }
-    }
-
     sourceSets {
         commonMain.dependencies {
-            implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
-            implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2"
-            implementation "io.ktor:ktor-client-core:2.3.7"
-            implementation "io.ktor:ktor-client-content-negotiation:2.3.7"
-            implementation "io.ktor:ktor-serialization-kotlinx-json:2.3.7"
-        }
-        commonTest.dependencies {
-            implementation kotlin('test')
-            implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"
-            implementation "io.ktor:ktor-client-mock:2.3.7"
+            // Umbrella module - exports all core modules as single framework for iOS
+            api(project(":core:domain"))
+            api(project(":core:network"))
+            api(project(":core:data"))
         }
     }
 }
@@ -84,47 +72,62 @@ kotlin {
 
 ---
 
-## 3. Directory Layout & Shared Source Files
+## 3. Platform Abstraction via Expect / Actual Pattern
 
-All multiplatform code lives under `shared/src/`:
-
-```text
-shared/
-├── build.gradle                                # Multiplatform build configuration
-└── src/
-    ├── commonMain/kotlin/.../shared/
-    │   ├── domain/
-    │   │   ├── model/
-    │   │   │   └── RepositoryItem.kt           # Shared domain entity (@Serializable)
-    │   │   └── repository/
-    │   │       └── GitHubRepository.kt         # Shared repository interface contract
-    │   └── data/
-    │       ├── network/
-    │       │   ├── dto/
-    │       │   │   └── SearchRepositoriesResponseDto.kt # Type-safe network DTOs
-    │       │   └── GitHubApiService.kt         # Multiplatform Ktor HTTP client
-    │       └── repository/
-    │           └── DefaultGitHubRepository.kt  # Implementation with memory caching
-    │
-    └── commonTest/kotlin/.../shared/
-        └── data/repository/
-            └── DefaultGitHubRepositoryTest.kt  # 3 tests running on Ktor MockEngine
+For HTTP execution, `:core:network` defines an `expect` declaration in `commonMain`:
+```kotlin
+// core/network/.../HttpClientEngineProvider.kt
+expect fun createHttpClientEngine(): HttpClientEngineFactory<*>
 ```
+And provides platform-specific `actual` implementations:
+- **`androidMain`**: Returns `OkHttp` engine factory.
+- **`iosMain`**: Returns `Darwin` (`URLSession`) engine factory.
 
 ---
 
-## 4. Binary Outputs Produced
+## 4. Directory Layout & Module Responsibilities
 
-Running `./gradlew :shared:assemble` produces:
-1. **Android AAR**: `shared/build/outputs/aar/shared-debug.aar` (consumed by `:app`)
-2. **iOS Frameworks**:
-   - `shared/build/bin/iosArm64/debugFramework/shared.framework` (Physical iPhone / iPad)
-   - `shared/build/bin/iosSimulatorArm64/debugFramework/shared.framework` (Apple Silicon Simulator)
-   - `shared/build/bin/iosX64/debugFramework/shared.framework` (Intel Mac Simulator)
+```text
+core/
+├── domain/                                      # Pure Kotlin business rules
+│   └── src/commonMain/kotlin/.../domain/
+│       ├── model/RepositoryItem.kt              # Business model
+│       ├── repository/GitHubRepository.kt       # Repository abstraction
+│       └── usecase/                             # Use cases
+├── network/                                     # Ktor HTTP client
+│   └── src/
+│       ├── commonMain/kotlin/.../network/       # GitHubApiService, DTOs, Mappers
+│       ├── androidMain/kotlin/.../network/      # OkHttp engine actual
+│       └── iosMain/kotlin/.../network/          # Darwin engine actual
+├── data/                                        # Data coordination & cache
+│   └── src/commonMain/kotlin/.../data/
+│       └── repository/GitHubRepositoryImpl.kt   # Caching repository implementation
+└── shared-core/                                 # Umbrella framework
+    └── src/commonMain/kotlin/.../               # Framework export configuration
+```
 
 ---
 
 ## 5. Defense & Justification for Technical Leadership
-- **Zero Framework Leaks**: Business logic is completely isolated from the Android SDK.
-- **Cross-Platform Readiness**: If the company decides to build an iOS app, the network client, caching, and repository logic can be dropped directly into Xcode via `shared.framework`.
-- **Test Velocity**: Unit tests in `commonTest` execute on the local JVM via Ktor's `MockEngine` in milliseconds without launching the Android OS or emulators.
+- **Zero Framework Leaks**: Business logic in `:core:domain` has zero dependencies on `android.*` or UIKit.
+- **Cross-Platform Readiness**: By exporting `:shared-core`, the entire data and domain pipeline can be consumed natively in Xcode via SwiftUI.
+- **Test Velocity**: Multiplatform unit tests execute on the local JVM in milliseconds without Android emulators.
+
+---
+
+## 6. Official Kotlin Multiplatform References
+
+1. **JetBrains KMP Official Portal**: [https://kotlinlang.org/multiplatform/](https://kotlinlang.org/multiplatform/)
+   - Primary guide for multiplatform architectures and code sharing.
+2. **"Share logic, keep UI native" (`logic-native-ui`)**: [https://kotlinlang.org/multiplatform/#choose-share-what-logic-native-ui](https://kotlinlang.org/multiplatform/#choose-share-what-logic-native-ui)
+   - Architectural justification for headless KMP with native UI.
+3. **Multiplatform Expect and Actual Declarations**: [https://kotlinlang.org/docs/multiplatform-expect-actual.html](https://kotlinlang.org/docs/multiplatform-expect-actual.html)
+   - Official reference for the expect/actual mechanism used in engine selection.
+4. **Ktor Multiplatform HTTP Client**: [https://ktor.io/docs/client-create-multiplatform-application.html](https://ktor.io/docs/client-create-multiplatform-application.html)
+   - Guide for multiplatform Ktor networking.
+5. **Ktor Client Engines**: [https://ktor.io/docs/client-engines.html](https://ktor.io/docs/client-engines.html)
+   - Engine choices: OkHttp for Android and Darwin for iOS.
+6. **Objective-C and Swift Interoperability**: [https://kotlinlang.org/docs/native-objc-interop.html](https://kotlinlang.org/docs/native-objc-interop.html)
+   - Framework compilation and Swift API consumption.
+7. **KMP Project Discovery & Source Sets**: [https://kotlinlang.org/docs/multiplatform-discover-project.html](https://kotlinlang.org/docs/multiplatform-discover-project.html)
+   - Standard source set organization (`commonMain`, `androidMain`, `iosMain`).

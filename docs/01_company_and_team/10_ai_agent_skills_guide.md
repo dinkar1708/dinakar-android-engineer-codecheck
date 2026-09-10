@@ -74,10 +74,12 @@ All AI skills reference concrete locations in the codebase. When referencing or 
 
 | Resource / Layer | Concrete File / Directory Relative Path | Primary Associated Skill(s) |
 |:---|:---|:---|
-| **API Client (Network)** | [`app/src/main/kotlin/jp/co/yumemi/android/code_check/api/GitHubApiClient.kt`](../../app/src/main/kotlin/jp/co/yumemi/android/code_check/api/GitHubApiClient.kt) | `review-code`, `yumemi-code-review` |
-| **JSON Mapper** | [`app/src/main/kotlin/jp/co/yumemi/android/code_check/api/RepositoryMapper.kt`](../../app/src/main/kotlin/jp/co/yumemi/android/code_check/api/RepositoryMapper.kt) | `review-code`, `yumemi-code-review` |
-| **Repository Layer** | [`app/src/main/kotlin/jp/co/yumemi/android/code_check/repository/GitHubRepository.kt`](../../app/src/main/kotlin/jp/co/yumemi/android/code_check/repository/GitHubRepository.kt) | `review-code`, `yumemi-issue-workflow` |
-| **Presentation ViewModel**| [`app/src/main/kotlin/jp/co/yumemi/android/code_check/RepositorySearchViewModel.kt`](../../app/src/main/kotlin/jp/co/yumemi/android/code_check/RepositorySearchViewModel.kt) | `review-code`, `yumemi-issue-workflow` |
+| **Network Service (Ktor)** | [`core/network/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/network/GitHubApiService.kt`](../../core/network/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/network/GitHubApiService.kt) | `review-code`, `yumemi-code-review` |
+| **Domain Layer (Entities & Repos)** | [`core/domain/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/domain/`](../../core/domain/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/domain/) | `review-code`, `yumemi-issue-workflow` |
+| **Data Layer (Caching & Impl)** | [`core/data/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/data/repository/GitHubRepositoryImpl.kt`](../../core/data/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/data/repository/GitHubRepositoryImpl.kt) | `review-code`, `yumemi-issue-workflow` |
+| **Search Feature (UI & ViewModel)** | [`feature/search/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/search/`](../../feature/search/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/search/) | `review-code`, `yumemi-issue-workflow` |
+| **Detail Feature (UI & ViewModel)** | [`feature/detail/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/detail/`](../../feature/detail/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/detail/) | `review-code`, `yumemi-issue-workflow` |
+| **Application Shell & DI** | [`app/src/main/kotlin/jp/co/yumemi/android/codecheck/`](../../app/src/main/kotlin/jp/co/yumemi/android/codecheck/) | `create-pr`, `review-code` |
 | **ADR Storage** | [`docs/02_project_architecture/adr/`](../02_project_architecture/adr/) | `create-adr`, `create-documentation` |
 | **Sprint & Issue Roadmap**| [`docs/03_sprint_execution/`](../03_sprint_execution/) | `yumemi-issue-workflow`, `create-documentation` |
 | **Review Guidelines** | [`docs/01_company_and_team/04_code_review_guidelines.md`](./04_code_review_guidelines.md) | `review-code`, `yumemi-code-review` |

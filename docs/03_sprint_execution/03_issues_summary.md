@@ -12,13 +12,13 @@ All **9 Yumemi challenge issues** (mapped to **GitHub Issues #3 through #11**) w
 
 | Yumemi Challenge | GitHub Issue | Title | Level | Status |
 |:---:|:---:|:------|:-----:|:------:|
-| **#1** | [**#3**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/3) | ソースコードの可読性の向上 | 初級 | 🚀 In Progress |
-| **#2** | [**#4**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/4) | ソースコードの安全性の向上 | 初級 | 📋 Planned |
-| **#3** | [**#5**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/5) | バグを修正 | 初級 | 📋 Planned |
-| **#4** | [**#6**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/6) | Fat Fragment の回避 | 初級 | 📋 Planned |
-| **#5** | [**#7**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/7) | プログラム構造をリファクタリング | 中級 | 📋 Planned |
-| **#6** | [**#8**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/8) | アーキテクチャを適用 | 中級 | 📋 Planned |
-| **#7** | [**#9**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/9) | テストを追加 | 中級 | 📋 Planned |
+| **#1** | [**#3**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/3) | ソースコードの可読性の向上 | 初級 | ✅ Done (PR #17) |
+| **#2** | [**#4**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/4) | ソースコードの安全性の向上 | 初級 | ✅ Done (PR #18) |
+| **#3** | [**#5**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/5) | バグを修正 | 初級 | ✅ Done (PR #19) |
+| **#4** | [**#6**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/6) | Fat Fragment の回避 | 初級 | ✅ Done (PR #20) |
+| **#5** | [**#7**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/7) | プログラム構造をリファクタリング | 中級 | ✅ Done (PR #21) |
+| **#6** | [**#8**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/8) | アーキテクチャを適用 | 中級 | ✅ Done (PRs 8.1, 8.2, 8.3) |
+| **#7** | [**#9**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/9) | テストを追加 | 中級 | 🎯 Active / Next |
 | **#8** | [**#10**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/10) | UI をブラッシュアップ | ボーナス | 📋 Planned |
 | **#9** | [**#11**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/11) | 新機能を追加 | ボーナス | 📋 Planned |
 
@@ -102,7 +102,7 @@ Opportunity to add production-ready enhancements: in-app browsing, repository so
 
 - [x] Foundation setup & Documentation architecture
 - [x] CI/CD automated pipeline
-- [ ] Sprint 1: Code health & readability
-- [ ] Sprint 2: Architecture & modularity
-- [ ] Sprint 3: Testing & Jetpack Compose UI
-- [ ] Sprint 4: Bonus features & Release v1.0.0
+- [x] Sprint 1: Code health & readability (GitHub #3, #4, #5)
+- [x] Sprint 2: Architecture & modularity (GitHub #6, #7, #8 — PRs 8.1, 8.2, 8.3)
+- [ ] Sprint 3: Testing & UI polish (GitHub #9, #10)
+- [ ] Sprint 4: Bonus features & Release v1.0.0 (GitHub #11)

@@ -9,13 +9,13 @@ description: >-
 This skill outlines the standard review checklist and criteria used by Yumemi reviewers (as referenced in their [Qiita evaluation article](https://qiita.com/blendthink/items/aa70b8b3106fb4e3555f)).
 
 ## 📱 Current Codebase Tech Stack
-- **Build Infrastructure:** Composite `build-logic` Convention Plugins + Version Catalog (`libs.versions.toml`)
-- **Modules:** Multi-module layout (`:core:domain`, `:core:network`, `:core:data`, `:shared-core`, `:core:designsystem`, `:core:ui`, `:app`, with future `:core:database` in Issue #9)
-- **UI:** ViewBinding (migrating to Jetpack Compose in PR 8.3)
-- **ViewModel:** AndroidViewModel with LiveData (migrating to StateFlow UDF in PR 8.3)
-- **DI:** Manual instantiation (migrating to Hilt in PR 8.3)
-- **Network:** Ktor HttpClient with Closeable pattern (migrating to KMP Ktor in PR 8.2)
-- **Async:** Coroutines + viewModelScope
+- **Build Infrastructure:** Composite `build-logic` Convention Plugins + Version Catalog (`libs.versions.toml`) + JVM-17 target validation
+- **Modules:** Multi-module Clean Architecture (`:core:domain`, `:core:network`, `:core:data`, `:shared-core`, `:core:designsystem`, `:core:ui`, `:feature:search`, `:feature:detail`, `:app`, with future `:core:database` in Issue #9)
+- **UI:** 100% Jetpack Compose + Material 3 Theme (`CodeCheckTheme`)
+- **ViewModel:** `@HiltViewModel` with `StateFlow` Unidirectional Data Flow (UDF) & `SavedStateHandle`
+- **DI:** Dagger Hilt (`@AndroidEntryPoint`, `@HiltAndroidApp`, `@Module`)
+- **Network:** KMP Ktor `HttpClient` with `Logging` plugin and explicit request/response logging
+- **Async:** Coroutines + `viewModelScope` + `StateFlow`
 
 ---
 
@@ -89,11 +89,12 @@ When providing feedback on code or PR diffs, categorize comments using standard 
 ---
 
 ## 📂 Related Relative Paths
-- **API Client**: `app/src/main/kotlin/jp/co/yumemi/android/code_check/api/GitHubApiClient.kt`
-- **JSON Mapper**: `app/src/main/kotlin/jp/co/yumemi/android/code_check/api/RepositoryMapper.kt`
-- **Repository Interface**: `app/src/main/kotlin/jp/co/yumemi/android/code_check/repository/GitHubRepository.kt`
-- **Repository Implementation**: `app/src/main/kotlin/jp/co/yumemi/android/code_check/repository/GitHubRepositoryImpl.kt`
-- **Search ViewModel**: `app/src/main/kotlin/jp/co/yumemi/android/code_check/RepositorySearchViewModel.kt`
+- **Network Service**: `core/network/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/network/GitHubApiService.kt`
+- **Domain Models & Contract**: `core/domain/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/domain/`
+- **Repository Implementation**: `core/data/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/data/repository/GitHubRepositoryImpl.kt`
+- **Search Feature (UI & ViewModel)**: `feature/search/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/search/`
+- **Detail Feature (UI & ViewModel)**: `feature/detail/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/detail/`
+- **Application Shell & DI**: `app/src/main/kotlin/jp/co/yumemi/android/codecheck/`
 - **Review Guidelines**: `docs/01_company_and_team/04_code_review_guidelines.md`
 - **Yumemi Review Culture**: `docs/01_company_and_team/09_yumemi_review_culture.md`
 - **Definition of Done**: `docs/01_company_and_team/05_definition_of_done.md`

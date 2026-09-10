@@ -336,8 +336,15 @@ The multi-module structure, convention plugin tooling, and headless KMP patterns
 
 * **Google (Now in Android & Modularization Guide):**
   * [Official Guide to Android App Modularization](https://developer.android.com/topic/modularization)
-  * [Modularization Patterns & Convention Plugins](https://developer.android.com/topic/modularization/patterns)
+  * [Modularization Patterns & Dependency Guidelines](https://developer.android.com/topic/modularization/patterns)
+  * [Hilt in Multi-Module Apps](https://developer.android.com/training/dependency-injection/hilt-multi-module)
   * [Now in Android Reference Repository](https://github.com/android/nowinandroid)
+* **Gradle & Build Infrastructure:**
+  * [Gradle Build Tool: Structuring Large Multi-Project Builds](https://docs.gradle.org/current/userguide/structuring_software_products.html)
+  * [Gradle: Sharing Build Logic with Convention Plugins](https://docs.gradle.org/current/userguide/sharing_build_logic_between_subprojects.html)
+* **JetBrains (Kotlin Multiplatform):**
+  * [KMP: "Share logic, keep UI native"](https://kotlinlang.org/multiplatform/#choose-share-what-logic-native-ui)
+  * [KMP Multiplatform Expect / Actual Pattern](https://kotlinlang.org/docs/multiplatform-expect-actual.html)
 * **Slack (Project Duplo - Enterprise Modularization):**
   * [Stabilize, Modularize, Modernize: Scaling Slack's Mobile Codebases](https://slack.engineering/stabilize-modularize-modernize-scaling-slacks-mobile-codebases-2/)
   * [Scaling Slack's Mobile Codebases: Modernization](https://slack.engineering/scaling-slacks-mobile-codebases-modernization/)

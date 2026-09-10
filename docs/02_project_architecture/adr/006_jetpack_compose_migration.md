@@ -1,8 +1,8 @@
 # ADR-006: Migration from Android Views / Fragments to Declarative Jetpack Compose
 
-**Status:** 📋 Proposed  
-**Deciders:** Dinakar Prasad Maurya  
-**Technical Story:** Issue #4 (Avoid Fat Fragment), Issue #8 (UI Polish), Material 3  
+**Status:** 📋 Proposed
+**Deciders:** Dinakar Prasad Maurya
+**Technical Story:** Declarative UI Migration & Material 3  
 
 ---
 

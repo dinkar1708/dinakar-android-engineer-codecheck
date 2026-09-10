@@ -65,12 +65,12 @@ This project starts as a single-module application and will evolve through PRs:
 
 Rather than a big-bang rewrite, the architecture evolves incrementally across PRs:
 
-1. **Decouple UI from Logic**: Extract business logic and network calls from Fragments into ViewModels (Issue #4).
-2. **Domain & Data Separation**: Separate pure domain entities from Ktor data implementations (Issue #5).
-3. **Clean Architecture & DI**: Wire all layers using Hilt and enforce UDF with `StateFlow` (Issue #6).
-4. **UI Modernization**: Migrate XML layouts to Jetpack Compose (Issue #8).
+1. **Decouple UI from Logic**: Extract business logic and network calls from Fragments into ViewModels
+2. **Domain & Data Separation**: Separate pure domain entities from Ktor data implementations
+3. **Clean Architecture & DI**: Wire all layers using Hilt and enforce UDF with `StateFlow`
+4. **UI Modernization**: Migrate XML layouts to Jetpack Compose
 
-For the complete issue-by-issue breakdown and tracking, see **[Issues Summary](./03_sprint_execution/03_issues_summary.md)**.
+> **See [Issues Summary](./03_sprint_execution/03_issues_summary.md) for complete implementation roadmap**
 
 ---
 

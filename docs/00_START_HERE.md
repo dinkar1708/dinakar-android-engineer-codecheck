@@ -30,15 +30,10 @@ This repository organizes documentation into three distinct operational tiers to
 
 ## Solution Scope & Approach
 
-This solution addresses all **9 Yumemi challenge issues** through a structured, incremental approach:
+This solution addresses all **9 Yumemi challenge issues** through a structured, incremental approach across 4 sprints.
 
-- **Foundation & Code Health** (Issues #1–3): Fix naming conventions, resolve null-safety hazards, and eliminate critical bugs/leaks.
-- **Architecture & Modularity** (Issues #4–6): Extract business logic, modularize the codebase, and implement Clean Architecture with Hilt DI.
-- **Testing & Modern UI** (Issues #7–8): Comprehensive test coverage (Turbine + MockEngine) and complete Jetpack Compose migration.
-- **Bonus Capabilities** (Issue #9): Production enhancements including Chrome Custom Tabs, repository sorting, and offline resilience.
-
-👉 For the detailed breakdown and progress tracking of each issue, see **[Issues Summary](./03_sprint_execution/03_issues_summary.md)**.
-👉 For technical architecture and data flow design, see **[Architecture Overview](./ARCHITECTURE_OVERVIEW.md)**.
+👉 **See [Issues Summary](./03_sprint_execution/03_issues_summary.md) for complete issue details and tracking**
+👉 For technical architecture and data flow design, see **[Architecture Overview](./ARCHITECTURE_OVERVIEW.md)**
 
 ---
 

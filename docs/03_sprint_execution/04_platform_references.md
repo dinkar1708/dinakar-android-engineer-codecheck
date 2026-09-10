@@ -200,19 +200,19 @@ graph TD
 
 Every decision and Pull Request executed in this repository is directly substantiated by these official references:
 
-| Project Decision / Feature | Problem Addressed | Official Reference Source | Applied Scope / Issue |
-|:---|:---|:---|:---|
-| **CI Quality Gates** | Broken builds, regression leakage | [Android CI & Gradle Best Practices](https://developer.android.com/build) | **CI & Build Infrastructure** |
-| **PascalCase Naming & Style** | Inconsistent naming, `topActivity.kt` CI failure | [Kotlin Coding Conventions](https://kotlinlang.org/docs/coding-conventions.html) | **Issue #1 (Readability)** |
-| **Null Safety & Safe Unwrapping** | `NullPointerException` via `!!` crashes | [Kotlin Null Safety Guide](https://kotlinlang.org/docs/null-safety.html) | **Issue #2 (Null Safety)** |
-| **Headless KMP Multiplatform** | Logic duplication between Android & iOS | [JetBrains KMP Architecture Guide](https://kotlinlang.org/multiplatform/#choose-share-what-logic-native-ui) | **Issue #5 (Modularization)** |
-| **UDF & Sealed UI State** | Fragment spaghetti & unpredictable view state | [Android UI Layer Guide](https://developer.android.com/topic/architecture/ui-layer) | **Issue #6 (Architecture & UDF)** |
-| **Jetpack Compose + Material 3** | Fragment ViewBinding memory leaks & outdated UI | [Material 3 Design Guidelines](https://m3.material.io/) | **Issue #8 (Jetpack Compose)** |
-| **Virtual Time Coroutine Tests** | Flaky asynchronous unit tests | [Kotlinx Coroutines Test API](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/) | **Issue #7 (Turbine & Testing)** |
-| **Process Death State Recovery** | Query loss on background app kill | [Android SavedStateHandle](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate) | **Issue #2 (Process Death)** |
-| **Custom Tabs & Settings** | External browser context switching | [Chrome Custom Tabs Guide](https://developer.chrome.com/docs/android/custom-tabs/) | **Issue #9 (Custom Tabs)** |
-| **SwiftUI Native Client** | Cross-platform UI degradation on iOS | [Apple HIG & SwiftUI Guidelines](https://developer.apple.com/design/human-interface-guidelines/) | **Issue #9 (iOS Verification)** |
-| **Build Flavors & Offline Mocking** | Fragile API tests & rate-limiting during demo | [Android Product Flavors Guide](https://developer.android.com/build/build-variants) | **Issue #9 (Product Flavors)** |
+| Project Decision / Feature | Problem Addressed | Official Reference Source |
+|:---|:---|:---|
+| **CI Quality Gates** | Broken builds, regression leakage | [Android CI & Gradle Best Practices](https://developer.android.com/build) |
+| **PascalCase Naming & Style** | Inconsistent naming, `topActivity.kt` CI failure | [Kotlin Coding Conventions](https://kotlinlang.org/docs/coding-conventions.html) |
+| **Null Safety & Safe Unwrapping** | `NullPointerException` via `!!` crashes | [Kotlin Null Safety Guide](https://kotlinlang.org/docs/null-safety.html) |
+| **Headless KMP Multiplatform** | Logic duplication between Android & iOS | [JetBrains KMP Architecture Guide](https://kotlinlang.org/multiplatform/#choose-share-what-logic-native-ui) |
+| **UDF & Sealed UI State** | Fragment spaghetti & unpredictable view state | [Android UI Layer Guide](https://developer.android.com/topic/architecture/ui-layer) |
+| **Jetpack Compose + Material 3** | Fragment ViewBinding memory leaks & outdated UI | [Material 3 Design Guidelines](https://m3.material.io/) |
+| **Virtual Time Coroutine Tests** | Flaky asynchronous unit tests | [Kotlinx Coroutines Test API](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/) |
+| **Process Death State Recovery** | Query loss on background app kill | [Android SavedStateHandle](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate) |
+| **Custom Tabs & Settings** | External browser context switching | [Chrome Custom Tabs Guide](https://developer.chrome.com/docs/android/custom-tabs/) |
+| **SwiftUI Native Client** | Cross-platform UI degradation on iOS | [Apple HIG & SwiftUI Guidelines](https://developer.apple.com/design/human-interface-guidelines/) |
+| **Build Flavors & Offline Mocking** | Fragile API tests & rate-limiting during demo | [Android Product Flavors Guide](https://developer.android.com/build/build-variants) |
 
 ---
 

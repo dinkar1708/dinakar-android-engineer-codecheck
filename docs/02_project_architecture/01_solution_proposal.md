@@ -23,24 +23,14 @@
 
 ### Original Requirements (from Yumemi)
 
-Yumemi provided a baseline Android repository search application with known issues across 9 categories:
-
-| # | Category | Problem Statement |
-|:-:|:---------|:------------------|
-| **#1** | **Code Readability** | File naming (topActivity.kt), Hungarian notation, wildcard imports |
-| **#2** | **Code Safety** | Forced unwraps (!!), null handling, process death crashes |
-| **#3** | **Bug Fixes** | JSON typo (forks_conut), runBlocking on main thread, memory leaks |
-| **#4** | **Fat Fragment** | All logic in Fragment, no separation of concerns |
-| **#5** | **Program Structure** | No layer separation, mixed Domain/Data/Presentation |
-| **#6** | **Architecture** | No DI, no Clean Architecture, ad-hoc state management |
-| **#7** | **Testing** | Zero unit tests, no test infrastructure |
-| **#8** | **UI Polish** | XML layouts, no dark mode, no localization, poor UX |
-| **#9** | **Bonus Features** | Add new capabilities (optional) |
+Yumemi provided a baseline Android repository search application with known issues across 9 categories covering code readability, safety, bugs, architecture, testing, UI polish, and bonus features.
 
 **Evaluation Criteria:**
-- New/experienced candidates: Issues #1-#3 (required)
-- Experienced/lead candidates: Issues #1-#8 (required)
-- Bonus: Issue #9 (optional, demonstrates initiative)
+- New/experienced candidates: First 3 issues (required)
+- Experienced/lead candidates: Issues 1-8 (required)
+- Bonus: Issue 9 (optional, demonstrates initiative)
+
+> **See [Issues Summary](../03_sprint_execution/03_issues_summary.md) for complete issue details**
 
 ---
 

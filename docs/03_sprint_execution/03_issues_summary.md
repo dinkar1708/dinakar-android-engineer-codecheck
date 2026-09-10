@@ -28,132 +28,81 @@ All **9 Yumemi challenge issues** (mapped to **GitHub Issues #3 through #11**) w
 
 ## Issue #1: [GitHub #3 — ソースコードの可読性の向上](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/3)
 
-**Problems to fix:**
-- File naming: `topActivity.kt` → `TopActivity.kt` (PascalCase)
-- Type naming: `data class item` → `data class RepositoryItem`
-- Fragment naming: `OneFragment` / `TwoFragment` → `RepositorySearchFragment` / `RepositoryDetailFragment`
-- Hungarian notation: `_binding`, `_viewModel`, `_layoutManager`, etc.
-- Variable naming: `diff_util` → `diffUtil` (lowerCamelCase)
-- Wildcard imports: `io.ktor.client.*`, `java.util.*`
-- Inconsistent indentation (tab/space mixing)
+**Code Readability**
 
-**Solution:**
-- Proper PascalCase naming for classes and files
-- Remove Hungarian prefixes
-- Enforce `.editorconfig` (4-space indent)
-- Explicit single-class imports
+The codebase has naming convention issues including `topActivity.kt` (should be PascalCase), Hungarian notation prefixes (`_binding`, `_viewModel`), and generic names like `OneFragment`. Also includes wildcard imports and inconsistent indentation. Needs improvement following Kotlin coding conventions and consistent formatting standards.
 
 ---
 
 ## Issue #2: [GitHub #4 — ソースコードの安全性の向上](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/4)
 
-**Problems to fix:**
-- Forced unwraps: `context!!`, `arguments!!`
-- `lateinit` crash on process death (`lastSearchDate`)
-- Unsafe JSON parsing without validation
+**Code Safety**
 
-**Solution:**
-- Use `requireContext()`, safe accessors
-- Remove all `!!` operators
-- Handle process death via `SavedStateHandle`
+The code uses forced unwraps (`context!!`, `arguments!!`) which can crash, and `lateinit` variables that don't survive process death. Needs safer null handling and process death resilience.
 
 ---
 
 ## Issue #3: [GitHub #5 — バグを修正](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/5)
 
-**Problems to fix:**
-- Typo: `forks_conut` (forks count always displays 0)
-- UI thread blocking: `runBlocking` in `searchResults()`
-- Memory leaks: ViewBinding references, Context retention
+**Bug Fixes**
 
-**Solution:**
-- Fix typo to `forks_count`
-- Use structured coroutines on background dispatchers
-- Clear ViewBinding in `onDestroyView()`
+There's a typo in the API parsing (`forks_conut` instead of `forks_count`) causing incorrect data display. The code also blocks the UI thread with `runBlocking` causing ANRs, and has ViewBinding memory leaks. These bugs need to be identified and fixed.
 
 ---
 
 ## Issue #4: [GitHub #6 — Fat Fragment の回避](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/6)
 
-**Problems to fix:**
-- Business logic in Fragment
-- Direct network calls in UI layer
+**Avoid Fat Fragment**
 
-**Solution:**
-- Extract logic to `RepositorySearchViewModel`
-- Separate UI observation from data fetching
+All business logic and network calls are directly in the Fragment, violating separation of concerns. The Fragment handles too many responsibilities and needs refactoring.
 
 ---
 
 ## Issue #5: [GitHub #7 — プログラム構造をリファクタリング](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/7)
 
-**Problems to fix:**
-- Single module monolith (`:app`)
-- Mixed concerns between presentation and data
+**Program Structure**
 
-**Solution:**
-- Multi-module architecture (`:core:model`, `:core:data`, `:core:domain`, `:feature:*`)
-- Clear layer separation and dependency inversion
+The app is a single monolithic `:app` module with mixed presentation and data concerns. Needs better modularization and layer separation.
 
 ---
 
 ## Issue #6: [GitHub #8 — アーキテクチャを適用](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/8)
 
-**Problems to fix:**
-- No dependency injection
-- Tightly coupled components
-- Unpredictable state mutations
+**Architecture**
 
-**Solution:**
-- Hilt DI implementation
-- Clean Architecture (Domain -> Data -> UI)
-- Unidirectional Data Flow (UDF) with `StateFlow`
+No dependency injection framework, tightly coupled components, and unpredictable state management. Needs proper architecture pattern implementation.
 
 ---
 
 ## Issue #7: [GitHub #9 — テストを追加](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/9)
 
-**Problems to fix:**
-- No automated tests
-- Untestable monolithic code
+**Testing**
 
-**Solution:**
-- Unit tests for ViewModels with `Turbine` and `MockEngine`
-- Virtual time coroutine testing (`StandardTestDispatcher`)
-- Repository & Mapper unit tests
+Zero automated tests and untestable monolithic code structure. Needs comprehensive test coverage and testable architecture.
 
 ---
 
 ## Issue #8: [GitHub #10 — UI をブラッシュアップ](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/10)
 
-**Problems to fix:**
-- Legacy XML layouts
-- No dark mode support
-- Hardcoded strings without localization
+**UI Polish**
 
-**Solution:**
-- 100% Declarative Jetpack Compose migration
-- Material 3 theme & dynamic color support
-- Dark mode + Bilingual Japanese & English localization
+Uses legacy XML layouts with no dark mode or localization support. UI needs modernization with better theming and internationalization.
 
 ---
 
 ## Issue #9: [GitHub #11 — 新機能を追加](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/11)
 
-**Features to add:**
-- Chrome Custom Tabs integration
-- Repository sorting (Stars, Forks, Updated)
-- Settings screen for language and theme toggling
-- Offline cache & mock product flavor
+**Bonus Features**
+
+Opportunity to add production-ready enhancements: in-app browsing, repository sorting, user preferences, offline support, and testing infrastructure improvements.
 
 ---
 
 ## Progress Tracking
 
 - [x] Foundation setup & Documentation architecture
-- [x] CI/CD automated pipeline (`ci-pr-quality-gate.yml`)
-- [ ] Issues #1–3 (Beginner level - Code health & readability)
-- [ ] Issues #4–6 (Intermediate level - Architecture & modularity)
-- [ ] Issues #7–8 (Testing & Jetpack Compose UI)
-- [ ] Issue #9 (Bonus features & Headless KMP)
-- [ ] Release v1.0.0
+- [x] CI/CD automated pipeline
+- [ ] Sprint 1: Code health & readability
+- [ ] Sprint 2: Architecture & modularity
+- [ ] Sprint 3: Testing & Jetpack Compose UI
+- [ ] Sprint 4: Bonus features & Release v1.0.0

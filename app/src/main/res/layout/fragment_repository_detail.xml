@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/ownerIconView"
@@ -23,12 +28,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="JetBrains/kotlin"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ownerIconView" />
+        app:layout_constraintTop_toBottomOf="@id/ownerIconView"
+        tools:text="JetBrains/kotlin" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/centerGuid"
@@ -43,11 +48,12 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:text="Written in Kotlin"
         android:textColor="@color/black"
         android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@id/centerGuid"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nameView"
-        tools:ignore="MissingConstraints" />
+        tools:text="Written in Kotlin" />
 
     <TextView
         android:id="@+id/starsView"
@@ -55,13 +61,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:text="38530 stars"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/centerGuid"
-        app:layout_constraintTop_toBottomOf="@id/nameView" />
+        app:layout_constraintTop_toBottomOf="@id/nameView"
+        tools:text="38530 stars" />
 
     <TextView
         android:id="@+id/watchersView"
@@ -69,13 +75,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:text="38530 watchers"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/centerGuid"
-        app:layout_constraintTop_toBottomOf="@id/starsView" />
+        app:layout_constraintTop_toBottomOf="@id/starsView"
+        tools:text="38530 watchers" />
 
     <TextView
         android:id="@+id/forksView"
@@ -83,13 +89,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:text="4675 forks"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/centerGuid"
-        app:layout_constraintTop_toBottomOf="@id/watchersView" />
+        app:layout_constraintTop_toBottomOf="@id/watchersView"
+        tools:text="4675 forks" />
 
     <TextView
         android:id="@+id/openIssuesView"
@@ -97,12 +103,14 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:text="131 open issues"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/centerGuid"
-        app:layout_constraintTop_toBottomOf="@id/forksView" />
+        app:layout_constraintTop_toBottomOf="@id/forksView"
+        tools:text="131 open issues" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

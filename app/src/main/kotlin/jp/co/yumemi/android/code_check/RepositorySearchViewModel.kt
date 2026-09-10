@@ -3,10 +3,13 @@
  */
 package jp.co.yumemi.android.code_check
 
-import android.content.Context
+import android.app.Application
 import android.os.Parcelable
 import android.util.Log
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
 import io.ktor.client.engine.android.Android
@@ -15,9 +18,8 @@ import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.HttpResponse
 import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.json.JSONObject
 import java.util.Date
@@ -27,24 +29,28 @@ import java.util.Date
  * Handles repository search logic and data management
  */
 class RepositorySearchViewModel(
-    val context: Context
-) : ViewModel() {
+    application: Application
+) : AndroidViewModel(application) {
+
+    private val _searchResults = MutableLiveData<List<RepositoryItem>>()
+    val searchResults: LiveData<List<RepositoryItem>> = _searchResults
 
     /**
      * Search GitHub repositories by keyword using the GitHub API
      * @param inputText Search keyword
-     * @return List of repository items matching the search query, or empty list on error
      */
-    fun searchResults(inputText: String): List<RepositoryItem> = runBlocking {
+    fun searchRepositories(inputText: String) {
         // Validate input
         if (inputText.isBlank()) {
             Log.w(TAG, "Search query is empty")
-            return@runBlocking emptyList()
+            _searchResults.value = emptyList()
+            return
         }
 
-        val client = HttpClient(Android)
+        viewModelScope.launch {
+            val client = HttpClient(Android)
 
-        return@runBlocking GlobalScope.async {
+            val results = async {
             try {
                 val response: HttpResponse = client.get("https://api.github.com/search/repositories") {
                     header("Accept", "application/vnd.github.v3+json")
@@ -85,7 +91,7 @@ class RepositorySearchViewModel(
                         RepositoryItem(
                             name = name,
                             ownerIconUrl = ownerIconUrl,
-                            language = context.getString(R.string.written_language, language),
+                            language = getApplication<Application>().getString(R.string.written_language, language),
                             stargazersCount = stargazersCount,
                             watchersCount = watchersCount,
                             forksCount = forksCount,
@@ -103,7 +109,10 @@ class RepositorySearchViewModel(
             } finally {
                 client.close()
             }
-        }.await()
+            }.await()
+
+            _searchResults.value = results
+        }
     }
 
     companion object {

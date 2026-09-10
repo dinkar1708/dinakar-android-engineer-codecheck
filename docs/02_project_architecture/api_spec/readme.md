@@ -29,3 +29,20 @@ When an IP exceeds 60 requests/hr, GitHub responds with HTTP status `403 Forbidd
 ```
 
 The client network layer intercepts non-2xx statuses and translates them into user-facing error notifications with retry capabilities.
+
+---
+
+## 3. API Specification Documents
+
+| Document | Description |
+|:---------|:------------|
+| [01_search_repositories_api.md](./01_search_repositories_api.md) | GitHub Search API endpoint specification, request/response schemas |
+| [02_api_versioning_guide.md](./02_api_versioning_guide.md) | API versioning strategy, backward compatibility, version negotiation |
+
+---
+
+## Related Documentation
+
+- **ADR:** [007_api_versioning_strategy.md](../adr/007_api_versioning_strategy.md)
+- **Architecture:** [Clean Architecture & UDF](../architecture/01_clean_architecture_and_udf.md)
+- **CI/CD:** [API Version Alignment](../../01_company_and_team/07_cicd_and_delivery_standards.md)

@@ -15,14 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
  * RecyclerView adapter for displaying GitHub repository items
  */
 class RepositoryAdapter(
-    private val itemClickListener: OnItemClickListener,
+    private val onItemClick: (RepositoryItem) -> Unit,
 ) : ListAdapter<RepositoryItem, RepositoryAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
-
-    interface OnItemClickListener {
-        fun itemClick(item: RepositoryItem)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -33,10 +29,7 @@ class RepositoryAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.itemView.findViewById<TextView>(R.id.repositoryNameView).text = item.name
-
-        holder.itemView.setOnClickListener {
-            itemClickListener.itemClick(item)
-        }
+        holder.itemView.setOnClickListener { onItemClick(item) }
     }
 
     companion object {

@@ -9,9 +9,8 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import jp.co.yumemi.android.code_check.databinding.FragmentRepositorySearchBinding
+import jp.co.yumemi.android.code_check.extensions.setupWithLinearLayout
 
 /**
  * Fragment for searching GitHub repositories
@@ -26,32 +25,29 @@ class RepositorySearchFragment : Fragment(R.layout.fragment_repository_search) {
 
         val binding = FragmentRepositorySearchBinding.bind(view)
 
-        val layoutManager = LinearLayoutManager(requireContext())
-        val dividerItemDecoration =
-            DividerItemDecoration(requireContext(), layoutManager.orientation)
-        val adapter = RepositoryAdapter(object : RepositoryAdapter.OnItemClickListener {
-            override fun itemClick(item: RepositoryItem) {
-                navigateToRepositoryDetail(item)
-            }
-        })
+        // Setup adapter with lambda click handler
+        val adapter = RepositoryAdapter { item ->
+            navigateToRepositoryDetail(item)
+        }
 
         // Observe search results from ViewModel
         viewModel.searchResults.observe(viewLifecycleOwner) { results ->
             adapter.submitList(results)
         }
 
+        // Setup search input listener
         binding.searchInputText.setOnEditorActionListener { editText, action, _ ->
             if (action == EditorInfo.IME_ACTION_SEARCH) {
-                val query = editText.text.toString()
-                viewModel.searchRepositories(query)
-                return@setOnEditorActionListener true
+                viewModel.searchRepositories(editText.text.toString())
+                true
+            } else {
+                false
             }
-            return@setOnEditorActionListener false
         }
 
+        // Setup RecyclerView
         binding.recyclerView.apply {
-            this.layoutManager = layoutManager
-            addItemDecoration(dividerItemDecoration)
+            setupWithLinearLayout()
             this.adapter = adapter
         }
     }

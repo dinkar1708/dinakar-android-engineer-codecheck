@@ -43,13 +43,13 @@ Android GitHub repository search application with modern architecture and best p
 
 | Yumemi Challenge Task | GitHub Issue | Milestone | Category / Level | Status |
 |:---|:---:|:---:|:---:|:---:|
-| **#1: ソースコードの可読性の向上** *(Improve Code Readability)* | [**Issue #3**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/3) | 課題 | 初級 (Beginner) | 🚀 In Progress |
-| **#2: ソースコードの安全性の向上** *(Improve Code Safety)* | [**Issue #4**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/4) | 課題 | 初級 (Beginner) | 📋 Planned |
-| **#3: バグを修正** *(Fix Bugs)* | [**Issue #5**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/5) | 課題 | 初級 (Beginner) | 📋 Planned |
-| **#4: Fat Fragment の回避** *(Avoid Fat Fragment)* | [**Issue #6**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/6) | 課題 | 初級 (Beginner) | 📋 Planned |
-| **#5: プログラム構造をリファクタリング** *(Refactor Program Structure)* | [**Issue #7**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/7) | 課題 | 中級 (Intermediate) | 📋 Planned |
-| **#6: アーキテクチャを適用** *(Apply Architecture)* | [**Issue #8**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/8) | 課題 | 中級 (Intermediate) | 📋 Planned |
-| **#7: テストを追加** *(Add Tests)* | [**Issue #9**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/9) | 課題 | 中級 (Intermediate) | 📋 Planned |
+| **#1: ソースコードの可読性の向上** *(Improve Code Readability)* | [**Issue #3**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/3) | 課題 | 初級 (Beginner) | ✅ Done (PR #17) |
+| **#2: ソースコードの安全性の向上** *(Improve Code Safety)* | [**Issue #4**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/4) | 課題 | 初級 (Beginner) | ✅ Done (PR #18) |
+| **#3: バグを修正** *(Fix Bugs)* | [**Issue #5**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/5) | 課題 | 初級 (Beginner) | ✅ Done (PR #19) |
+| **#4: Fat Fragment の回避** *(Avoid Fat Fragment)* | [**Issue #6**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/6) | 課題 | 初級 (Beginner) | ✅ Done (PR #20) |
+| **#5: プログラム構造をリファクタリング** *(Refactor Program Structure)* | [**Issue #7**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/7) | 課題 | 中級 (Intermediate) | ✅ Done (PR #21) |
+| **#6: アーキテクチャを適用** *(Apply Architecture)* | [**Issue #8**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/8) | 課題 | 中級 (Intermediate) | ✅ Done (PRs 8.1, 8.2, 8.3) |
+| **#7: テストを追加** *(Add Tests)* | [**Issue #9**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/9) | 課題 | 中級 (Intermediate) | 🎯 Active / Next |
 | **#8: UI をブラッシュアップ** *(Polish UI)* | [**Issue #10**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/10) | 課題 | ボーナス (Bonus) | 📋 Planned |
 | **#9: 新機能を追加** *(Add New Features)* | [**Issue #11**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/11) | 課題 | ボーナス (Bonus) | 📋 Planned |
 
@@ -80,13 +80,17 @@ In alignment with the [Yumemi Code Challenge AI policy](https://github.com/yumem
 ### Implemented
 - GitHub repository search
 - Repository detail view
-- Offline support
+- Multi-Module Clean Architecture (`:core:*`, `:feature:*`, `:app`)
+- Jetpack Compose UI (Baseline functional UI)
+- Hilt Dependency Injection
+- Unidirectional Data Flow (UDF) with StateFlow
+- KMP Ktor Network Client with HTTP Logging
+- Query in-memory caching and resilient error handling
 
 ### Planned
-- Modern Android architecture
-- Jetpack Compose UI
-- Comprehensive testing
-- Dark mode & Internationalization
+- Comprehensive unit and integration testing (Issue #9)
+- UI Polish, Material 3 Dark theme & Japanese Localization (Issue #10)
+- Bonus features: Pagination / Infinite Scrolling, Chrome Custom Tabs, Sorting (Issue #11)
 
 ---
 

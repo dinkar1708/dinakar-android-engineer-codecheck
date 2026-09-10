@@ -1,16 +1,35 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
     repositories {
         google()
         mavenCentral()
     }
 }
+
 rootProject.name = "Android Engineer CodeCheck"
+
+// App module
 include ':app'
+
+// Core KMP modules (PR 8.2 will implement these)
+include ':core:domain'
+include ':core:network'
+include ':core:data'
+include ':shared-core'
+
+// Core Android UI modules (PR 8.3 will implement these)
+include ':core:designsystem'
+include ':core:ui'
+
+// Feature modules will be added in PR 8.3
+// include ':feature:search'
+// include ':feature:detail'

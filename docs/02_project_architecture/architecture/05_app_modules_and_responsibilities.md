@@ -8,13 +8,15 @@
 
 ## 1. Executive Architectural Overview
 
-The repository is architected as an **11-module decoupled multi-project system** (plus composite `build-logic`), enforcing strict **Unidirectional Dependency Flow** based on Martin Fowler's Clean Architecture and Google's official Android Modularization guidelines.
+The repository is architected as an **enterprise-grade decoupled multi-project system** (plus composite `build-logic`), enforcing strict **Unidirectional Dependency Flow** based on Martin Fowler's Clean Architecture and Google's official Android Modularization guidelines.
 
 ### Architectural Principles:
 1. **Separation of Concerns:** Feature modules do not know about each other (zero cross-feature dependencies).
-2. **Pure Domain Core:** `:core:domain` is 100% pure Kotlin with **zero Android dependencies**, making domain validation and business contracts lightning fast to test.
-3. **Reusability & DRY:** Shared UI components live in `:core:ui`, design tokens in `:core:designsystem`, and test doubles in `:core:testing`.
-4. **Independent Compilation:** Gradle parallel compilation compiles unrelated modules simultaneously, reducing clean build times by 65% and incremental builds to seconds.
+2. **Pure Domain Core:** `:core:domain` is 100% pure Kotlin with **zero Android dependencies**, making domain validation and business contracts lightning fast to test across Android and iOS.
+3. **Dedicated Data & Persistence Separation:** Remote network execution (`:core:network`) and persistent storage (`:core:database`) are kept in specialized modules, coordinated by `:core:data`.
+4. **Reusability & DRY:** Shared UI components live in `:core:ui`, design tokens in `:core:designsystem`, and test doubles in `:core:testing`.
+5. **Cross-Platform Readiness (KMP Type 2):** Business logic and data layers are shared via `:shared-core`, while keeping native UI (Jetpack Compose on Android, SwiftUI on iOS).
+6. **Independent Compilation:** Gradle parallel compilation compiles unrelated modules simultaneously, drastically reducing clean and incremental build times.
 
 ---
 
@@ -33,16 +35,17 @@ graph TD
     end
 
     subgraph CoreLayer [Core Infrastructure Modules]
-        core_domain[":core:domain<br/>(Entities, Repo Contract - Pure Kotlin)"]
-        core_data[":core:data<br/>(Repo Impl, Cache, Jittered Backoff)"]
-        core_network[":core:network<br/>(Ktor HTTP, DTOs, Serialization)"]
+        core_domain[":core:domain<br/>(Entities, Repo Contract, Use Cases - Pure Kotlin)"]
+        core_data[":core:data<br/>(Repo Impl, In-Memory Cache, Retry Coordination)"]
+        core_network[":core:network<br/>(Ktor HTTP Client, DTOs, Serialization)"]
+        core_database[":core:database<br/>(Local Persistence: Room for Android / SQLDelight for iOS)"]
         core_designsystem[":core:designsystem<br/>(M3 Tokens, Color, Type, Spacing)"]
         core_ui[":core:ui<br/>(Loading, Error, Empty, Card Components)"]
         core_testing[":core:testing<br/>(FakeRepo, Fixtures, Dispatcher Rules)"]
     end
 
-    subgraph CrossPlatformLayer [Cross-Platform KMP]
-        shared[":shared<br/>(Headless KMP Domain & Networking)"]
+    subgraph CrossPlatformLayer [Cross-Platform KMP Umbrella]
+        shared_core[":shared-core<br/>(Umbrella KMP Domain, Network & Data)"]
         ios_app["iosApp<br/>(Native iOS SwiftUI Client)"]
     end
 
@@ -53,9 +56,10 @@ graph TD
     app --> core_domain
     app --> core_data
     app --> core_network
+    app --> core_database
     app --> core_designsystem
     app --> core_ui
-    app --> shared
+    app --> shared_core
 
     feature_search --> core_domain
     feature_search --> core_ui
@@ -70,14 +74,20 @@ graph TD
 
     core_data --> core_domain
     core_data --> core_network
+    core_data --> core_database
 
     core_network --> core_domain
+    core_database --> core_domain
 
     core_ui --> core_designsystem
 
     core_testing --> core_domain
 
-    ios_app -.-> shared
+    shared_core --> core_domain
+    shared_core --> core_network
+    shared_core --> core_data
+
+    ios_app -.-> shared_core
 ```
 
 ---
@@ -182,24 +192,41 @@ graph TD
 
 ### 7. `:core:network` — Remote Ktor HTTP Engine & DTOs
 * **Namespace:** `jp.co.yumemi.android.code_check.core.network`
-* **Plugin Applied:** `codecheck.android.library`
+* **Plugin Applied:** `codecheck.kotlin.multiplatform`
 * **Primary Responsibility:**
-  * Handles all external communication with the GitHub REST API v3.
-  * Uses multiplatform **Ktor HTTP Client** with `OkHttp` engine on Android.
+  * Handles all external communication with the GitHub REST API v3 (`GET /search/repositories`, `GET /repos/{owner}/{repo}`).
+  * Multiplatform **Ktor HTTP Client** configured with platform engines (`OkHttp` on Android, `Darwin` on iOS).
   * Uses `kotlinx.serialization` for strict JSON decoding and DTO mapping.
   * Maps HTTP status codes (`403` rate limit, `404` not found, `5xx` server error) to strongly typed domain exceptions.
 * **Dependencies:**
-  * Implementation: `:core:domain`, `ktor-client-core`, `ktor-client-okhttp`, `kotlinx-serialization-json`.
+  * Implementation: `:core:domain`, `ktor-client-core`, `ktor-client-content-negotiation`, `ktor-serialization-kotlinx-json`, `ktor-client-logging`.
 * **Key Components:**
-  * `GitHubRemoteDataSource.kt`: Executes `GET /search/repositories`.
-  * `SearchRepositoriesResponse.kt`: Network DTO deserialization models.
-  * `NetworkResponseMapper.kt`: Converts network DTOs to pure domain entities.
+  * `GitHubApiService.kt`: Ktor HTTP client and API endpoints.
+  * `SearchResponseDto.kt`, `RepositoryItemDto.kt`, `OwnerDto.kt`: Deserialization models.
+  * `DtoMappers.kt`: Maps network DTOs to pure domain entities.
 
 ---
 
-### 8. `:core:designsystem` — Material 3 Design Tokens
+### 8. `:core:database` — Local Persistence & Offline Caching (KMP)
+* **Namespace:** `jp.co.yumemi.android.code_check.core.database`
+* **Plugin Applied:** `codecheck.kotlin.multiplatform`
+* **Primary Responsibility:**
+  * Local persistent storage for offline caching and search history.
+  * Multiplatform abstraction: **Room** implementation on Android, **SQLDelight** / native driver on iOS.
+  * Manages database migrations, DAOs, table schemas, and indexed query execution.
+  * Enables offline-first user experience when combined with `:core:data` repository coordination.
+* **Dependencies:**
+  * Implementation: `:core:domain`, platform database runtime (Room KMP / SQLDelight).
+* **Key Components:**
+  * `RepositoryDao.kt`: Query and mutation contracts for cached repositories.
+  * `RepositoryEntity.kt`: Local database table schema definitions.
+  * `AppDatabase.kt`: Abstract database definition.
+
+---
+
+### 9. `:core:designsystem` — Material 3 Design Tokens
 * **Namespace:** `jp.co.yumemi.android.code_check.core.designsystem`
-* **Plugin Applied:** `codecheck.android.library`, `codecheck.android.compose`
+* **Plugin Applied:** `codecheck.android.library`
 * **Primary Responsibility:**
   * Defines the visual identity and design system tokens following Material 3.
   * Centralizes dynamic light/dark color palettes (`ColorScheme`).
@@ -210,9 +237,9 @@ graph TD
 
 ---
 
-### 9. `:core:ui` — Reusable Presentation Components
+### 10. `:core:ui` — Reusable Presentation Components
 * **Namespace:** `jp.co.yumemi.android.code_check.core.ui`
-* **Plugin Applied:** `codecheck.android.library`, `codecheck.android.compose`
+* **Plugin Applied:** `codecheck.android.library`
 * **Primary Responsibility:**
   * Cross-feature reusable composables preventing UI duplication.
   * Provides standard state views:
@@ -225,7 +252,7 @@ graph TD
 
 ---
 
-### 10. `:core:testing` — Shared Test Infrastructure & Doubles
+### 11. `:core:testing` — Shared Test Infrastructure & Doubles
 * **Namespace:** `jp.co.yumemi.android.code_check.core.testing`
 * **Plugin Applied:** `codecheck.android.library`
 * **Primary Responsibility:**
@@ -238,35 +265,32 @@ graph TD
 
 ---
 
-### 11. `:shared` — Headless Kotlin Multiplatform (KMP) Core
-* **Plugin Applied:** `kotlin("multiplatform")`, `kotlinx-serialization`
-* **Targets:** Android JVM library + iOS native XCFramework (`iosApp/`).
+### 12. `:shared-core` — Headless Kotlin Multiplatform (KMP) Umbrella
+* **Plugin Applied:** `codecheck.kotlin.multiplatform`
+* **Targets:** Android library + iOS native framework/XCFramework (`iosApp/`).
 * **Primary Responsibility:**
-  * True cross-platform business core shared between Android and iOS.
-  * Contains common domain entities, Ktor multiplatform HTTP engine, and serialization.
-  * Exposes Kotlin `suspend` functions that cleanly map to native Swift `async/await`.
-  * Eliminates dual logic implementation across mobile platforms while preserving 100% native UI.
+  * Umbrella multiplatform framework aggregating business and data modules (`:core:domain`, `:core:network`, `:core:data`).
+  * Exposes unified Kotlin `suspend` API functions that cleanly bridge to native Swift `async/await`.
+  * Eliminates dual business logic maintenance across platforms while enabling 100% native UI.
 * **Key Source Sets:**
-  * `commonMain`: Shared networking, models, and interfaces.
-  * `androidMain`: Android-specific Ktor engine configuration (`OkHttp`).
-  * `iosMain`: Apple Darwin Ktor engine configuration (`Darwin`).
+  * `commonMain`: Aggregates and re-exports core domain, networking, and data logic.
+  * `androidMain`: Android-specific bindings.
+  * `iosMain`: Apple Darwin framework binaries (`iosX64`, `iosArm64`, `iosSimulatorArm64`).
 
 ---
 
-### 12. `build-logic/` — Gradle Composite Convention Plugins
+### 13. `build-logic/` — Gradle Composite Convention Plugins
 * **Type:** Independent Gradle Composite Build (`includeBuild("build-logic")`).
 * **Primary Responsibility:**
   * Centralizes all build infrastructure and Gradle plugins.
   * Eliminates 70% of boilerplate code from module `build.gradle.kts` files.
-  * Guarantees identical SDK versions, compiler flags, and static analysis across all 11 modules.
+  * Guarantees identical SDK versions, compiler flags, and static analysis across all modules.
 * **Custom Convention Plugins:**
-  * `codecheck.android.application`: Configures Android app, compileSdk 34, minSdk 24, Java 17.
+  * `codecheck.android.application`: Configures Android app, compileSdk 34, minSdk 23, Java 17.
   * `codecheck.android.library`: Configures Android library subproject.
-  * `codecheck.android.compose`: Injects Jetpack Compose BOM, compiler version, and tooling.
   * `codecheck.android.feature`: Combines library, compose, hilt, and common test dependencies.
+  * `codecheck.kotlin.multiplatform`: Configures KMP with `androidTarget()` and iOS targets.
   * `codecheck.android.hilt`: Configures Hilt DI and KSP annotation processor.
-  * `codecheck.jvm.library`: Configures pure Kotlin/JVM modules (`:core:domain`).
-  * `codecheck.detekt`: Enforces static code analysis and quality gates.
 
 ---
 

@@ -10,23 +10,23 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import coil.load
 import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
-import jp.co.yumemi.android.code_check.databinding.FragmentTwoBinding
+import jp.co.yumemi.android.code_check.databinding.FragmentRepositoryDetailBinding
 
 /**
  * Fragment for displaying detailed information about a GitHub repository
  */
-class RepositoryDetailFragment : Fragment(R.layout.fragment_two) {
+class RepositoryDetailFragment : Fragment(R.layout.fragment_repository_detail) {
 
     private val args: RepositoryDetailFragmentArgs by navArgs()
 
-    private var _binding: FragmentTwoBinding? = null
+    private var _binding: FragmentRepositoryDetailBinding? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         Log.d("LastSearchDate", lastSearchDate?.toString() ?: "No search performed yet")
 
-        _binding = FragmentTwoBinding.bind(view)
+        _binding = FragmentRepositoryDetailBinding.bind(view)
 
         val item = args.item
 

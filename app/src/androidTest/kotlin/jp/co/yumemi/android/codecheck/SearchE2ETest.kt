@@ -13,8 +13,7 @@ import org.junit.runner.RunWith
 
 /**
  * Instrumented End-to-End (E2E) test for the GitHub repository search user journey.
- * Executes on an Android device or emulator to verify full Activity lifecycle,
- * Compose navigation, and UI interactions.
+ * Executes live on an Android device or emulator.
  */
 @RunWith(AndroidJUnit4::class)
 class SearchE2ETest {
@@ -24,6 +23,9 @@ class SearchE2ETest {
 
     @Test
     fun initialLaunch_displaysSearchScreenWithEmptyState() {
+        // Allow user to visibly view initial screen on emulator
+        Thread.sleep(2000)
+
         // Verify TopAppBar
         composeTestRule.onNodeWithText("GitHub Repository Search").assertIsDisplayed()
 
@@ -33,23 +35,32 @@ class SearchE2ETest {
         // Verify initial empty state guidance
         composeTestRule.onNodeWithText("Search GitHub Repositories").assertIsDisplayed()
         composeTestRule.onNodeWithText("Type a search query above and press Enter.").assertIsDisplayed()
+
+        Thread.sleep(1000)
     }
 
     @Test
     fun typeSearchQuery_updatesInputAndAllowsClearing() {
+        Thread.sleep(1500)
+
         val searchPlaceholder = composeTestRule.onNodeWithText("Search repositories...")
         searchPlaceholder.assertIsDisplayed()
 
-        // Input a search query
+        // Type query visibly on simulator
         searchPlaceholder.performTextInput("kotlin")
         composeTestRule.onNodeWithText("kotlin").assertIsDisplayed()
 
-        // Clear button should be visible when text is present
+        // Pause so user sees typed text and clear button
+        Thread.sleep(2000)
+
+        // Clear button should be visible
         val clearButton = composeTestRule.onNodeWithContentDescription("Clear search")
         clearButton.assertIsDisplayed()
         clearButton.performClick()
 
         // Query cleared, returns to placeholder
         composeTestRule.onNodeWithText("Search repositories...").assertIsDisplayed()
+
+        Thread.sleep(2000)
     }
 }

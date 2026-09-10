@@ -10,15 +10,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import io.ktor.client.HttpClient
-import io.ktor.client.call.receive
-import io.ktor.client.engine.android.Android
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.client.request.parameter
-import io.ktor.client.statement.HttpResponse
 import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
-import kotlinx.coroutines.async
+import jp.co.yumemi.android.code_check.api.GitHubApiClient
+import jp.co.yumemi.android.code_check.api.GitHubApiClientImpl
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.json.JSONObject
@@ -31,6 +25,8 @@ import java.util.Date
 class RepositorySearchViewModel(
     application: Application
 ) : AndroidViewModel(application) {
+
+    private val apiClient: GitHubApiClient = GitHubApiClientImpl()
 
     private val _searchResults = MutableLiveData<List<RepositoryItem>>()
     val searchResults: LiveData<List<RepositoryItem>> = _searchResults
@@ -48,25 +44,21 @@ class RepositorySearchViewModel(
         }
 
         viewModelScope.launch {
-            val client = HttpClient(Android)
-
-            val results = async {
             try {
-                val response: HttpResponse = client.get("https://api.github.com/search/repositories") {
-                    header("Accept", "application/vnd.github.v3+json")
-                    parameter("q", inputText)
-                }
-
-                val responseBody = response.receive<String>()
+                val responseBody = apiClient.searchRepositories(inputText)
                 val jsonBody = JSONObject(responseBody)
 
                 // Validate JSON structure
                 if (!jsonBody.has("items")) {
                     Log.w(TAG, "API response missing 'items' field")
-                    return@async emptyList()
+                    _searchResults.value = emptyList()
+                    return@launch
                 }
 
-                val jsonItems = jsonBody.optJSONArray("items") ?: return@async emptyList()
+                val jsonItems = jsonBody.optJSONArray("items") ?: run {
+                    _searchResults.value = emptyList()
+                    return@launch
+                }
 
                 val items = mutableListOf<RepositoryItem>()
 
@@ -102,16 +94,11 @@ class RepositorySearchViewModel(
 
                 TopActivity.lastSearchDate = Date()
 
-                return@async items.toList()
+                _searchResults.value = items
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to search repositories: ${e.message}", e)
-                return@async emptyList()
-            } finally {
-                client.close()
+                _searchResults.value = emptyList()
             }
-            }.await()
-
-            _searchResults.value = results
         }
     }
 

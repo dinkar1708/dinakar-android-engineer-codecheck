@@ -28,7 +28,8 @@ Android GitHub repository search application with modern architecture and best p
 - **[Getting Started](./docs/GETTING_STARTED.md)** - Build, run, and prerequisite instructions
 - **[Architecture Overview](./docs/ARCHITECTURE_OVERVIEW.md)** - System design and technology choices
 - **[Issues Summary](./docs/03_sprint_execution/03_issues_summary.md)** - Breakdown and roadmap for all 9 Yumemi issues
-- **[Contributing Guidelines](./docs/CONTRIBUTING.md)** - Branch naming, commit conventions, and workflow
+- **[Contributing Guidelines](./CONTRIBUTING.md)** - Branch naming, commit conventions, and workflow
+- **[Agent Guidelines & Context](./GEMINI.md)** 🤖 - AI pairing rules, guardrails, and architectural directives
 - **[Technical References](./docs/references.md)** - External references and architecture benchmarks
 - **[Documentation Portal](./docs/readme.md)** - Full documentation index
 
@@ -61,6 +62,16 @@ Android GitHub repository search application with modern architecture and best p
 - **DI:** Hilt
 - **Network:** Ktor HTTP Client
 - **Modules:** Multi-module architecture (feature + core modules)
+
+---
+
+## 🤖 AI Pairing & Agent Skills Framework
+
+In alignment with the [Yumemi Code Challenge AI policy](https://github.com/yumemi-inc/android-engineer-codecheck#use-of-ai-services), this repository integrates structured **AI Agent Skills & Guardrails** adhering to the [Google Gemini Agent Skills standard](https://github.com/google-gemini/gemini-skills):
+
+- **[GEMINI.md](./GEMINI.md)**: Always-on project context, architectural guidelines, and strict git safety rules (zero autonomous commits, Conventional Commits, branch naming policies from [CONTRIBUTING.md](./CONTRIBUTING.md)).
+- **[`yumemi-issue-workflow`](./.agents/skills/yumemi-issue-workflow/SKILL.md)**: Standardized runbook for TDD implementation, layer separation (Clean Architecture), and quality gate verification.
+- **[`yumemi-code-review`](./.agents/skills/yumemi-code-review/SKILL.md)**: Automated pre-PR review gate evaluating code against [Yumemi Qiita criteria](https://qiita.com/blendthink/items/aa70b8b3106fb4e3555f) using feedback badges (`[must]`, `[imo]`, `[nits]`, `[memo]`).
 
 ---
 

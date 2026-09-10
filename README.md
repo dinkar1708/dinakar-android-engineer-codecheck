@@ -21,8 +21,8 @@ Android GitHub repository search application with modern architecture and best p
 
 **Prerequisites:** JDK 17+, Android Studio Iguana+, Gradle 8.5
 
-- **Test Suite:** 23 automated unit tests covering domain use cases/models (`:core:domain`), data cache/repositories (`:core:data`), and Ktor HTTP service/mappers (`:core:network`).
-- **Code Coverage:** 100% on `:core:domain`, 82.1% on `:core:data`, and 64.9% on `:core:network` (20.1% repo baseline via Kotlinx Kover, expanding across ViewModels & Compose UI in upcoming PRs).
+- **Test Suite:** 40 automated unit tests covering domain use cases/models (`:core:domain`), data cache/repositories (`:core:data`), Ktor network API/mappers (`:core:network`), and presentation ViewModels (`:feature:search`, `:feature:detail`).
+- **Code Coverage:** 100% on `SearchViewModel` & `DetailViewModel`, 100% on `:core:domain`, 82.1% on `:core:data`, and 64.9% on `:core:network` (31.1% repo baseline via Kotlinx Kover, expanding across Compose UI in upcoming PRs).
 
 📖 **Full guide:** See [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md)
 

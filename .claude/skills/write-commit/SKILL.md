@@ -5,6 +5,14 @@ description: Use this skill when authoring Conventional Commit messages aligned 
 
 # Write Commit Message
 
+## 📱 Current Codebase Context
+When writing commits, reference the **current** implementation:
+- **UI Layer:** Activities/Fragments with ViewBinding (XML layouts)
+- **ViewModel:** AndroidViewModel with LiveData
+- **Repository:** Manual instantiation (not Hilt-injected)
+- **Network:** Ktor HttpClient with Closeable pattern
+- **Modules:** Single `:app` module
+
 ## Format Standards
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/) format:

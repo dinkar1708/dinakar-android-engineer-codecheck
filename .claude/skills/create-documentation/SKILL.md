@@ -5,6 +5,11 @@ description: Use this skill when authoring, structuring, or updating technical d
 
 # Documentation Standards
 
+## 📱 Current Codebase Context
+- **Current Stack:** ViewBinding + LiveData + Manual DI + Single-module
+- **Target Stack:** Jetpack Compose + StateFlow + Hilt + Multi-module (aspirational)
+- When documenting, be clear about what is **current** vs. **planned**
+
 ## Core Principles
 1. **Single Source of Truth**: Issues documented in `03_issues_summary.md` only.
 2. **Concise Code**: 5–10 lines max in docs; explain concepts, not huge implementations.

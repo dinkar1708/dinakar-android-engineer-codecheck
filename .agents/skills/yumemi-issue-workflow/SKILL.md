@@ -8,6 +8,16 @@ description: >-
 
 A structured, end-to-end procedure for tackling any issue in the Yumemi Android Engineer Code Check challenge.
 
+## 📱 Current Codebase Context
+**Current Implementation:**
+- ViewBinding + LiveData + Manual DI + Single `:app` module
+- Activities (TopActivity, RepositorySearchViewModel)
+- Ktor HttpClient + Closeable pattern
+
+**Target Architecture (Aspirational):**
+- Jetpack Compose + StateFlow + Hilt + Multi-module
+- When implementing issues, transition incrementally from current to target
+
 ---
 
 ## 1. Issue Analysis & Triage

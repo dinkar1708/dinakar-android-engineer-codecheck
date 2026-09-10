@@ -8,6 +8,14 @@ description: >-
 
 This skill outlines the standard review checklist and criteria used by Yumemi reviewers (as referenced in their [Qiita evaluation article](https://qiita.com/blendthink/items/aa70b8b3106fb4e3555f)).
 
+## 📱 Current Codebase Tech Stack
+- **UI:** XML layouts with ViewBinding (Activities, not Compose)
+- **ViewModel:** AndroidViewModel with LiveData
+- **DI:** Manual instantiation (not Hilt)
+- **Network:** Ktor HttpClient with Closeable pattern
+- **Modules:** Single `:app` module (not multi-module)
+- **Async:** Coroutines + viewModelScope
+
 ---
 
 ## 🏷️ Review Feedback Badges

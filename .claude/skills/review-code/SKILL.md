@@ -7,6 +7,13 @@ description: Use this skill when performing code reviews against Android, Kotlin
 
 Review checklist aligned with Yumemi's Qiita evaluation criteria and our codebase architecture.
 
+## 📱 Current Tech Stack Context
+- **UI:** XML layouts with ViewBinding (not Jetpack Compose)
+- **Architecture:** MVVM with Repository pattern (manual DI, not Hilt)
+- **Async:** Coroutines + LiveData (not StateFlow/SharedFlow)
+- **Network:** Ktor HTTP Client
+- **Module Structure:** Single-module app (`:app` only)
+
 ---
 
 ## 🏷️ Yumemi Review Badges
@@ -35,8 +42,9 @@ Categorize every review comment using these badges:
 
 ### 2. Android Lifecycle & Resource Cleanup
 - [ ] **Closeable Resources**: Does `RepositorySearchViewModel` invoke `repository.close()` in `onCleared()`?
-- [ ] **ViewBinding Cleanup**: When using Fragments, is `_binding = null` set in `onDestroyView()`?
+- [ ] **ViewBinding Cleanup**: Is `_binding = null` set in Fragment `onDestroyView()`? (Current codebase uses Activities with ViewBinding, but this applies if Fragments are used)
 - [ ] **Coroutine Scope**: Are jobs launched within `viewModelScope` or `lifecycleScope`? No `GlobalScope` or blocking `runBlocking`.
+- [ ] **LiveData Observation**: Are LiveData observers removed properly or using lifecycle-aware observers?
 
 ### 3. Code Hygiene & Kotlin Idioms
 - [ ] No Hungarian notation (`m_var`, `_var` except for private backing properties).

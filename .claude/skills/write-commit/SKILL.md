@@ -7,11 +7,11 @@ description: Use this skill when authoring Conventional Commit messages aligned 
 
 ## 📱 Current Codebase Context
 When writing commits, reference the **current** implementation:
-- **UI Layer:** Activities/Fragments with ViewBinding (XML layouts)
-- **ViewModel:** AndroidViewModel with LiveData
-- **Repository:** Manual instantiation (not Hilt-injected)
-- **Network:** Ktor HttpClient with Closeable pattern
-- **Modules:** Single `:app` module
+- **UI Layer:** 100% Jetpack Compose with Material 3 Theme (`CodeCheckTheme`)
+- **ViewModel:** `@HiltViewModel` with `StateFlow` Unidirectional Data Flow (UDF) & `SavedStateHandle`
+- **DI:** Dagger Hilt (`@AndroidEntryPoint`, `@HiltAndroidApp`, `@Module`, `@InstallIn`)
+- **Network:** KMP Ktor `HttpClient` (`GitHubApiService`) with `Logging` plugin and explicit request/response logging
+- **Modules:** Multi-module Clean Architecture (`:core:domain`, `:core:network`, `:core:data`, `:shared-core`, `:core:designsystem`, `:core:ui`, `:feature:search`, `:feature:detail`, `:app`)
 
 ## Format Standards
 

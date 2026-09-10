@@ -8,12 +8,13 @@ description: Use this skill when performing code reviews against Android, Kotlin
 Review checklist aligned with Yumemi's Qiita evaluation criteria and our codebase architecture.
 
 ## 📱 Current Tech Stack Context
-- **Build Infrastructure:** Composite `build-logic` Convention Plugins + Version Catalog (`libs.versions.toml`)
-- **Module Structure:** Multi-module architecture (`:core:domain`, `:core:network`, `:core:data`, `:shared-core`, `:core:designsystem`, `:core:ui`, `:app`, with future `:core:database` in Issue #9)
-- **UI:** ViewBinding (migrating to Jetpack Compose in PR 8.3)
-- **Architecture:** MVVM with Repository pattern (migrating to StateFlow UDF & Hilt in PR 8.3)
-- **Async:** Coroutines + LiveData (transitioning to StateFlow)
-- **Network:** Ktor HTTP Client (migrating to KMP Ktor in PR 8.2)
+- **Build Infrastructure:** Composite `build-logic` Convention Plugins + Version Catalog (`libs.versions.toml`) + JVM-17 target validation
+- **Module Structure:** Multi-module Clean Architecture (`:core:domain`, `:core:network`, `:core:data`, `:shared-core`, `:core:designsystem`, `:core:ui`, `:feature:search`, `:feature:detail`, `:app`, with future `:core:database` in Issue #9)
+- **UI:** 100% Jetpack Compose + Material 3 Theme (`CodeCheckTheme`)
+- **Architecture:** Unidirectional Data Flow (UDF) + `@HiltViewModel` (`StateFlow<SearchUiState>`)
+- **Async:** Kotlin Coroutines + `viewModelScope` + `StateFlow`
+- **Network:** KMP Ktor `HttpClient` with `Logging` plugin and explicit request/response logging
+- **Navigation:** Jetpack Compose Navigation (`AppNavHost`)
 
 ---
 
@@ -79,11 +80,12 @@ override fun onDestroyView() {
 - [ ] Skills and documentation updated if new designs were added (`docs/01_company_and_team/10_ai_agent_skills_guide.md`).
 
 ## 📂 Related Relative Paths
-- **API Client**: `app/src/main/kotlin/jp/co/yumemi/android/code_check/api/GitHubApiClient.kt`
-- **JSON Mapper**: `app/src/main/kotlin/jp/co/yumemi/android/code_check/api/RepositoryMapper.kt`
-- **Repository Interface**: `app/src/main/kotlin/jp/co/yumemi/android/code_check/repository/GitHubRepository.kt`
-- **Repository Implementation**: `app/src/main/kotlin/jp/co/yumemi/android/code_check/repository/GitHubRepositoryImpl.kt`
-- **Search ViewModel**: `app/src/main/kotlin/jp/co/yumemi/android/code_check/RepositorySearchViewModel.kt`
+- **Network Service**: `core/network/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/network/GitHubApiService.kt`
+- **Domain Models & Contract**: `core/domain/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/domain/`
+- **Repository Implementation**: `core/data/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/data/repository/GitHubRepositoryImpl.kt`
+- **Search Feature (UI & ViewModel)**: `feature/search/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/search/`
+- **Detail Feature (UI & ViewModel)**: `feature/detail/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/detail/`
+- **Application Shell & DI**: `app/src/main/kotlin/jp/co/yumemi/android/codecheck/`
 - **Review Guidelines**: `docs/01_company_and_team/04_code_review_guidelines.md`
 - **Yumemi Review Culture**: `docs/01_company_and_team/09_yumemi_review_culture.md`
 - **Engineering Guardrails**: `docs/01_company_and_team/06_engineering_guardrails.md`

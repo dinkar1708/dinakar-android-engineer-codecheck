@@ -10,23 +10,26 @@ It is an Android application for searching GitHub repositories, displaying resul
 
 ---
 
-## 📍 Current Codebase State (Post-Issue #7 / PR #21)
-The application has recently completed foundational refactoring:
-- **`GitHubApiClient` / `GitHubApiClientImpl`**: Encapsulates raw Ktor HTTP calls; implements `Closeable`.
-- **`RepositoryMapper`**: Decoupled object for JSON response validation and transformation into domain entities.
-- **`GitHubRepository` / `GitHubRepositoryImpl`**: Encapsulates data layer coordination; cascades `close()` to the API client.
-- **`RepositorySearchViewModel`**: Cleanly coordinates coroutines in `viewModelScope` and releases resources in `onCleared()`.
-- **Stateless Activities**: `TopActivity.lastSearchDate` mutable global state has been completely removed to satisfy the Principle of Least Surprise.
+## 📍 Current Codebase State (Post-Issue #8 / PR 8.3 Completed)
+The application has completed migration to Multi-Module Clean Architecture with Jetpack Compose:
+- **`:core:domain`**: Pure Kotlin business models (`RepositoryItem`, `Owner`) and repository contracts (`GitHubRepository`).
+- **`:core:network`**: KMP Ktor HTTP service (`GitHubApiService`) with `Logging` plugin (`LogLevel.ALL`) and explicit URL logging.
+- **`:core:data`**: `GitHubRepositoryImpl` with query caching and resilient network error mapping.
+- **`:shared-core`**: Umbrella module consolidating core dependencies.
+- **`:core:designsystem` & `:core:ui`**: Material 3 theme (`CodeCheckTheme`), tokens, and reusable components (`LoadingView`, `EmptyView`, `ErrorView`).
+- **`:feature:search` & `:feature:detail`**: Decoupled feature modules with `@HiltViewModel`, `StateFlow` UDF, and Jetpack Compose screens.
+- **`:app`**: Single `MainActivity` (`@AndroidEntryPoint`) running Compose `AppNavHost` with Hilt DI.
+- **Build Infrastructure**: Custom convention plugins (`build-logic`) enforcing JVM-17 target consistency across JDK 21+ environments.
 
 ### Issue Roadmap & Next Priorities
 - ✅ **Issues #3 – #7 Completed**: Code Readability, Safety (`SavedStateHandle`), Bug fixes (`forks_count`, remove `runBlocking`, memory leaks), ViewModel extraction, and Program Structure decoupling.
-- 🎯 **Issue #8 (ACTIVE / NEXT)**: **アーキテクチャを適用 (Apply Architecture)** &rarr; Decomposed into 3 atomic PRs:
-  - `PR 8.1`: Multi-module layout (`build-logic`, `libs.versions.toml`, `settings.gradle`)
-  - `PR 8.2`: Pure Kotlin `:core:domain` and resilient `:core:data`
-  - `PR 8.3`: Hilt DI wiring & `StateFlow<SearchUiState>` UDF **(Closes #8)**
-- 📋 **Issue #9**: **テストを追加 (Add Tests)** &rarr; Turbine Flow testing + Ktor `MockEngine` HTTP testing.
+- ✅ **Issue #8 Completed**: **アーキテクチャを適用 (Apply Architecture)** &rarr; Decomposed into 3 atomic PRs:
+  - `PR 8.1` ✅: Multi-module layout (`build-logic`, `libs.versions.toml`, `settings.gradle`)
+  - `PR 8.2` ✅: Pure Kotlin `:core:domain`, Ktor `:core:network`, caching `:core:data`, and umbrella `:shared-core`
+  - `PR 8.3` ✅: `:feature:search`, `:feature:detail`, Hilt DI wiring, and Compose Navigation **(Closes #8)**
+- 🎯 **Issue #9 (ACTIVE / NEXT)**: **テストを追加 (Add Tests)** &rarr; Turbine Flow testing + Ktor `MockEngine` HTTP testing.
 - 📋 **Issue #10**: **UI をブラッシュアップ (Polish UI)** &rarr; 100% Jetpack Compose + Material 3, Dark theme, bilingual i18n (`values-ja`).
-- 📋 **Issue #11**: **新機能を追加 (Add New Features - Bonus)** &rarr; Chrome Custom Tabs, Sorting, Settings Hub, Offline Mock flavor, KMP `:shared`.
+- 📋 **Issue #11**: **新機能を追加 (Add New Features - Bonus)** &rarr; Pagination / Infinite Scrolling, Chrome Custom Tabs, Sorting, Settings Hub, Offline Mock flavor, KMP `:shared`.
 
 ---
 

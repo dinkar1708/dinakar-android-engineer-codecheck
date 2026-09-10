@@ -9,15 +9,15 @@ description: >-
 A structured, end-to-end procedure for tackling any issue in the Yumemi Android Engineer Code Check challenge.
 
 ## 📱 Current Codebase Context
-**Current Implementation State (Post-PR 8.1):**
+**Current Implementation State (Post-PR 8.3 / Issue #8 Completed):**
 - **Build Infrastructure:** Composite `build-logic` with convention plugins (`AndroidApplication`, `AndroidLibrary`, `AndroidFeature`, `KotlinMultiplatform`, `AndroidHilt`).
 - **Dependency Management:** Centralized Version Catalog (`gradle/libs.versions.toml`).
 - **Multi-Module Layout:**
   - KMP Core Modules: `:core:domain` (pure Kotlin), `:core:network` (Ktor), `:core:data` (caching), `:shared-core` (umbrella framework).
   - Android Core Modules: `:core:designsystem` (M3 tokens), `:core:ui` (shared composables).
-  - Planned Persistence: `:core:database` (offline Room/SQLDelight persistence in Issue #9) and `:core:testing` (Issue #9).
-  - Feature Modules (PR 8.3): `:feature:search`, `:feature:detail` (and `:feature:settings` in Issue #11).
-- **Application Shell (`:app`):** ViewBinding + LiveData + Manual DI (transitioning incrementally to Hilt + Compose).
+  - Feature Modules: `:feature:search` (Compose SearchScreen + SearchViewModel), `:feature:detail` (Compose DetailScreen + DetailViewModel).
+  - Persistence & Testing (Next - Issue #9): `:core:database` (offline Room/SQLDelight) and `:core:testing` (Turbine + MockEngine).
+- **Application Shell (`:app`):** Single-Activity (`MainActivity : ComponentActivity`) with Hilt DI (`@AndroidEntryPoint`) + Compose Navigation (`AppNavHost`).
 
 **Target Architecture:**
 - Jetpack Compose + StateFlow UDF + Hilt + Multi-Module Clean Architecture + KMP Type 2 (shared business logic, native UI).
@@ -39,8 +39,9 @@ A structured, end-to-end procedure for tackling any issue in the Yumemi Android 
 - **Decompose major issues into atomic PRs**:
   - Example (Issue #8: アーキテクチャを適用):
     - `PR 8.1` ✅: Multi-module layout & `build-logic` convention plugins foundation.
-    - `PR 8.2` 🎯 (Active / Next): Pure Kotlin `:core:domain`, Ktor `:core:network`, caching `:core:data`, and umbrella `:shared-core`.
-    - `PR 8.3` 📋: `:feature:search`, `:feature:detail`, Hilt DI wiring & `StateFlow` UDF (Closes #8).
+    - `PR 8.2` ✅: Pure Kotlin `:core:domain`, Ktor `:core:network`, caching `:core:data`, and umbrella `:shared-core`.
+    - `PR 8.3` ✅: `:feature:search`, `:feature:detail`, Hilt DI wiring & Compose Navigation (Closes #8).
+  - Next Issue: **Issue #9: テストを追加 (Add Tests)** &rarr; Turbine Flow testing + Ktor `MockEngine` HTTP testing.
 - **Zero Broken Intermediate Builds**: Every atomic PR must compile cleanly (`./gradlew clean assembleDebug`) and maintain existing functionality before merging.
 
 ---

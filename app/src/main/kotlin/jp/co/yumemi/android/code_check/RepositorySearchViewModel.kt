@@ -11,9 +11,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
-import jp.co.yumemi.android.code_check.api.GitHubApiClient
 import jp.co.yumemi.android.code_check.api.GitHubApiClientImpl
-import jp.co.yumemi.android.code_check.api.RepositoryMapper
+import jp.co.yumemi.android.code_check.repository.GitHubRepository
+import jp.co.yumemi.android.code_check.repository.GitHubRepositoryImpl
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.util.Date
@@ -26,7 +26,10 @@ class RepositorySearchViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-    private val apiClient: GitHubApiClient = GitHubApiClientImpl()
+    private val repository: GitHubRepository = GitHubRepositoryImpl(
+        apiClient = GitHubApiClientImpl(),
+        context = application
+    )
 
     private val _searchResults = MutableLiveData<List<RepositoryItem>>()
     val searchResults: LiveData<List<RepositoryItem>> = _searchResults
@@ -45,8 +48,7 @@ class RepositorySearchViewModel(
 
         viewModelScope.launch {
             try {
-                val responseBody = apiClient.searchRepositories(inputText)
-                val items = RepositoryMapper.parseSearchResponse(responseBody, getApplication())
+                val items = repository.searchRepositories(inputText)
 
                 TopActivity.lastSearchDate = Date()
 

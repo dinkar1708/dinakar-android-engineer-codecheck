@@ -28,6 +28,12 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx.lifecycle.viewmodel.compose").get())
                 add("implementation", libs.findLibrary("androidx.navigation.compose").get())
                 add("implementation", libs.findLibrary("hilt.navigation.compose").get())
+
+                // Testing dependencies for feature modules
+                add("testImplementation", libs.findLibrary("junit").get())
+                add("testImplementation", libs.findLibrary("kotlinx.coroutines.test").get())
+                add("testImplementation", libs.findLibrary("turbine").get())
+                add("testImplementation", libs.findLibrary("mockk").get())
             }
         }
     }

@@ -55,6 +55,15 @@ class RepositorySearchViewModel(
         }
     }
 
+    /**
+     * Clean up resources when ViewModel is destroyed
+     * Closes the repository to release HTTP client resources
+     */
+    override fun onCleared() {
+        super.onCleared()
+        repository.close()
+    }
+
     companion object {
         private const val TAG = "RepositorySearchVM"
     }

@@ -32,4 +32,12 @@ class GitHubRepositoryImpl(
         val responseBody = apiClient.searchRepositories(query)
         return RepositoryMapper.parseSearchResponse(responseBody, context)
     }
+
+    /**
+     * Close the repository and release all resources
+     * Cascades close to the API client
+     */
+    override fun close() {
+        apiClient.close()
+    }
 }

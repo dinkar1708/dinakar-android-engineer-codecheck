@@ -3,11 +3,14 @@
  */
 package jp.co.yumemi.android.code_check.api
 
+import java.io.Closeable
+
 /**
  * Interface for GitHub API client
  * Provides methods to interact with GitHub API endpoints
+ * Implements Closeable for proper resource management
  */
-interface GitHubApiClient {
+interface GitHubApiClient : Closeable {
     /**
      * Search repositories by query
      * @param query Search keyword

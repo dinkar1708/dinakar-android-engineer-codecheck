@@ -33,9 +33,10 @@ class GitHubApiClientImpl : GitHubApiClient {
     }
 
     /**
-     * Close the HTTP client
+     * Close the HTTP client to release resources
+     * Should be called when the client is no longer needed
      */
-    fun close() {
+    override fun close() {
         client.close()
     }
 

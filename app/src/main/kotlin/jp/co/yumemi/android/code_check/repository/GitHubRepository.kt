@@ -4,12 +4,14 @@
 package jp.co.yumemi.android.code_check.repository
 
 import jp.co.yumemi.android.code_check.RepositoryItem
+import java.io.Closeable
 
 /**
  * Repository interface for GitHub API operations
  * Provides abstraction layer between data sources and business logic
+ * Implements Closeable for proper resource management
  */
-interface GitHubRepository {
+interface GitHubRepository : Closeable {
 
     /**
      * Search GitHub repositories by keyword

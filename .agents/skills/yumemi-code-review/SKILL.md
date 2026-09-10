@@ -9,11 +9,12 @@ description: >-
 This skill outlines the standard review checklist and criteria used by Yumemi reviewers (as referenced in their [Qiita evaluation article](https://qiita.com/blendthink/items/aa70b8b3106fb4e3555f)).
 
 ## 📱 Current Codebase Tech Stack
-- **UI:** XML layouts with ViewBinding (Activities, not Compose)
-- **ViewModel:** AndroidViewModel with LiveData
-- **DI:** Manual instantiation (not Hilt)
-- **Network:** Ktor HttpClient with Closeable pattern
-- **Modules:** Single `:app` module (not multi-module)
+- **Build Infrastructure:** Composite `build-logic` Convention Plugins + Version Catalog (`libs.versions.toml`)
+- **Modules:** Multi-module layout (`:core:domain`, `:core:network`, `:core:data`, `:shared-core`, `:core:designsystem`, `:core:ui`, `:app`, with future `:core:database` in Issue #9)
+- **UI:** ViewBinding (migrating to Jetpack Compose in PR 8.3)
+- **ViewModel:** AndroidViewModel with LiveData (migrating to StateFlow UDF in PR 8.3)
+- **DI:** Manual instantiation (migrating to Hilt in PR 8.3)
+- **Network:** Ktor HttpClient with Closeable pattern (migrating to KMP Ktor in PR 8.2)
 - **Async:** Coroutines + viewModelScope
 
 ---

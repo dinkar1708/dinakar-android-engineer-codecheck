@@ -9,14 +9,18 @@ description: >-
 A structured, end-to-end procedure for tackling any issue in the Yumemi Android Engineer Code Check challenge.
 
 ## 📱 Current Codebase Context
-**Current Implementation:**
-- ViewBinding + LiveData + Manual DI + Single `:app` module
-- Activities (TopActivity, RepositorySearchViewModel)
-- Ktor HttpClient + Closeable pattern
+**Current Implementation State (Post-PR 8.1):**
+- **Build Infrastructure:** Composite `build-logic` with convention plugins (`AndroidApplication`, `AndroidLibrary`, `AndroidFeature`, `KotlinMultiplatform`, `AndroidHilt`).
+- **Dependency Management:** Centralized Version Catalog (`gradle/libs.versions.toml`).
+- **Multi-Module Layout:**
+  - KMP Core Modules: `:core:domain` (pure Kotlin), `:core:network` (Ktor), `:core:data` (caching), `:shared-core` (umbrella framework).
+  - Android Core Modules: `:core:designsystem` (M3 tokens), `:core:ui` (shared composables).
+  - Planned Persistence: `:core:database` (offline Room/SQLDelight persistence in Issue #9) and `:core:testing` (Issue #9).
+  - Feature Modules (PR 8.3): `:feature:search`, `:feature:detail` (and `:feature:settings` in Issue #11).
+- **Application Shell (`:app`):** ViewBinding + LiveData + Manual DI (transitioning incrementally to Hilt + Compose).
 
-**Target Architecture (Aspirational):**
-- Jetpack Compose + StateFlow + Hilt + Multi-module
-- When implementing issues, transition incrementally from current to target
+**Target Architecture:**
+- Jetpack Compose + StateFlow UDF + Hilt + Multi-Module Clean Architecture + KMP Type 2 (shared business logic, native UI).
 
 ---
 
@@ -33,11 +37,11 @@ A structured, end-to-end procedure for tackling any issue in the Yumemi Android 
 ## 2. Atomic PR Sizing Directive
 - **Keep PR diffs under ~300 lines**: Large PRs hide bugs and slow down review.
 - **Decompose major issues into atomic PRs**:
-  - Example (Issue #8):
-    - `PR 8.1`: Multi-module layout & `build-logic` foundation (~200 lines).
-    - `PR 8.2`: Pure Kotlin `:core:domain` and resilient `:core:data` (~300 lines).
-    - `PR 8.3`: Hilt DI wiring & `StateFlow` UDF (~350 lines, closes #8).
-- **Zero Broken Intermediate Builds**: Every atomic PR must compile cleanly (`./gradlew assembleDebug`) and pass existing tests before merging.
+  - Example (Issue #8: アーキテクチャを適用):
+    - `PR 8.1` ✅: Multi-module layout & `build-logic` convention plugins foundation.
+    - `PR 8.2` 🎯 (Active / Next): Pure Kotlin `:core:domain`, Ktor `:core:network`, caching `:core:data`, and umbrella `:shared-core`.
+    - `PR 8.3` 📋: `:feature:search`, `:feature:detail`, Hilt DI wiring & `StateFlow` UDF (Closes #8).
+- **Zero Broken Intermediate Builds**: Every atomic PR must compile cleanly (`./gradlew clean assembleDebug`) and maintain existing functionality before merging.
 
 ---
 

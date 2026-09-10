@@ -10,13 +10,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
 import jp.co.yumemi.android.code_check.api.GitHubApiClientImpl
 import jp.co.yumemi.android.code_check.repository.GitHubRepository
 import jp.co.yumemi.android.code_check.repository.GitHubRepositoryImpl
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import java.util.Date
 
 /**
  * ViewModel for GitHub repository search functionality
@@ -49,9 +47,6 @@ class RepositorySearchViewModel(
         viewModelScope.launch {
             try {
                 val items = repository.searchRepositories(inputText)
-
-                TopActivity.lastSearchDate = Date()
-
                 _searchResults.value = items
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to search repositories: ${e.message}", e)

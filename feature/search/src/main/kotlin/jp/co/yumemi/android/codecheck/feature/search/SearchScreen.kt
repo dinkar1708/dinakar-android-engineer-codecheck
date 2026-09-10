@@ -101,10 +101,17 @@ internal fun SearchScreen(
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 placeholder = { Text(text = "Search repositories...") },
                 leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = null
-                    )
+                    IconButton(
+                        onClick = {
+                            focusManager.clearFocus()
+                            onSearch()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Submit search"
+                        )
+                    }
                 },
                 trailingIcon = {
                     if (query.isNotEmpty()) {

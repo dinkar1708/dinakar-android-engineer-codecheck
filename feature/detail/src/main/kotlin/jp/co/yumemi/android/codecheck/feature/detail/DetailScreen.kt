@@ -105,7 +105,7 @@ fun DetailScreen(
 }
 
 @Composable
-private fun DetailContent(
+internal fun DetailContent(
     repository: RepositoryItem,
     onOpenBrowser: ((String) -> Unit)?,
     modifier: Modifier = Modifier

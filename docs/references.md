@@ -79,10 +79,14 @@ Every reference included below has been verified for availability (HTTP 200 OK) 
   *Application in Project:* Official API reference for `runTest`, `StandardTestDispatcher`, and virtual time control.
 - **Turbine Flow Testing (Cash App)**: [https://github.com/cashapp/turbine](https://github.com/cashapp/turbine)  
   *Application in Project:* Step-by-step assertions on Flow emissions (`awaitItem()`, `awaitComplete()`) for ViewModel and Repository tests.
+- **Ktor Client Testing (`MockEngine`)**: [https://ktor.io/docs/client-testing.html](https://ktor.io/docs/client-testing.html)  
+  *Application in Project:* Deterministic, offline HTTP response mocking and JSON deserialization verification without live network dependencies.
 - **MockK Kotlin Mocking Library**: [https://mockk.io/](https://mockk.io/)  
   *Application in Project:* Idiomatic, first-class Kotlin mocking library for coroutines, suspend functions, and repository abstractions.
 - **Testing Compose Layouts**: [https://developer.android.com/develop/ui/compose/testing](https://developer.android.com/develop/ui/compose/testing)  
   *Application in Project:* UI interaction assertions verifying node visibility, text rendering, and click actions via Compose testing semantics.
+- **Compose Testing Cheat Sheet**: [https://developer.android.com/develop/ui/compose/testing-cheatsheet](https://developer.android.com/develop/ui/compose/testing-cheatsheet)  
+  *Application in Project:* Quick lookup for semantic matchers (`hasTestTag`, `hasClickAction`), assertions, and synchronization actions.
 - **Detekt Static Code Analysis for Kotlin**: [https://detekt.dev/](https://detekt.dev/)  
   *Application in Project:* Automated static analysis verifying complexity metrics, naming conventions, formatting, and potential code smells in CI.
 - **EditorConfig Specification**: [https://editorconfig.org/](https://editorconfig.org/)  

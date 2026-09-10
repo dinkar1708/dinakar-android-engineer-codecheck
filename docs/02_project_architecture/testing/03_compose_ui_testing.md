@@ -52,19 +52,22 @@ Complete user journeys verified in `app/src/androidTest/SearchE2ETest.kt`:
 
 ---
 
-## 4. Best Practices
+## 4. Best Practices & UI Polish Resilience (Issue #10 Isolation)
 
-- **Test Stateless Composables:** Pass states/callbacks, not ViewModels
-- **Semantics First:** Use `onNodeWithText()`, `hasContentDescription()`; `testTag()` only for non-labeled elements
-- **Accessibility:** Verify 48x48dp touch targets and TalkBack content descriptions
+- **Test Stateless Composables:** Pass states/callbacks to `SearchContent` and `DetailContent`, decoupling tests from ViewModels.
+- **Stable Test Tags (`SearchTestTags`):** Rely on semantic test tags (`SEARCH_INPUT`, `PROGRESS_BAR`, `EMPTY_VIEW`, `ERROR_VIEW`, `RETRY_BUTTON`) rather than hardcoded text strings. This ensures Issue #10's UI polish (Material 3 token updates, layout refinement, Japanese localization) will **not** break UI tests.
+- **Accessibility:** Verify 48x48dp touch targets and TalkBack content descriptions.
 
 ---
 
 ## 5. Execution Commands
 
 ```bash
-# Run Compose UI and instrumented tests on connected device/emulator
-./gradlew connectedDevDebugAndroidTest
+# Run Compose UI tests for feature:search
+./gradlew :feature:search:connectedDebugAndroidTest
+
+# Run all instrumented and Compose UI tests
+./gradlew connectedDebugAndroidTest
 ```
 
 ---

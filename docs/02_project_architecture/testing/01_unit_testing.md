@@ -74,13 +74,13 @@ Validates core business rules before queries reach the network layer:
 
 ```bash
 # Execute all unit tests across all modules
-./gradlew testDevDebugUnitTest
+./gradlew testDebugUnitTest
 
 # Execute unit tests in :feature:search only
-./gradlew :feature:search:testDevDebugUnitTest
+./gradlew :feature:search:testDebugUnitTest
 
 # Execute unit tests in :core:domain only
-./gradlew :core:domain:test
+./gradlew :core:domain:testDebugUnitTest
 ```
 
 ---

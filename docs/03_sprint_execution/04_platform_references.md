@@ -102,6 +102,14 @@ graph TD
   * `runTest`, `StandardTestDispatcher`, and virtual time control via `advanceUntilIdle()`.
 * **Cash App Turbine**: [https://github.com/cashapp/turbine](https://github.com/cashapp/turbine)
   * Deterministic assertions for Kotlin Flow emissions in unit tests.
+* **Ktor Client Testing (`MockEngine`)**: [https://ktor.io/docs/client-testing.html](https://ktor.io/docs/client-testing.html)
+  * Deterministic offline HTTP mocking and serialization verification for KMP network clients.
+* **Testing Jetpack Compose**: [https://developer.android.com/develop/ui/compose/testing](https://developer.android.com/develop/ui/compose/testing)
+  * Semantics tree verification, UI interaction assertions, and accessibility testing for declarative UI.
+* **Compose Testing Cheat Sheet**: [https://developer.android.com/develop/ui/compose/testing-cheatsheet](https://developer.android.com/develop/ui/compose/testing-cheatsheet)
+  * Matchers (`hasTestTag`), assertions, and synchronization APIs for Compose tests.
+* **Hilt Multi-Module Testing**: [https://developer.android.com/training/dependency-injection/hilt-testing](https://developer.android.com/training/dependency-injection/hilt-testing)
+  * Guidelines for testing Hilt-managed multi-module code with fake bindings and test components.
 
 ### 2.6 Official Google Reference Applications
 * **Google "Now in Android" (NiA)**: [https://github.com/android/nowinandroid](https://github.com/android/nowinandroid)

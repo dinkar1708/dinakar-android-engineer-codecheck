@@ -13,9 +13,9 @@ import androidx.lifecycle.viewModelScope
 import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
 import jp.co.yumemi.android.code_check.api.GitHubApiClient
 import jp.co.yumemi.android.code_check.api.GitHubApiClientImpl
+import jp.co.yumemi.android.code_check.api.RepositoryMapper
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import org.json.JSONObject
 import java.util.Date
 
 /**
@@ -46,51 +46,7 @@ class RepositorySearchViewModel(
         viewModelScope.launch {
             try {
                 val responseBody = apiClient.searchRepositories(inputText)
-                val jsonBody = JSONObject(responseBody)
-
-                // Validate JSON structure
-                if (!jsonBody.has("items")) {
-                    Log.w(TAG, "API response missing 'items' field")
-                    _searchResults.value = emptyList()
-                    return@launch
-                }
-
-                val jsonItems = jsonBody.optJSONArray("items") ?: run {
-                    _searchResults.value = emptyList()
-                    return@launch
-                }
-
-                val items = mutableListOf<RepositoryItem>()
-
-                for (i in 0 until jsonItems.length()) {
-                    val jsonItem = jsonItems.optJSONObject(i) ?: continue
-
-                    // Validate required fields
-                    val name = jsonItem.optString("full_name")
-                    if (name.isEmpty()) {
-                        Log.w(TAG, "Repository item missing full_name, skipping")
-                        continue
-                    }
-
-                    val ownerIconUrl = jsonItem.optJSONObject("owner")?.optString("avatar_url") ?: ""
-                    val language = jsonItem.optString("language")
-                    val stargazersCount = jsonItem.optLong("stargazers_count")
-                    val watchersCount = jsonItem.optLong("watchers_count")
-                    val forksCount = jsonItem.optLong("forks_count")
-                    val openIssuesCount = jsonItem.optLong("open_issues_count")
-
-                    items.add(
-                        RepositoryItem(
-                            name = name,
-                            ownerIconUrl = ownerIconUrl,
-                            language = getApplication<Application>().getString(R.string.written_language, language),
-                            stargazersCount = stargazersCount,
-                            watchersCount = watchersCount,
-                            forksCount = forksCount,
-                            openIssuesCount = openIssuesCount
-                        )
-                    )
-                }
+                val items = RepositoryMapper.parseSearchResponse(responseBody, getApplication())
 
                 TopActivity.lastSearchDate = Date()
 

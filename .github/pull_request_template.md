@@ -28,11 +28,14 @@ close #
 - [ ] 紐付いているチケットと変更内容との間に相違がないか
 - [ ] 考慮漏れなどないか (エッジケース、Null安全性、ライフサイクル、例外処理)
 - [ ] テストおよびビルドが正常に通過しているか (`./gradlew test`)
+- [ ] 新しい設計・アーキテクチャ・命名規則・パターンを追加した場合、AIスキル（`.agents/skills/`、`.claude/skills/`）および関連ドキュメント（`docs/`）を更新したか
 
 ## 参考 (Reference)
 <!-- 関連するドキュメント、記事、ガイドラインへのリンク -->
 <!-- 例:
 - Kotlinコーディング規約: https://kotlinlang.org/docs/coding-conventions.html
 - Android開発ベストプラクティス: https://developer.android.com/topic/architecture
+- AIスキル活用ガイド: docs/01_company_and_team/10_ai_agent_skills_guide.md
 - 関連Issue: #123
 -->
+

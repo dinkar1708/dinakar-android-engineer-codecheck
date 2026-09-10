@@ -42,6 +42,12 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 composeOptions {
                     kotlinCompilerExtensionVersion = "1.5.4"
                 }
+
+                testOptions {
+                    unitTests {
+                        isIncludeAndroidResources = true
+                    }
+                }
             }
 
             tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).configureEach {

@@ -9,11 +9,12 @@
 
 Integration testing verifies that data contracts, network serialization, HTTP error translation, and caching mechanisms operate cohesively across module boundaries without relying on live network connectivity or third-party byte-code mocking frameworks (Mockito / MockK).
 
-All network integration tests utilize Ktor's native `MockEngine` in `shared/src/commonTest/` to execute deterministically in milliseconds across both JVM and Native (iOS) compilation targets.
+All network integration tests utilize Ktor's native `MockEngine` in `:core:network/src/commonTest/` and `:core:data/src/commonTest/` to execute deterministically in milliseconds across both JVM and Native (iOS) compilation targets.
 
 ```mermaid
 flowchart LR
-    Repo["DefaultGitHubRepository"] --> KtorClient["HttpClient(MockEngine)"]
+    Repo["GitHubRepositoryImpl<br/>(:core:data)"] --> ApiService["GitHubApiService<br/>(:core:network)"]
+    ApiService --> KtorClient["HttpClient(MockEngine)"]
     KtorClient --> Serializer["Kotlinx Serialization"]
     Serializer --> Assertions["Test Assertions<br/>(Result.success / Result.failure)"]
     Repo --> Cache["InMemoryCache"]
@@ -21,7 +22,7 @@ flowchart LR
 
 ---
 
-## 2. Shared Engine Test Suite (`DefaultGitHubRepositoryTest.kt`)
+## 2. Network & Data Test Suites (`GitHubApiServiceTest.kt` & `GitHubRepositoryImplTest.kt`)
 
 ### Test Setup with Ktor `MockEngine`
 ```kotlin
@@ -98,11 +99,14 @@ class FakeGitHubRepository : GitHubRepository {
 ## 5. Execution Commands
 
 ```bash
-# Execute shared engine integration tests across all targets
-./gradlew :shared:allTests
+# Execute network integration tests
+./gradlew :core:network:testDebugUnitTest
 
-# Execute JVM integration tests for shared module
-./gradlew :shared:testDebugUnitTest
+# Execute data & repository integration tests
+./gradlew :core:data:testDebugUnitTest
+
+# Execute all tests across all modules
+./gradlew testDebugUnitTest
 ```
 
 ---

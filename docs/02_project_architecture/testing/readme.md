@@ -47,20 +47,32 @@ flowchart TD
 
 ### Directory Mirroring Layout:
 ```text
-shared/
-├── src/commonMain/kotlin/jp/co/yumemi/android/code_check/shared/
-│   └── data/repository/DefaultGitHubRepository.kt
-└── src/commonTest/kotlin/jp/co/yumemi/android/code_check/shared/
-    └── data/repository/DefaultGitHubRepositoryTest.kt    <-- 1-to-1 Mirror
+core/domain/
+├── src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/domain/
+│   └── model/RepositoryItem.kt
+└── src/commonTest/kotlin/jp/co/yumemi/android/codecheck/core/domain/
+    └── model/RepositoryItemTest.kt                      <-- 1-to-1 Domain Unit Mirror
+
+core/network/
+├── src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/network/
+│   └── api/GitHubApiService.kt
+└── src/commonTest/kotlin/jp/co/yumemi/android/codecheck/core/network/
+    └── api/GitHubApiServiceTest.kt                      <-- 1-to-1 Network Integration Mirror
+
+core/data/
+├── src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/data/
+│   └── repository/GitHubRepositoryImpl.kt
+└── src/commonTest/kotlin/jp/co/yumemi/android/codecheck/core/data/
+    └── repository/GitHubRepositoryImplTest.kt          <-- 1-to-1 Repository Integration Mirror
 
 feature/search/
-├── src/main/kotlin/jp/co/yumemi/android/code_check/feature/search/
+├── src/main/kotlin/jp/co/yumemi/android/codecheck/feature/search/
 │   ├── SearchViewModel.kt
 │   └── SearchScreen.kt
-├── src/test/kotlin/jp/co/yumemi/android/code_check/feature/search/
+├── src/test/kotlin/jp/co/yumemi/android/codecheck/feature/search/
 │   └── SearchViewModelTest.kt                           <-- 1-to-1 JVM Unit Mirror
-└── src/androidTest/kotlin/jp/co/yumemi/android/code_check/feature/search/
-    └── SearchScreenTest.kt                              <-- 1-to-1 UI Test Mirror
+└── src/androidTest/kotlin/jp/co/yumemi/android/codecheck/feature/search/
+    └── SearchScreenTest.kt                              <-- 1-to-1 Compose UI Mirror
 ```
 
 ---
@@ -68,7 +80,7 @@ feature/search/
 ## 3. Standard Test Naming Conventions
 
 All test classes and methods adhere to standardized naming conventions:
-- **Test Class:** `<TargetClass>Test` (e.g., `SearchViewModelTest`, `DefaultGitHubRepositoryTest`, `SearchScreenTest`)
+- **Test Class:** `<TargetClass>Test` (e.g., `SearchViewModelTest`, `GitHubRepositoryImplTest`, `GitHubApiServiceTest`, `SearchScreenTest`)
 - **Test Method:** `methodName_condition_expectedResult`
   - Example: `searchRepositories_whenApiReturns200_emitsSuccessState`
   - Example: `searchRepositories_whenRateLimitExceeded_emitsErrorState`
@@ -84,3 +96,20 @@ All test classes and methods adhere to standardized naming conventions:
 | **[`02_integration_testing.md`](./02_integration_testing.md)** | Repository, Ktor MockEngine, In-Memory Caching | Ktor `MockEngine`, `kotlin.test`, Kotlinx Serialization |
 | **[`03_compose_ui_testing.md`](./03_compose_ui_testing.md)** | Compose UI States, Semantics, E2E Journeys | `createComposeRule`, AndroidX Test, `CustomTestRunner` |
 | **[`04_test_cases_matrix.md`](./04_test_cases_matrix.md)** | Traceability Matrix from Requirements to Tests | Full requirement-to-test mapping |
+
+---
+
+## 5. Official Testing References & Standards
+
+All testing implementations follow official Google Android and JetBrains guidelines:
+
+- **Android Testing Guide**: [https://developer.android.com/training/testing](https://developer.android.com/training/testing)
+- **Local Unit Testing**: [https://developer.android.com/training/testing/local-tests](https://developer.android.com/training/testing/local-tests)
+- **Testing Coroutines with TestDispatcher**: [https://developer.android.com/kotlin/coroutines/test](https://developer.android.com/kotlin/coroutines/test)
+- **Kotlinx Coroutines Test API**: [https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
+- **Turbine Flow Testing (Cash App)**: [https://github.com/cashapp/turbine](https://github.com/cashapp/turbine)
+- **Ktor Client Testing (`MockEngine`)**: [https://ktor.io/docs/client-testing.html](https://ktor.io/docs/client-testing.html)
+- **Testing Jetpack Compose Layouts**: [https://developer.android.com/develop/ui/compose/testing](https://developer.android.com/develop/ui/compose/testing)
+- **Compose Testing Cheat Sheet**: [https://developer.android.com/develop/ui/compose/testing-cheatsheet](https://developer.android.com/develop/ui/compose/testing-cheatsheet)
+- **Hilt Multi-Module Testing**: [https://developer.android.com/training/dependency-injection/hilt-testing](https://developer.android.com/training/dependency-injection/hilt-testing)
+

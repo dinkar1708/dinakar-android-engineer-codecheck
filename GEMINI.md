@@ -30,9 +30,9 @@ The application has recently completed foundational refactoring:
 
 ---
 
-## 🛡️ Strict Guardrails & Git Safety Policy
-1. **Zero Autonomous Commits**: Never execute `git commit`, `git push`, or alter git history automatically. Keep all changes in the working tree for developer inspection (`git diff`, `git status`).
-2. **Present Commands as Text**: When changes are ready, suggest git commands as formatted Markdown text for the developer to review and run.
+## 🛡️ Git Commit & Development Guardrails
+1. **Code Commits Permitted**: Gemini is permitted to stage files (`git add`) and commit code changes (`git commit`) following task completion or upon user request.
+2. **Commit Verification**: Verify that the code builds and unit tests pass before committing. Exclude untracked artifacts, cache files, and `.idea/` configs.
 3. **Atomic PR Sizing**: Keep PR diffs under **~300 lines**. Never dump an entire multi-module refactor or an entire issue into a massive 1,500-line PR.
 4. **Branch Naming**: Follow semantic prefixes:
    - `feature/<name>` (New features)

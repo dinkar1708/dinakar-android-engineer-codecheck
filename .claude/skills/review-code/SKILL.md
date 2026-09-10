@@ -8,11 +8,12 @@ description: Use this skill when performing code reviews against Android, Kotlin
 Review checklist aligned with Yumemi's Qiita evaluation criteria and our codebase architecture.
 
 ## 📱 Current Tech Stack Context
-- **UI:** XML layouts with ViewBinding (not Jetpack Compose)
-- **Architecture:** MVVM with Repository pattern (manual DI, not Hilt)
-- **Async:** Coroutines + LiveData (not StateFlow/SharedFlow)
-- **Network:** Ktor HTTP Client
-- **Module Structure:** Single-module app (`:app` only)
+- **Build Infrastructure:** Composite `build-logic` Convention Plugins + Version Catalog (`libs.versions.toml`)
+- **Module Structure:** Multi-module architecture (`:core:domain`, `:core:network`, `:core:data`, `:shared-core`, `:core:designsystem`, `:core:ui`, `:app`, with future `:core:database` in Issue #9)
+- **UI:** ViewBinding (migrating to Jetpack Compose in PR 8.3)
+- **Architecture:** MVVM with Repository pattern (migrating to StateFlow UDF & Hilt in PR 8.3)
+- **Async:** Coroutines + LiveData (transitioning to StateFlow)
+- **Network:** Ktor HTTP Client (migrating to KMP Ktor in PR 8.2)
 
 ---
 

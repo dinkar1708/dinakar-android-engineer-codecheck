@@ -29,25 +29,31 @@ We will restructure the project into a **multi-module architecture** with the fo
 
 ```
 android-engineer-codecheck/
-├── app/                              # Android app entry point (10% of code)
+├── app/                              # Android app entry point (Activity, NavHost, Hilt container)
 ├── core/
-│   ├── data/                         # Repository implementations
-│   ├── domain/                       # Business models & interfaces (pure Kotlin)
-│   ├── network/                      # Ktor client, API services
-│   ├── designsystem/                 # Material 3 theme system
-│   └── ui/                           # Shared Composables
+│   ├── data/                         # Repository implementations, caching, retry logic
+│   ├── database/                     # Local persistence (Room for Android / SQLDelight for iOS)
+│   ├── domain/                       # Business models, repository interfaces, use cases (pure Kotlin / KMP)
+│   ├── network/                      # Multiplatform Ktor client, DTOs, mappers (KMP)
+│   ├── designsystem/                 # Material 3 design tokens & theme system
+│   ├── ui/                           # Shared Composables (Loading, Empty, Error states)
+│   └── testing/                      # Shared test doubles & fixtures
 ├── feature/
 │   ├── search/                       # Search feature (ViewModel + Screen + Tests)
-│   └── detail/                       # Detail feature (ViewModel + Screen + Tests)
-└── shared/                           # Existing KMP module (unchanged)
+│   ├── detail/                       # Detail feature (ViewModel + Screen + Tests)
+│   └── settings/                     # Settings feature (theme, language preferences)
+├── shared-core/                      # Umbrella KMP framework export for iOS
+└── build-logic/                      # Gradle composite convention plugins
 ```
 
 ### Module Dependency Rules:
-1. **app/** depends on all `feature/*` modules
-2. **feature/*** modules depend on `core/*` modules
-3. **core/*** modules **cannot** depend on `feature/*` or `app/`
-4. `core/domain` has **no Android dependencies** (pure Kotlin)
-5. Circular dependencies are **forbidden** (enforced by Gradle)
+1. **app/** depends on all `feature/*` modules and `core/*` modules.
+2. **feature/*** modules depend on `core/*` modules (`:core:domain`, `:core:ui`, `:core:designsystem`).
+3. **core/*** modules **cannot** depend on `feature/*` or `app/`.
+4. `:core:domain` has **no Android SDK dependencies** (`android.*` is prohibited).
+5. `:core:data` coordinates remote data from `:core:network` and local persistence from `:core:database`.
+6. `:shared-core` aggregates `:core:domain`, `:core:network`, and `:core:data` for cross-platform delivery.
+7. Circular dependencies are **forbidden** (enforced by Gradle).
 
 ---
 

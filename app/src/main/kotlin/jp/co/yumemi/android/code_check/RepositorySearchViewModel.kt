@@ -10,19 +10,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import io.ktor.client.HttpClient
-import io.ktor.client.call.receive
-import io.ktor.client.engine.android.Android
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.client.request.parameter
-import io.ktor.client.statement.HttpResponse
-import jp.co.yumemi.android.code_check.TopActivity.Companion.lastSearchDate
-import kotlinx.coroutines.async
+import jp.co.yumemi.android.code_check.api.GitHubApiClientImpl
+import jp.co.yumemi.android.code_check.repository.GitHubRepository
+import jp.co.yumemi.android.code_check.repository.GitHubRepositoryImpl
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import org.json.JSONObject
-import java.util.Date
 
 /**
  * ViewModel for GitHub repository search functionality
@@ -31,6 +23,11 @@ import java.util.Date
 class RepositorySearchViewModel(
     application: Application
 ) : AndroidViewModel(application) {
+
+    private val repository: GitHubRepository = GitHubRepositoryImpl(
+        apiClient = GitHubApiClientImpl(),
+        context = application
+    )
 
     private val _searchResults = MutableLiveData<List<RepositoryItem>>()
     val searchResults: LiveData<List<RepositoryItem>> = _searchResults
@@ -48,71 +45,23 @@ class RepositorySearchViewModel(
         }
 
         viewModelScope.launch {
-            val client = HttpClient(Android)
-
-            val results = async {
             try {
-                val response: HttpResponse = client.get("https://api.github.com/search/repositories") {
-                    header("Accept", "application/vnd.github.v3+json")
-                    parameter("q", inputText)
-                }
-
-                val responseBody = response.receive<String>()
-                val jsonBody = JSONObject(responseBody)
-
-                // Validate JSON structure
-                if (!jsonBody.has("items")) {
-                    Log.w(TAG, "API response missing 'items' field")
-                    return@async emptyList()
-                }
-
-                val jsonItems = jsonBody.optJSONArray("items") ?: return@async emptyList()
-
-                val items = mutableListOf<RepositoryItem>()
-
-                for (i in 0 until jsonItems.length()) {
-                    val jsonItem = jsonItems.optJSONObject(i) ?: continue
-
-                    // Validate required fields
-                    val name = jsonItem.optString("full_name")
-                    if (name.isEmpty()) {
-                        Log.w(TAG, "Repository item missing full_name, skipping")
-                        continue
-                    }
-
-                    val ownerIconUrl = jsonItem.optJSONObject("owner")?.optString("avatar_url") ?: ""
-                    val language = jsonItem.optString("language")
-                    val stargazersCount = jsonItem.optLong("stargazers_count")
-                    val watchersCount = jsonItem.optLong("watchers_count")
-                    val forksCount = jsonItem.optLong("forks_count")
-                    val openIssuesCount = jsonItem.optLong("open_issues_count")
-
-                    items.add(
-                        RepositoryItem(
-                            name = name,
-                            ownerIconUrl = ownerIconUrl,
-                            language = getApplication<Application>().getString(R.string.written_language, language),
-                            stargazersCount = stargazersCount,
-                            watchersCount = watchersCount,
-                            forksCount = forksCount,
-                            openIssuesCount = openIssuesCount
-                        )
-                    )
-                }
-
-                TopActivity.lastSearchDate = Date()
-
-                return@async items.toList()
+                val items = repository.searchRepositories(inputText)
+                _searchResults.value = items
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to search repositories: ${e.message}", e)
-                return@async emptyList()
-            } finally {
-                client.close()
+                _searchResults.value = emptyList()
             }
-            }.await()
-
-            _searchResults.value = results
         }
+    }
+
+    /**
+     * Clean up resources when ViewModel is destroyed
+     * Closes the repository to release HTTP client resources
+     */
+    override fun onCleared() {
+        super.onCleared()
+        repository.close()
     }
 
     companion object {

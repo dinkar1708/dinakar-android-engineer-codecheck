@@ -49,6 +49,31 @@ fun SearchScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val query by viewModel.query.collectAsState()
+
+    SearchScreen(
+        uiState = uiState,
+        query = query,
+        onQueryChanged = viewModel::onQueryChanged,
+        onSearch = { viewModel.searchRepositories(query) },
+        onClearQuery = viewModel::clearQuery,
+        onRetry = viewModel::retry,
+        onRepositoryClick = onRepositoryClick,
+        modifier = modifier
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun SearchScreen(
+    uiState: SearchUiState,
+    query: String,
+    onQueryChanged: (String) -> Unit,
+    onSearch: () -> Unit,
+    onClearQuery: () -> Unit,
+    onRetry: () -> Unit,
+    onRepositoryClick: (RepositoryItem) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val focusManager = LocalFocusManager.current
 
     Scaffold(
@@ -70,7 +95,7 @@ fun SearchScreen(
         ) {
             OutlinedTextField(
                 value = query,
-                onValueChange = { viewModel.onQueryChanged(it) },
+                onValueChange = onQueryChanged,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -83,7 +108,7 @@ fun SearchScreen(
                 },
                 trailingIcon = {
                     if (query.isNotEmpty()) {
-                        IconButton(onClick = { viewModel.clearQuery() }) {
+                        IconButton(onClick = onClearQuery) {
                             Icon(
                                 imageVector = Icons.Default.Clear,
                                 contentDescription = "Clear search"
@@ -96,7 +121,7 @@ fun SearchScreen(
                 keyboardActions = KeyboardActions(
                     onSearch = {
                         focusManager.clearFocus()
-                        viewModel.searchRepositories(query)
+                        onSearch()
                     }
                 )
             )
@@ -125,7 +150,7 @@ fun SearchScreen(
                     is SearchUiState.Error -> {
                         ErrorView(
                             message = state.message,
-                            onRetry = { viewModel.retry() }
+                            onRetry = onRetry
                         )
                     }
                     is SearchUiState.Success -> {

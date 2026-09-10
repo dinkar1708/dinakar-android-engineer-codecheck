@@ -27,6 +27,43 @@ subprojects {
         koverReport {
             defaults {
                 mergeWith("debug")
+                filters {
+                    excludes {
+                        classes(
+                            "*_Factory*",
+                            "*_HiltModules*",
+                            "*Hilt_*",
+                            "*_MembersInjector*",
+                            "*BuildConfig*",
+                            "*ComposableSingletons*"
+                        )
+                        packages(
+                            "dagger.hilt.*",
+                            "hilt_aggregated_deps"
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+koverReport {
+    defaults {
+        filters {
+            excludes {
+                classes(
+                    "*_Factory*",
+                    "*_HiltModules*",
+                    "*Hilt_*",
+                    "*_MembersInjector*",
+                    "*BuildConfig*",
+                    "*ComposableSingletons*"
+                )
+                packages(
+                    "dagger.hilt.*",
+                    "hilt_aggregated_deps"
+                )
             }
         }
     }

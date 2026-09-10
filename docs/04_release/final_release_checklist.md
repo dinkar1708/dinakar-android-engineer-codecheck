@@ -55,10 +55,10 @@ The project provides a comprehensive 6-Phase Agile SDLC documentation suite stru
 - [`issue_01.md`](../03_iteration/issues/issue_01.md) through [`issue_09.md`](../03_iteration/issues/issue_09.md) - Granular issue deep-dives
 - [`01_sprint_1_foundation_and_code_health.md`](../03_iteration/sprints/01_sprint_1_foundation_and_code_health.md) through Sprint 4 plans
 - [`readme.md`](../03_iteration/testing/readme.md) - Master testing strategy & pyramid
-- [`01_unit_testing.md`](../03_iteration/testing/01_unit_testing.md) - Unit tests & coroutine infrastructure
-- [`02_integration_testing.md`](../03_iteration/testing/02_integration_testing.md) - Ktor MockEngine & data caching integration tests
-- [`03_compose_ui_testing.md`](../03_iteration/testing/03_compose_ui_testing.md) - Compose UI & instrumented testing
-- [`04_test_cases_matrix.md`](../03_iteration/testing/04_test_cases_matrix.md) - Test case traceability matrix
+- [`01_unit_testing.md`](../02_project_architecture/testing/01_unit_testing.md) - Unit & ViewModel testing (JVM)
+- [`02_compose_ui_testing.md`](../02_project_architecture/testing/02_compose_ui_testing.md) - Compose View & Screen testing (Robolectric JVM)
+- [`03_integration_and_e2e_testing.md`](../02_project_architecture/testing/03_integration_and_e2e_testing.md) - Network integration & on-device E2E testing
+- [`04_test_cases_matrix.md`](../02_project_architecture/testing/04_test_cases_matrix.md) - Test case traceability matrix
 
 ### Phase 04: Release & Operations
 - [`01_build_and_export_guide.md`](operations/01_build_and_export_guide.md) - APK / AAB packaging procedures

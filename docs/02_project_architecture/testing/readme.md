@@ -1,115 +1,145 @@
-# Testing Strategy & Quality Assurance Overview
+# Testing Architecture & Quality Assurance Strategy
 
-**Scope:** Continuous Construction & Automated Verification (Phase 3 Iteration)  
-**Target:** Mobile Engineering Team & Quality Assurance  
+**Target:** Mobile Engineering Team & Code Reviewers  
+**Scope:** Automated Test Suite, Directory Layout & Quality Gates  
 
 ---
 
 ## 1. Testing Philosophy & 4-Level Test Pyramid
 
-Quality is built directly into features during active development (shift-left testing). The platform adopts an enterprise **Test Pyramid** strategy, prioritizing fast, reliable unit and integration tests executing on the local JVM in milliseconds, complemented by declarative Jetpack Compose UI tests and end-to-end user journey validation.
+The repository adopts an enterprise **Test Pyramid** strategy, prioritizing fast, reliable unit and integration tests executing on the local JVM in milliseconds, complemented by declarative Jetpack Compose UI tests and end-to-end user journey validation.
 
 ```mermaid
 flowchart TD
-    E2E["Level 4: End-to-End Instrumented Tests<br/>(Full User Journeys, CustomTestRunner, Navigation)"]
-    UI["Level 3: Declarative Compose UI Tests<br/>(createComposeRule, Semantics Tree, 5 Visual States)"]
-    INT["Level 2: Data & Network Integration Tests<br/>(Ktor MockEngine, In-Memory Caching, KMP Contracts)"]
-    UNIT["Level 1: Pure Unit Tests<br/>(ViewModels, UDF StateFlow, Turbine, Coroutine Virtual Time)"]
+    E2E["Level 4: End-to-End Instrumented Tests<br/>(Full User Journey, Navigation, Real Device/Emulator in app/src/androidTest)"]
+    UI["Level 3: Declarative Compose UI Tests<br/>(Robolectric on JVM in feature/*/src/test, 5 Visual States)"]
+    INT["Level 2: Data & Network Integration Tests<br/>(Ktor MockEngine, In-Memory Caching in core/*/src/commonTest)"]
+    UNIT["Level 1: Pure Unit & ViewModel Tests<br/>(ViewModels, UDF StateFlow, Turbine, Coroutine Virtual Time in src/test)"]
 
     UNIT --> INT --> UI --> E2E
 ```
 
 ### Breakdown of Testing Levels:
-1. **Level 1: Pure Unit Tests (60% of Suite)**
-   - **Scope:** ViewModels (`SearchViewModel`), UDF state machines (`SearchUiState`), domain validators (`SearchQueryValidator`), and Coroutines virtual time.
-   - **Execution:** Runs in ~2 seconds on the local JVM via JUnit 4 and Cash App Turbine without Android emulator overhead.
-2. **Level 2: Data & Network Integration Tests (20% of Suite)**
+1. **Level 1: Pure Unit & ViewModel Tests (JVM)**
+   - **Scope:** ViewModels (`SearchViewModel`, `DetailViewModel`), UDF state machines, domain entities, coroutine virtual time, and navigation builders.
+   - **Execution:** Runs in ~2 seconds on the local JVM via JUnit 4, Cash App Turbine, and MockK.
+2. **Level 2: Data & Network Integration Tests (JVM)**
    - **Scope:** Repository contracts, Ktor HTTP JSON serialization/deserialization, in-memory cache eviction, and API error mappings (403, 404, 5xx).
-   - **Execution:** Fully offline, deterministic HTTP mocking via Ktor's `MockEngine` without third-party bytecode mocking libraries.
-3. **Level 3: Compose UI Tests (15% of Suite)**
-   - **Scope:** Visual rendering across all 5 UI states (`Idle`, `Loading`, `Success`, `Empty`, `Error`), click gestures, and accessibility semantics.
-   - **Execution:** AndroidX `createComposeRule` validating the Compose Semantics Tree.
-4. **Level 4: End-to-End (E2E) & Instrumented Tests (5% of Suite)**
-   - **Scope:** Complete search-to-detail navigation flow, back-stack persistence, and mock build flavor verification.
-   - **Execution:** `CustomTestRunner` configuring `HiltTestApplication` for instrumented tests.
+   - **Execution:** Fully offline, deterministic HTTP mocking via Ktor's `MockEngine`.
+3. **Level 3: Declarative Compose UI Tests (Robolectric JVM)**
+   - **Scope:** Visual rendering across all 5 UI states (`Idle`, `Loading`, `Success`, `Empty`, `Error`), component layouts (`RepositoryItemRow`, `DetailContent`), and user click interactions.
+   - **Execution:** AndroidX `createComposeRule` running on the local JVM via Robolectric.
+4. **Level 4: End-to-End (E2E) Instrumented Tests (Device/Emulator)**
+   - **Scope:** Complete search-to-detail navigation flow on a live device or emulator.
+   - **Execution:** `createAndroidComposeRule<MainActivity>()` in `app/src/androidTest/`.
 
 ---
 
-## 2. Test Package Mirroring Standard (1-to-1 Architecture Layout)
+## 2. Definitive Directory & Folder Architecture
 
 > [!IMPORTANT]
-> **All test classes must strictly mirror the exact package and directory structure of the corresponding production code.**
+> ### 🚨 Key Takeaway on Folder Naming
+> - **`src/test/` (and `src/commonTest/`)**: Contains all **JVM Tests** (Unit tests, ViewModel tests, Ktor MockEngine tests, and Robolectric Compose UI tests).
+> - **`app/src/androidTest/`**: The **ONLY** instrumented test folder in the entire project. Dedicated exclusively to End-to-End (E2E) verification of the fully assembled application on a real device/emulator.
+> - **`feature/*/src/` has NO `androidTest/`**: Feature modules test their UI using fast Robolectric in `src/test/`, keeping tests fast, reliable, and headless-CI compatible.
 
-### Benefits of 1-to-1 Mirroring:
-1. **Package-Private & `internal` Access:** Tests residing in the identical package access `internal` classes and state properties without exposing them publicly.
-2. **Deterministic File Location:** Team members can locate any class's test file instantly without searching.
-3. **IDE Two-Way Navigation:** Instant switching between production code and test file via `Cmd+Shift+T` (macOS) or `Ctrl+Shift+T` (Linux/Windows).
-
-### Directory Mirroring Layout:
 ```text
-core/domain/
-├── src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/domain/
-│   └── model/RepositoryItem.kt
-└── src/commonTest/kotlin/jp/co/yumemi/android/codecheck/core/domain/
-    └── model/RepositoryItemTest.kt                      <-- 1-to-1 Domain Unit Mirror
-
-core/network/
-├── src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/network/
-│   └── api/GitHubApiService.kt
-└── src/commonTest/kotlin/jp/co/yumemi/android/codecheck/core/network/
-    └── api/GitHubApiServiceTest.kt                      <-- 1-to-1 Network Integration Mirror
-
-core/data/
-├── src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/data/
-│   └── repository/GitHubRepositoryImpl.kt
-└── src/commonTest/kotlin/jp/co/yumemi/android/codecheck/core/data/
-    └── repository/GitHubRepositoryImplTest.kt          <-- 1-to-1 Repository Integration Mirror
-
-feature/search/
-├── src/main/kotlin/jp/co/yumemi/android/codecheck/feature/search/
-│   ├── SearchViewModel.kt
-│   └── SearchScreen.kt
-├── src/test/kotlin/jp/co/yumemi/android/codecheck/feature/search/
-│   └── SearchViewModelTest.kt                           <-- 1-to-1 JVM Unit Mirror
-└── src/androidTest/kotlin/jp/co/yumemi/android/codecheck/feature/search/
-    └── SearchScreenTest.kt                              <-- 1-to-1 Compose UI Mirror
+📁 2-dinakar-android-engineer-codecheck
+│
+├── 📁 app/                                                 ⭐ ONLY MODULE WITH ANDROIDTEST
+│    └── 📁 src/
+│         ├── 📁 main/                                      <-- MainActivity, Navigation Graph & Hilt App
+│         ├── 📁 test/                                      <-- App-level JVM Unit Tests
+│         │    └── 📁 kotlin/jp/co/yumemi/android/codecheck/
+│         │         ├── 📁 navigation/                      <-- ExtractOwnerAndRepoTest, ScreenRouteTest
+│         │         └── 📁 di/                              <-- DependencyInjectionTest
+│         └── 📁 androidTest/                               ⭐ INSTRUMENTED ON-DEVICE E2E TESTS
+│              └── 📁 kotlin/jp/co/yumemi/android/codecheck/
+│                   └── 📄 SearchE2ETest.kt                 <-- Live Emulator Search-to-Detail Journey
+│
+├── 📁 feature/search/
+│    └── 📁 src/
+│         ├── 📁 main/                                      <-- SearchScreen & SearchViewModel
+│         └── 📁 test/                                      ⭐ ALL SEARCH TESTS LIVE IN SRC/TEST (JVM)
+│              └── 📁 kotlin/jp/co/yumemi/android/codecheck/feature/search/
+│                   ├── 📄 SearchViewModelTest.kt           <-- Turbine StateFlow Unit Tests
+│                   ├── 📄 SearchScreenTest.kt              <-- Robolectric 5-State Screen UI Tests
+│                   └── 📄 RepositoryItemRowTest.kt         <-- Robolectric Card Component UI Tests
+│
+├── 📁 feature/detail/
+│    └── 📁 src/
+│         ├── 📁 main/                                      <-- DetailScreen & DetailViewModel
+│         └── 📁 test/                                      ⭐ ALL DETAIL TESTS LIVE IN SRC/TEST (JVM)
+│              └── 📁 kotlin/jp/co/yumemi/android/codecheck/feature/detail/
+│                   ├── 📄 DetailViewModelTest.kt           <-- Turbine StateFlow Unit Tests
+│                   ├── 📄 DetailScreenTest.kt              <-- Robolectric Screen UI Tests
+│                   └── 📄 DetailContentTest.kt             <-- Robolectric Content Component UI Tests
+│
+├── 📁 core/ui/
+│    └── 📁 src/
+│         ├── 📁 main/                                      <-- EmptyView, ErrorView, LoadingView
+│         └── 📁 test/                                      ⭐ REUSABLE COMPONENT TESTS (JVM)
+│              └── 📁 kotlin/jp/co/yumemi/android/codecheck/core/ui/component/
+│                   ├── 📄 EmptyViewTest.kt
+│                   ├── 📄 ErrorViewTest.kt
+│                   └── 📄 LoadingViewTest.kt
+│
+├── 📁 core/data/
+│    └── 📁 src/
+│         ├── 📁 commonMain/                                <-- GitHubRepositoryImpl & Caching
+│         └── 📁 commonTest/                                ⭐ KMP DATA INTEGRATION TESTS (JVM)
+│              └── 📁 kotlin/jp/co/yumemi/android/codecheck/core/data/
+│                   ├── 📁 repository/
+│                   │    └── 📄 GitHubRepositoryImplTest.kt
+│                   └── 📁 util/
+│                        └── 📄 RetryUtilTest.kt
+│
+├── 📁 core/network/
+│    └── 📁 src/
+│         ├── 📁 commonMain/                                <-- GitHubApiService (Ktor Client)
+│         └── 📁 commonTest/                                ⭐ KMP NETWORK INTEGRATION TESTS (JVM)
+│              └── 📁 kotlin/jp/co/yumemi/android/codecheck/core/network/
+│                   ├── 📁 api/
+│                   │    └── 📄 GitHubApiServiceTest.kt
+│                   └── 📁 error/
+│                        └── 📄 NetworkExceptionTest.kt
+│
+└── 📁 core/domain/
+     └── 📁 src/
+          ├── 📁 commonMain/                                <-- Pure Domain Models & Contracts
+          └── 📁 commonTest/                                ⭐ PURE DOMAIN UNIT TESTS (JVM)
+               └── 📁 kotlin/jp/co/yumemi/android/codecheck/core/domain/model/
+                    └── 📄 RepositoryItemTest.kt
 ```
 
 ---
 
-## 3. Standard Test Naming Conventions
+## 3. Dedicated Testing Guides (Index)
 
-All test classes and methods adhere to standardized naming conventions:
-- **Test Class:** `<TargetClass>Test` (e.g., `SearchViewModelTest`, `GitHubRepositoryImplTest`, `GitHubApiServiceTest`, `SearchScreenTest`)
-- **Test Method:** `methodName_condition_expectedResult`
-  - Example: `searchRepositories_whenApiReturns200_emitsSuccessState`
-  - Example: `searchRepositories_whenRateLimitExceeded_emitsErrorState`
-  - Example: `searchRepositories_whenQueryIsBlank_returnsEmptyListImmediately`
+We have organized our testing architecture into 3 clear, focused specifications:
 
----
-
-## 4. Testing Specifications Index
-
-| Specification | Focus Area | Frameworks & Tools |
-|:---|:---|:---|
-| **[`01_unit_testing.md`](./01_unit_testing.md)** | ViewModel StateFlow, Turbine, Coroutines | JUnit 4, Turbine, `kotlinx-coroutines-test`, `MainDispatcherRule` |
-| **[`02_integration_testing.md`](./02_integration_testing.md)** | Repository, Ktor MockEngine, In-Memory Caching | Ktor `MockEngine`, `kotlin.test`, Kotlinx Serialization |
-| **[`03_compose_ui_testing.md`](./03_compose_ui_testing.md)** | Compose UI States, Semantics, E2E Journeys | `createComposeRule`, AndroidX Test, `CustomTestRunner` |
-| **[`04_test_cases_matrix.md`](./04_test_cases_matrix.md)** | Traceability Matrix from Requirements to Tests | Full requirement-to-test mapping |
+| Guide | Scope & Focus Area | Frameworks & Tools | Location Folder |
+|:---|:---|:---|:---|
+| **[Guide 1: Unit & ViewModel Testing](./01_unit_testing.md)** | ViewModels, StateFlow UDF, Domain Models, Coroutines | JUnit 4, Turbine, MockK, Coroutines Virtual Time | `feature/*/src/test/`<br/>`core/*/src/commonTest/`<br/>`app/src/test/` |
+| **[Guide 2: Compose View Testing](./02_compose_ui_testing.md)** | Screen UI States (5 states), Component Layouts, Click Actions | Robolectric, AndroidX Compose Test Rule | `feature/*/src/test/`<br/>`core/ui/src/test/` |
+| **[Guide 3: Integration & E2E Testing](./03_integration_and_e2e_testing.md)** | Live Emulator User Journey & Ktor MockEngine HTTP Tests | `createAndroidComposeRule`, Ktor `MockEngine` | `app/src/androidTest/`<br/>`core/*/src/commonTest/` |
+| **[Traceability Matrix](./04_test_cases_matrix.md)** | Full bidirectional mapping from requirements to 81 tests | Markdown Matrix | All test folders |
 
 ---
 
-## 5. Official Testing References & Standards
+## 4. Master Verification Commands
 
-All testing implementations follow official Google Android and JetBrains guidelines:
+```bash
+# 1. Run all 81 automated unit and Robolectric Compose tests (takes ~15s)
+./gradlew testDebugUnitTest
 
-- **Android Testing Guide**: [https://developer.android.com/training/testing](https://developer.android.com/training/testing)
-- **Local Unit Testing**: [https://developer.android.com/training/testing/local-tests](https://developer.android.com/training/testing/local-tests)
-- **Testing Coroutines with TestDispatcher**: [https://developer.android.com/kotlin/coroutines/test](https://developer.android.com/kotlin/coroutines/test)
-- **Kotlinx Coroutines Test API**: [https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
-- **Turbine Flow Testing (Cash App)**: [https://github.com/cashapp/turbine](https://github.com/cashapp/turbine)
-- **Ktor Client Testing (`MockEngine`)**: [https://ktor.io/docs/client-testing.html](https://ktor.io/docs/client-testing.html)
-- **Testing Jetpack Compose Layouts**: [https://developer.android.com/develop/ui/compose/testing](https://developer.android.com/develop/ui/compose/testing)
-- **Compose Testing Cheat Sheet**: [https://developer.android.com/develop/ui/compose/testing-cheatsheet](https://developer.android.com/develop/ui/compose/testing-cheatsheet)
-- **Hilt Multi-Module Testing**: [https://developer.android.com/training/dependency-injection/hilt-testing](https://developer.android.com/training/dependency-injection/hilt-testing)
+# 2. Run connected live E2E test on Android emulator / device
+./gradlew :app:connectedAndroidTest
 
+# 3. Generate Kover code coverage report (verifies >80% line coverage)
+./gradlew koverHtmlReportDebug
+# View report: open build/reports/kover/htmlDebug/index.html
+
+# 4. Verify full project hygiene (Assemble + Unit Tests + Lint)
+./gradlew clean assembleDebug testDebugUnitTest lintDebug
+```

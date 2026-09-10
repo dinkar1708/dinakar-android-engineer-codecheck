@@ -28,6 +28,7 @@ The standards defined in this handbook establish a high-performance engineering 
 | **7. CI/CD & Delivery** | [`07_cicd_and_delivery_standards.md`](./07_cicd_and_delivery_standards.md) | 3-tier promotion (`dev` -> `stg` -> `main`), Firebase QA distribution & keystores | `DEVOPS` |
 | **8. Developer Workflow** | [`08_developer_workflow.md`](./08_developer_workflow.md) | Contract-first development (Domain -> Data -> UI) enabling parallel engineering | `DEV-GUIDES` |
 | **9. Engineering Culture** | [`09_yumemi_review_culture.md`](./09_yumemi_review_culture.md) | Psychological safety, blameless retrospectives & collaborative code review ethics | `CULTURE` |
+| **10. AI Agent Skills** | [`10_ai_agent_skills_guide.md`](./10_ai_agent_skills_guide.md) | AI agent skills standards (Gemini, Claude, others), living documentation & pairing workflows | `AI-TOOLING` |
 
 ---
 

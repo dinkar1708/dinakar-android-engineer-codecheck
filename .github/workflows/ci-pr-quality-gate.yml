@@ -6,11 +6,17 @@ on:
     paths-ignore:
       - 'docs/**'
       - '*.md'
+      - '.claude/**'
+      - '.agents/**'
+      - 'GEMINI.md'
   pull_request:
     branches: [ dev ]
     paths-ignore:
       - 'docs/**'
       - '*.md'
+      - '.claude/**'
+      - '.agents/**'
+      - 'GEMINI.md'
   workflow_dispatch:
 
 concurrency:

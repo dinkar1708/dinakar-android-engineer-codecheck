@@ -72,23 +72,40 @@ When providing feedback on code or PR diffs, categorize comments using standard 
 - [ ] Favor immutability (`val` over `var`, immutable collections).
 - [ ] Strings and dimensions extracted into resources (`R.string`, `R.dimen`).
 
+### 5. Testing Architecture & Directory Compliance
+- [ ] **Guide 1 (Unit & ViewModel)**: All unit and ViewModel tests are located in `src/test/` (Android) or `src/commonTest/` (KMP).
+- [ ] **Guide 2 (Compose View & Screen)**: All Compose UI tests are located in `feature/*/src/test/` and `core/ui/src/test/` using Robolectric (JVM). **Verify that NO `androidTest/` folder was accidentally created in feature modules.**
+- [ ] **Guide 3 (Integration & E2E)**: On-device E2E tests are located exclusively in `app/src/androidTest/` (`SearchE2ETest.kt`), and network integration tests use Ktor `MockEngine` in `core/network/src/commonTest/`.
+- [ ] **Coverage Gate**: Code coverage is verified with Kover (`./gradlew koverHtmlReportDebug`) and meets the >= 80% line coverage standard.
+
 ---
 
 ## 🚀 How to Run Review Checks Locally
 ```bash
-# Static analysis
+# 1. Static analysis
 ./gradlew lintDebug
 
-# Unit test execution
+# 2. All Unit and Robolectric Compose Tests (81 tests)
 ./gradlew testDebugUnitTest
 
-# Full Debug APK assembly
+# 3. Code Coverage Verification (Target >= 80%)
+./gradlew koverHtmlReportDebug
+
+# 4. Full Debug APK assembly
 ./gradlew clean assembleDebug
+
+# 5. Connected E2E Test on Emulator (when app/src/androidTest changes)
+./gradlew :app:connectedAndroidTest
 ```
 
 ---
 
 ## 📂 Related Relative Paths
+- **Master Testing Strategy**: `docs/02_project_architecture/testing/readme.md`
+- **Guide 1: Unit & ViewModel Testing**: `docs/02_project_architecture/testing/01_unit_testing.md`
+- **Guide 2: Compose View Testing**: `docs/02_project_architecture/testing/02_compose_ui_testing.md`
+- **Guide 3: Integration & E2E Testing**: `docs/02_project_architecture/testing/03_integration_and_e2e_testing.md`
+- **Test Traceability Matrix**: `docs/02_project_architecture/testing/04_test_cases_matrix.md`
 - **Network Service**: `core/network/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/network/GitHubApiService.kt`
 - **Domain Models & Contract**: `core/domain/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/domain/`
 - **Repository Implementation**: `core/data/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/data/repository/GitHubRepositoryImpl.kt`

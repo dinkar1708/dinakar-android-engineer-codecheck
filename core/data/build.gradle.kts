@@ -11,6 +11,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core:domain"))
             implementation(project(":core:network"))
+            implementation(libs.kotlinx.coroutines.core)
         }
     }
 }

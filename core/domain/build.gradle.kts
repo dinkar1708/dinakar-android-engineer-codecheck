@@ -9,7 +9,7 @@ android {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            // Pure Kotlin - no dependencies
+            implementation(libs.kotlinx.coroutines.core)
         }
     }
 }

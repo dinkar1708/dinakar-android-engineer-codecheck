@@ -57,7 +57,24 @@ fun DetailScreen(
     viewModel: DetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    DetailScreen(
+        uiState = uiState,
+        onBackClick = onBackClick,
+        onRetry = viewModel::retry,
+        modifier = modifier,
+        onOpenBrowser = onOpenBrowser
+    )
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun DetailScreen(
+    uiState: DetailUiState,
+    onBackClick: () -> Unit,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+    onOpenBrowser: ((String) -> Unit)? = null
+) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -90,7 +107,7 @@ fun DetailScreen(
                 is DetailUiState.Error -> {
                     ErrorView(
                         message = state.message,
-                        onRetry = { viewModel.retry() }
+                        onRetry = onRetry
                     )
                 }
                 is DetailUiState.Success -> {

@@ -48,11 +48,17 @@ Categorize every review comment using these badges:
 - [ ] **Coroutine Scope**: Are jobs launched within `viewModelScope` or `lifecycleScope`? No `GlobalScope` or blocking `runBlocking`.
 - [ ] **LiveData Observation**: Are LiveData observers removed properly or using lifecycle-aware observers?
 
-### 3. Code Hygiene & Kotlin Idioms
+### 4. Code Hygiene & Kotlin Idioms
 - [ ] No Hungarian notation (`m_var`, `_var` except for private backing properties).
 - [ ] No wildcard imports (`import foo.bar.*`).
 - [ ] Favor immutability (`val` over `var`, immutable collections).
 - [ ] Strings and dimensions extracted into resources (`R.string`, `R.dimen`).
+
+### 5. Testing Architecture & Directory Compliance
+- [ ] **Guide 1 (Unit & ViewModel)**: All unit and ViewModel tests strictly located in `src/test/` or `src/commonTest/` (KMP).
+- [ ] **Guide 2 (Compose View & Screen)**: All Compose UI tests strictly located in `feature/*/src/test/` and `core/ui/src/test/` using Robolectric (JVM). **Verify that NO `androidTest/` folder was created in feature modules.**
+- [ ] **Guide 3 (Integration & E2E)**: On-device E2E tests strictly located in `app/src/androidTest/` (`SearchE2ETest.kt`), and network integration tests in `core/network/src/commonTest/`.
+- [ ] **Coverage Gate**: Code coverage verified via Kover (`./gradlew koverHtmlReportDebug`) with line coverage >= 80%.
 
 ---
 
@@ -74,12 +80,20 @@ override fun onDestroyView() {
 
 ## ✅ Merge Approval Criteria
 - [ ] `./gradlew clean assembleDebug` compiles with 0 errors.
-- [ ] `./gradlew test` passes 100%.
+- [ ] `./gradlew testDebugUnitTest` passes 100% (all 81 unit & Compose UI tests).
+- [ ] `./gradlew koverHtmlReportDebug` verifies >= 80% line coverage.
+- [ ] `./gradlew :app:connectedAndroidTest` passes on connected emulator/device (when `app/src/androidTest` is touched).
+- [ ] Directory layout complies strictly with Testing Guides 1, 2, and 3.
 - [ ] No unhandled exceptions or swallowed error states.
 - [ ] Follows project conventions in `docs/CONTRIBUTING.md`.
 - [ ] Skills and documentation updated if new designs were added (`docs/01_company_and_team/10_ai_agent_skills_guide.md`).
 
 ## 📂 Related Relative Paths
+- **Master Testing Strategy**: `docs/02_project_architecture/testing/readme.md`
+- **Guide 1: Unit & ViewModel Testing**: `docs/02_project_architecture/testing/01_unit_testing.md`
+- **Guide 2: Compose View Testing**: `docs/02_project_architecture/testing/02_compose_ui_testing.md`
+- **Guide 3: Integration & E2E Testing**: `docs/02_project_architecture/testing/03_integration_and_e2e_testing.md`
+- **Test Traceability Matrix**: `docs/02_project_architecture/testing/04_test_cases_matrix.md`
 - **Network Service**: `core/network/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/network/GitHubApiService.kt`
 - **Domain Models & Contract**: `core/domain/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/domain/`
 - **Repository Implementation**: `core/data/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/data/repository/GitHubRepositoryImpl.kt`

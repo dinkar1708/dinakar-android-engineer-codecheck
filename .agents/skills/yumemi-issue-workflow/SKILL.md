@@ -46,14 +46,20 @@ A structured, end-to-end procedure for tackling any issue in the Yumemi Android 
 
 ---
 
-## 3. Test-First Implementation (TDD)
-Before modifying production code:
-1. Locate or create unit tests in `app/src/test/java/...` or `:core:testing`.
-2. Write unit test cases reproducing:
-   - **Happy path**: Valid search input returns expected item list.
-   - **Edge cases**: Empty search string, whitespace-only query, special characters.
-   - **Error scenarios**: HTTP 403 rate limit, HTTP 404, network timeout, malformed JSON.
-3. Confirm test fails initially (Red phase).
+## 3. Test-First Implementation (TDD) & Directory Architecture
+Before modifying production code, adhere strictly to the 3-guide testing layout:
+1. **Guide 1 (Unit & ViewModel Tests - JVM)**:
+   - Write tests in `feature/*/src/test/` (ViewModels with Turbine), `core/*/src/commonTest/` (KMP domain/data/network), or `app/src/test/` (Navigation & DI).
+   - Ref: [`docs/02_project_architecture/testing/01_unit_testing.md`](../../docs/02_project_architecture/testing/01_unit_testing.md)
+2. **Guide 2 (Compose View & Screen Tests - Robolectric JVM)**:
+   - Write declarative UI tests in `feature/*/src/test/` and `core/ui/src/test/` using Robolectric.
+   - **CRITICAL**: Do NOT create `androidTest/` in feature modules. All screen state tests (`Idle`, `Loading`, `Success`, `Empty`, `Error`) run on JVM in `src/test/` to ensure ~2s execution and 100% Kover coverage contribution.
+   - Ref: [`docs/02_project_architecture/testing/02_compose_ui_testing.md`](../../docs/02_project_architecture/testing/02_compose_ui_testing.md)
+3. **Guide 3 (Integration & End-to-End Tests)**:
+   - Network integration tests: `core/network/src/commonTest/` using Ktor `MockEngine`.
+   - On-device E2E tests: Located **exclusively in `app/src/androidTest/`** (`SearchE2ETest.kt`).
+   - Ref: [`docs/02_project_architecture/testing/03_integration_and_e2e_testing.md`](../../docs/02_project_architecture/testing/03_integration_and_e2e_testing.md)
+4. Confirm test fails initially (Red phase) before implementing green behavior.
 
 ---
 
@@ -78,7 +84,7 @@ Before modifying production code:
   - Expose `StateFlow<SearchUiState>`
   - Sealed interface for state: `Idle`, `Loading`, `Success(items)`, `Empty`, `Error(message)`
 - **Lifecycle & Resource Cleanup**:
-  - Always clean up ViewBinding in `onDestroyView()`
+  - Always clean up ViewBinding in `onDestroyView()` when using legacy views
   - Implement `onCleared()` in ViewModels to close HTTP resources (`repository.close()`)
   - Preserve state across configuration changes using `SavedStateHandle`
 
@@ -88,14 +94,20 @@ Before modifying production code:
 Always execute these verification commands before presenting changes:
 
 ```bash
-# 1. Run Unit Tests
+# 1. Run all Unit and Robolectric Compose Tests (all 81 tests)
 ./gradlew testDebugUnitTest
 
 # 2. Run Android Lint Checks
 ./gradlew lintDebug
 
-# 3. Assemble Debug APK
+# 3. Verify Code Coverage (Target >= 80% line coverage)
+./gradlew koverHtmlReportDebug
+
+# 4. Assemble Debug APK
 ./gradlew clean assembleDebug
+
+# 5. Run Live E2E Instrumented Test on Emulator (When app/src/androidTest is touched)
+./gradlew :app:connectedAndroidTest
 ```
 
 ---
@@ -106,12 +118,17 @@ Always execute these verification commands before presenting changes:
    ```bash
    git commit -m "<type>: <concise description of issue resolution>"
    ```
-3. Generate PR description using `.github/pull_request_template.md` referencing the issue number (`close #X`).
+3. Generate PR description using `.github/pull_request_template.md` referencing the issue number (`close #X`), ensuring all checklist items in **Testing Architecture Compliance** are satisfied.
 4. Verify that AI skills and docs were updated if new code designs were introduced.
 
 ---
 
 ## 📂 Related Relative Paths
+- **Master Testing Strategy**: `docs/02_project_architecture/testing/readme.md`
+- **Guide 1: Unit & ViewModel Testing**: `docs/02_project_architecture/testing/01_unit_testing.md`
+- **Guide 2: Compose View Testing**: `docs/02_project_architecture/testing/02_compose_ui_testing.md`
+- **Guide 3: Integration & E2E Testing**: `docs/02_project_architecture/testing/03_integration_and_e2e_testing.md`
+- **Test Traceability Matrix**: `docs/02_project_architecture/testing/04_test_cases_matrix.md`
 - **Sprint Delivery Roadmap**: `docs/03_sprint_execution/01_execution_roadmap.md`
 - **Issue-to-Ticket Mapping**: `docs/03_sprint_execution/02_how_to_proceed_and_issue_mapping.md`
 - **Authoritative Issue Specifications**: `docs/03_sprint_execution/03_issues_summary.md`

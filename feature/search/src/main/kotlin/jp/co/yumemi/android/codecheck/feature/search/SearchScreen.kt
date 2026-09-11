@@ -1,5 +1,11 @@
 package jp.co.yumemi.android.codecheck.feature.search
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -19,7 +26,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -28,6 +37,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -78,9 +88,17 @@ internal fun SearchScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
-                title = { Text(text = "GitHub Repository Search") },
+                title = {
+                    Text(
+                        text = "GitHub Repository Search",
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.onSurface
@@ -93,45 +111,72 @@ internal fun SearchScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            OutlinedTextField(
-                value = query,
-                onValueChange = onQueryChanged,
+            // Modern search field with enhanced styling - 16dp margins follow Material 3 specs
+            Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                placeholder = { Text(text = "Search repositories...") },
-                leadingIcon = {
-                    IconButton(
-                        onClick = {
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                shape = RoundedCornerShape(16.dp),
+                shadowElevation = 4.dp,
+                tonalElevation = 1.dp
+            ) {
+                OutlinedTextField(
+                    value = query,
+                    onValueChange = onQueryChanged,
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = {
+                        Text(
+                            text = "Search repositories...",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    },
+                    leadingIcon = {
+                        IconButton(
+                            onClick = {
+                                focusManager.clearFocus()
+                                onSearch()
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Submit search",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    },
+                    trailingIcon = {
+                        AnimatedVisibility(
+                            visible = query.isNotEmpty(),
+                            enter = fadeIn() + slideInVertically(),
+                            exit = fadeOut() + slideOutVertically()
+                        ) {
+                            IconButton(onClick = onClearQuery) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = "Clear search",
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    },
+                    singleLine = true,
+                    textStyle = MaterialTheme.typography.bodyLarge,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                    ),
+                    shape = RoundedCornerShape(16.dp),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(
+                        onSearch = {
                             focusManager.clearFocus()
                             onSearch()
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Submit search"
-                        )
-                    }
-                },
-                trailingIcon = {
-                    if (query.isNotEmpty()) {
-                        IconButton(onClick = onClearQuery) {
-                            Icon(
-                                imageVector = Icons.Default.Clear,
-                                contentDescription = "Clear search"
-                            )
-                        }
-                    }
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(
-                    onSearch = {
-                        focusManager.clearFocus()
-                        onSearch()
-                    }
+                    )
                 )
-            )
+            }
 
             Box(
                 modifier = Modifier
@@ -142,7 +187,7 @@ internal fun SearchScreen(
                     is SearchUiState.Idle -> {
                         EmptyView(
                             title = "Search GitHub Repositories",
-                            description = "Type a search query above and press Enter."
+                            description = "Type a search query above and press Enter or tap the search icon."
                         )
                     }
                     is SearchUiState.Loading -> {
@@ -163,8 +208,8 @@ internal fun SearchScreen(
                     is SearchUiState.Success -> {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             items(
                                 items = state.repositories,

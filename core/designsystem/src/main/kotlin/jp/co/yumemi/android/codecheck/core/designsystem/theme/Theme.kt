@@ -12,32 +12,50 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple200,
-    onPrimary = Color.Black,
-    primaryContainer = Purple700,
-    onPrimaryContainer = Color.White,
-    secondary = Teal200,
-    onSecondary = Color.Black,
+    primary = Primary200,
+    onPrimary = Color(0xFF1E1B4B), // Deep indigo for contrast
+    primaryContainer = Primary600,
+    onPrimaryContainer = Primary200,
+    secondary = Secondary200,
+    onSecondary = Color(0xFF0C4A6E), // Deep cyan for contrast
+    secondaryContainer = Secondary600,
+    onSecondaryContainer = Secondary200,
+    tertiary = Tertiary300,
+    onTertiary = Color(0xFF4C1D95), // Deep purple for contrast
+    tertiaryContainer = Color(0xFF5B21B6),
+    onTertiaryContainer = Tertiary300,
     background = DarkBackground,
-    onBackground = Color.White,
+    onBackground = TextPrimaryDark,
     surface = DarkSurface,
-    onSurface = Color.White,
-    error = ErrorRed,
-    onError = Color.White
+    onSurface = TextPrimaryDark,
+    surfaceVariant = DarkSurfaceVariant,
+    onSurfaceVariant = TextSecondaryDark,
+    outline = BorderDark,
+    error = ErrorDark,
+    onError = Color(0xFF7F1D1D)
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple500,
+    primary = Primary500,
     onPrimary = Color.White,
-    primaryContainer = Purple700,
-    onPrimaryContainer = Color.White,
-    secondary = Teal700,
+    primaryContainer = Color(0xFFEEF2FF), // Indigo 50
+    onPrimaryContainer = Primary700,
+    secondary = Secondary500,
     onSecondary = Color.White,
+    secondaryContainer = Color(0xFFECFEFF), // Cyan 50
+    onSecondaryContainer = Secondary600,
+    tertiary = Tertiary500,
+    onTertiary = Color.White,
+    tertiaryContainer = Color(0xFFF5F3FF), // Purple 50
+    onTertiaryContainer = Color(0xFF5B21B6), // Purple 800
     background = LightBackground,
-    onBackground = Color.Black,
+    onBackground = TextPrimaryLight,
     surface = LightSurface,
-    onSurface = Color.Black,
-    error = ErrorRed,
+    onSurface = TextPrimaryLight,
+    surfaceVariant = LightSurfaceVariant,
+    onSurfaceVariant = TextSecondaryLight,
+    outline = BorderLight,
+    error = ErrorLight,
     onError = Color.White
 )
 
@@ -51,7 +69,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun CodeCheckTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false, // Disabled to use our custom pure white theme
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

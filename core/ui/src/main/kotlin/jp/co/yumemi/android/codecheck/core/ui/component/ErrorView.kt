@@ -2,25 +2,31 @@ package jp.co.yumemi.android.codecheck.core.ui.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 /**
- * Centered error state display with warning icon, message, and retry button.
+ * Modern error state with enhanced styling and prominent retry button.
  */
 @Composable
 fun ErrorView(
@@ -32,30 +38,71 @@ fun ErrorView(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(32.dp),
+            .padding(40.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                imageVector = Icons.Default.Warning,
-                contentDescription = null,
-                modifier = Modifier.size(56.dp),
-                tint = MaterialTheme.colorScheme.error
+            // Error icon with circular background
+            Surface(
+                modifier = Modifier.size(96.dp),
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.2f)
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Warning,
+                        contentDescription = null,
+                        modifier = Modifier.size(48.dp),
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "Oops! Something went wrong",
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurface
             )
-            Spacer(modifier = Modifier.height(16.dp))
+
+            Spacer(modifier = Modifier.height(12.dp))
+
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
             )
-            Spacer(modifier = Modifier.height(24.dp))
+
+            Spacer(modifier = Modifier.height(32.dp))
+
             Button(
-                onClick = onRetry
+                onClick = onRetry,
+                shape = RoundedCornerShape(12.dp),
+                elevation = ButtonDefaults.buttonElevation(
+                    defaultElevation = 2.dp,
+                    pressedElevation = 4.dp
+                ),
+                contentPadding = PaddingValues(
+                    horizontal = 24.dp,
+                    vertical = 12.dp
+                )
             ) {
-                Text(text = retryLabel)
+                Text(
+                    text = retryLabel,
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        fontWeight = FontWeight.SemiBold
+                    )
+                )
             }
         }
     }

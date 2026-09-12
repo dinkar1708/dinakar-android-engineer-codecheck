@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -58,6 +59,9 @@ fun SplashScreen(
     modifier: Modifier = Modifier,
     splashDurationMs: Long = 2000L
 ) {
+    // Retain latest callback reference safely without capturing stale or leaked outer scopes
+    val currentOnSplashFinished by rememberUpdatedState(onSplashFinished)
+
     // ── Entrance Animation Drivers ──────────────────────────────────────────
     val ringRotation = remember { Animatable(-120f) }
     val ringScale = remember { Animatable(0.2f) }
@@ -184,7 +188,7 @@ fun SplashScreen(
 
         // Wait for configured duration (default: 2000ms), then trigger handoff callback
         delay(splashDurationMs)
-        onSplashFinished()
+        currentOnSplashFinished()
     }
 
     // ── Root Canvas ─────────────────────────────────────────────────────────

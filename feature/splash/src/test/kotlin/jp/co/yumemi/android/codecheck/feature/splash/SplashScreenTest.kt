@@ -1,9 +1,13 @@
 package jp.co.yumemi.android.codecheck.feature.splash
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -52,5 +56,26 @@ class SplashScreenTest {
         }
 
         assertTrue("Callback should be invoked after duration", callbackInvoked)
+    }
+
+    @Test
+    fun splashScreen_disposedBeforeTimeout_doesNotInvokeCallback() {
+        var callbackInvoked = false
+        var showSplash by androidx.compose.runtime.mutableStateOf(true)
+
+        composeTestRule.setContent {
+            if (showSplash) {
+                SplashScreen(
+                    onSplashFinished = { callbackInvoked = true },
+                    splashDurationMs = 2000L
+                )
+            }
+        }
+
+        // Simulate leaving composition (e.g. user backpress / early navigation)
+        showSplash = false
+        composeTestRule.waitForIdle()
+
+        org.junit.Assert.assertFalse("Callback must not be invoked after disposal", callbackInvoked)
     }
 }

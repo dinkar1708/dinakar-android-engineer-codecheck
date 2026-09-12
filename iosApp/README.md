@@ -15,7 +15,7 @@ The iOS companion app demonstrates a **Headless KMP** architecture: business log
 ```mermaid
 graph TD
     subgraph iOS Native Presentation
-        SwiftUI[SwiftUI Views<br/>ContentView.swift] --> VM[SearchViewModel.swift<br/>@MainActor / Swift Concurrency]
+        SwiftUI[SwiftUI Views<br/>SearchView.swift] --> VM[SearchViewModel.swift<br/>@MainActor / Swift Concurrency]
     end
 
     subgraph KMP Shared Engine [:shared-core]
@@ -95,8 +95,9 @@ iosApp/
 │   └── xcshareddata/xcschemes/          # Shared schemes (Mock, Dev, Stg, Prod)
 ├── CodeCheck-iOS/                       # SwiftUI source files
 │   ├── CodeCheckApp.swift               # @main entry point
-│   ├── ContentView.swift                # Simple, clean search list (tap prints console log)
+│   ├── SearchView.swift                 # Simple, clean search list (tap prints console log)
 │   ├── SearchViewModel.swift            # @MainActor ViewModel querying KMP SharedCore
+│   ├── AppFlavor.swift                  # Flavor environments (Mock, Dev, Stg, Prod)
 │   ├── ColorTheme.swift                 # Brand tokens matching Android design system
 │   └── Assets.xcassets/                 # App icon & brand accent color
 ├── CodeCheck-iOSTests/                  # Native Swift Testing unit test suite

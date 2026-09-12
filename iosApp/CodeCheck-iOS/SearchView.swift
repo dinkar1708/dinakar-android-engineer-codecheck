@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  SearchView.swift
 //  CodeCheck-iOS
 //
 //  Simple, clean search list demonstrating Kotlin Multiplatform SharedCore integration.
@@ -8,7 +8,7 @@
 import SwiftUI
 import shared_core
 
-struct ContentView: View {
+struct SearchView: View {
     @StateObject private var viewModel = SearchViewModel()
 
     private var flavorBadgeColor: Color {

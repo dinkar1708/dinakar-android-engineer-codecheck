@@ -106,7 +106,8 @@ fun SplashLogoMark(
             // 2. Handle (extends at 45° from (84dp, 84dp))
             if (handleScale > 0f) {
                 val handleOrigin = Offset(84.dp.toPx(), 84.dp.toPx())
-                rotate(degrees = 45f, pivot = handleOrigin) {
+                val handlePivot = Offset(84.dp.toPx(), 84.dp.toPx() + (strokeWidth / 2f))
+                rotate(degrees = 45f, pivot = handlePivot) {
                     drawRoundRect(
                         color = AppBlue,
                         topLeft = handleOrigin,

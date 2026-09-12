@@ -17,5 +17,7 @@ data class RepositoryItemDto(
     @SerialName("forks_count") val forksCount: Long = 0L,
     @SerialName("open_issues_count") val openIssuesCount: Long = 0L,
     @SerialName("description") val description: String? = null,
-    @SerialName("html_url") val htmlUrl: String? = null
+    @SerialName("html_url") val htmlUrl: String? = null,
+    @SerialName("updated_at") val updatedAt: String? = null,
+    @SerialName("pushed_at") val pushedAt: String? = null
 )

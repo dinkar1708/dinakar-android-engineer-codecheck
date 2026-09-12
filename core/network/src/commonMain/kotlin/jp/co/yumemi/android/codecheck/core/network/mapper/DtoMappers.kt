@@ -29,6 +29,7 @@ fun RepositoryItemDto.toDomain(): RepositoryItem {
         forksCount = this.forksCount,
         openIssuesCount = this.openIssuesCount,
         description = this.description,
-        htmlUrl = this.htmlUrl
+        htmlUrl = this.htmlUrl,
+        updatedAt = this.pushedAt ?: this.updatedAt
     )
 }

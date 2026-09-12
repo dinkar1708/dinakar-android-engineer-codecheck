@@ -41,6 +41,14 @@ class DefaultGitHubRepository(
         if (minStars != null && minStars > 0) {
             queryBuilder.append(" stars:>=$minStars")
         }
+        val updatedAfter = filter.updatedAfter ?: when (filter.updatedPeriod) {
+            "year" -> "2026-01-01"
+            "month" -> "2026-09-01"
+            else -> null
+        }
+        if (!updatedAfter.isNullOrBlank()) {
+            queryBuilder.append(" pushed:>=$updatedAfter")
+        }
         val effectiveQuery = queryBuilder.toString()
         val cacheKey = "$effectiveQuery:$page:${sort.name}"
 

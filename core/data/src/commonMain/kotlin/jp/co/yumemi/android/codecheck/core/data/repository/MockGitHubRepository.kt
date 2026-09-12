@@ -20,7 +20,18 @@ class MockGitHubRepository(
     customDataset: List<RepositoryItem>? = null
 ) : GitHubRepository {
 
-    val mockData: List<RepositoryItem> = customDataset ?: defaultMockData
+    val mockData: List<RepositoryItem> = (customDataset ?: defaultMockData).mapIndexed { index, item ->
+        if (item.updatedAt == null) {
+            val generatedDate = when (index % 3) {
+                0 -> "2026-09-${(10 + (index % 3)).toString().padStart(2, '0')}T12:00:00Z"
+                1 -> "2026-0${1 + (index % 8)}-15T10:00:00Z"
+                else -> "2025-11-20T08:00:00Z"
+            }
+            item.copy(updatedAt = generatedDate)
+        } else {
+            item
+        }
+    }
 
     override suspend fun searchRepositories(
         query: String,
@@ -68,12 +79,24 @@ class MockGitHubRepository(
             }
         }
 
-        // 4. Sorting
+        // 4. Recency filter
+        val updatedAfter = filter.updatedAfter ?: when (filter.updatedPeriod) {
+            "year" -> "2026-01-01"
+            "month" -> "2026-09-01"
+            else -> null
+        }
+        if (!updatedAfter.isNullOrBlank()) {
+            filtered = filtered.filter { item ->
+                (item.updatedAt ?: "") >= updatedAfter
+            }
+        }
+
+        // 5. Sorting
         val sorted = when (sort) {
             SearchSort.BEST_MATCH -> filtered
             SearchSort.STARS -> filtered.sortedByDescending { it.stargazersCount }
             SearchSort.FORKS -> filtered.sortedByDescending { it.forksCount }
-            SearchSort.UPDATED -> filtered.sortedByDescending { it.openIssuesCount }
+            SearchSort.UPDATED -> filtered.sortedByDescending { it.updatedAt ?: "" }
         }
 
         // 5. Pagination (10 items per page)

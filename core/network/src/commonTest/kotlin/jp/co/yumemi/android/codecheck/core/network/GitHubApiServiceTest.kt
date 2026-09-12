@@ -97,4 +97,31 @@ class GitHubApiServiceTest {
             apiService.getRepositoryDetails("owner", "nonexistent")
         }
     }
+
+    @Test
+    fun getRepositoryById_onSuccess_deserializesItem() = runTest {
+        val jsonBody = """
+            {
+                "id": 12345,
+                "name": "codecheck",
+                "full_name": "yumemi/codecheck",
+                "owner": {
+                    "login": "yumemi",
+                    "avatar_url": "https://example.com/icon.png"
+                },
+                "language": "Kotlin",
+                "stargazers_count": 42
+            }
+        """.trimIndent()
+
+        val client = createMockClient(HttpStatusCode.OK, jsonBody)
+        val apiService = GitHubApiServiceImpl(client)
+
+        val result = apiService.getRepositoryById(12345L)
+
+        assertEquals(12345L, result.id)
+        assertEquals("yumemi/codecheck", result.fullName)
+        assertEquals("Kotlin", result.language)
+        assertEquals(42L, result.stargazersCount)
+    }
 }

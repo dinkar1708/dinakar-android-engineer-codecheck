@@ -21,6 +21,7 @@ fun OwnerDto?.toDomain(): Owner {
 fun RepositoryItemDto.toDomain(): RepositoryItem {
     val repoName = this.fullName ?: this.name.orEmpty()
     return RepositoryItem(
+        id = this.id,
         name = repoName,
         owner = this.owner.toDomain(),
         language = this.language,

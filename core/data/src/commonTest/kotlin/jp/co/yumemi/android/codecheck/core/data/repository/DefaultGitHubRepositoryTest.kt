@@ -39,6 +39,12 @@ class DefaultGitHubRepositoryTest {
             throwOnDetail?.let { throw it }
             return detailResponse ?: throw NoSuchElementException()
         }
+
+        override suspend fun getRepositoryById(id: Long): RepositoryItemDto {
+            detailCallCount++
+            throwOnDetail?.let { throw it }
+            return detailResponse ?: throw NoSuchElementException()
+        }
     }
 
     private fun createDto(
@@ -118,6 +124,25 @@ class DefaultGitHubRepositoryTest {
 
         // Second call with same owner/repo
         val result2 = repository.getRepositoryDetails("octocat", "Hello-World")
+        assertEquals(1, fakeApi.detailCallCount) // Cached!
+        assertEquals(result1, result2)
+    }
+
+    @Test
+    fun getRepositoryById_delegatesToApi_andCachesResult() = runTest {
+        val fakeApi = FakeGitHubApiService()
+        fakeApi.detailResponse = createDto(name = "Hello-World", fullName = "octocat/Hello-World")
+
+        val repository = DefaultGitHubRepository(
+            apiService = fakeApi,
+            detailCache = InMemoryCache()
+        )
+
+        val result1 = repository.getRepositoryById(12345L)
+        assertEquals(1, fakeApi.detailCallCount)
+        assertEquals("octocat/Hello-World", result1.name)
+
+        val result2 = repository.getRepositoryById(12345L)
         assertEquals(1, fakeApi.detailCallCount) // Cached!
         assertEquals(result1, result2)
     }

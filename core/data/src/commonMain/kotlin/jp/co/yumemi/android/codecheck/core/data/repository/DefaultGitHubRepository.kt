@@ -92,6 +92,22 @@ class DefaultGitHubRepository(
         return item
     }
 
+    override suspend fun getRepositoryById(id: Long): RepositoryItem {
+        val cacheKey = "id:$id"
+        val cached = detailCache.get(cacheKey)
+        if (cached != null) {
+            return cached
+        }
+
+        val response = retryWithExponentialBackoff(shouldRetry = ::isRecoverableError) {
+            apiService.getRepositoryById(id)
+        }
+
+        val item = response.toDomain()
+        detailCache.put(cacheKey, item)
+        return item
+    }
+
     private fun isRecoverableError(throwable: Throwable): Boolean {
         return when (throwable) {
             is NetworkException.RateLimitExceededException -> false

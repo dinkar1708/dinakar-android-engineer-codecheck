@@ -141,6 +141,26 @@ class MockGitHubRepository(
         )
     }
 
+    override suspend fun getRepositoryById(id: Long): RepositoryItem {
+        if (simulatedDelayMs > 0) {
+            delay(simulatedDelayMs)
+        }
+
+        val match = mockData.firstOrNull { it.id == id }
+        return match ?: mockData.firstOrNull() ?: RepositoryItem(
+            id = id,
+            name = "mock/repo-$id",
+            owner = Owner(login = "mock", avatarUrl = "https://avatars.githubusercontent.com/u/9919?s=200&v=4"),
+            language = "Kotlin",
+            stargazersCount = 1_000L,
+            watchersCount = 1_000L,
+            forksCount = 100L,
+            openIssuesCount = 5L,
+            description = "Mock repository for ID $id",
+            htmlUrl = "https://github.com/mock/repo-$id"
+        )
+    }
+
     companion object {
         val defaultMockData: List<RepositoryItem> = listOf(
             RepositoryItem(

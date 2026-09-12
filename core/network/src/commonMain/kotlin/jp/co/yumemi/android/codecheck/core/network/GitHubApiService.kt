@@ -37,6 +37,11 @@ interface GitHubApiService {
      * Fetch detailed repository metadata.
      */
     suspend fun getRepositoryDetails(owner: String, repo: String): RepositoryItemDto
+
+    /**
+     * Fetch repository metadata directly by numeric repository ID.
+     */
+    suspend fun getRepositoryById(id: Long): RepositoryItemDto
 }
 
 /**
@@ -74,6 +79,18 @@ class GitHubApiServiceImpl(
     override suspend fun getRepositoryDetails(owner: String, repo: String): RepositoryItemDto {
         return safeApiCall {
             val endpoint = "$BASE_URL/repos/$owner/$repo"
+            println("[GitHubApi] --> GET $endpoint")
+            val response: HttpResponse = client.get(endpoint) {
+                header("Accept", "application/vnd.github.v3+json")
+            }
+            println("[GitHubApi] <-- ${response.status.value} ${response.status.description} (${response.call.request.url})")
+            handleHttpResponse(response)
+        }
+    }
+
+    override suspend fun getRepositoryById(id: Long): RepositoryItemDto {
+        return safeApiCall {
+            val endpoint = "$BASE_URL/repositories/$id"
             println("[GitHubApi] --> GET $endpoint")
             val response: HttpResponse = client.get(endpoint) {
                 header("Accept", "application/vnd.github.v3+json")

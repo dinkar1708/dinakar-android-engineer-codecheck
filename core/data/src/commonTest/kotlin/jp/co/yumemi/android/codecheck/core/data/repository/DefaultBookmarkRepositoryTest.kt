@@ -12,12 +12,14 @@ import kotlin.test.assertTrue
 class DefaultBookmarkRepositoryTest {
 
     private val sampleRepo1 = RepositoryItem(
+        id = 101L,
         name = "compose-samples",
         owner = Owner(avatarUrl = "https://example.com/avatar.png", login = "android"),
         stargazersCount = 5000L
     )
 
     private val sampleRepo2 = RepositoryItem(
+        id = 102L,
         name = "kotlin",
         owner = Owner(avatarUrl = "https://example.com/kotlin.png", login = "JetBrains"),
         stargazersCount = 45000L
@@ -68,5 +70,43 @@ class DefaultBookmarkRepositoryTest {
         val bookmarks = repository.getBookmarks().first()
         assertTrue(bookmarks.isEmpty())
         assertFalse(repository.isBookmarked("compose-samples").first())
+    }
+
+    @Test
+    fun isBookmarkedById_checksSetOfIds() = runTest {
+        val repository = DefaultBookmarkRepository()
+
+        repository.addBookmark(sampleRepo1)
+
+        assertTrue(repository.isBookmarked(101L).first())
+        assertFalse(repository.isBookmarked(102L).first())
+        assertTrue(repository.getBookmarkedIds().first().contains(101L))
+    }
+
+    @Test
+    fun removeBookmarkById_removesItemAndId() = runTest {
+        val repository = DefaultBookmarkRepository()
+
+        repository.addBookmark(sampleRepo1)
+        repository.addBookmark(sampleRepo2)
+        repository.removeBookmark(101L)
+
+        val bookmarks = repository.getBookmarks().first()
+        assertEquals(listOf(sampleRepo2), bookmarks)
+        assertFalse(repository.isBookmarked(101L).first())
+        assertTrue(repository.isBookmarked(102L).first())
+    }
+
+    @Test
+    fun toggleBookmark_addsWhenAbsent_removesWhenPresent() = runTest {
+        val repository = DefaultBookmarkRepository()
+
+        repository.toggleBookmark(sampleRepo1)
+        assertTrue(repository.isBookmarked(101L).first())
+        assertEquals(1, repository.getBookmarks().first().size)
+
+        repository.toggleBookmark(sampleRepo1)
+        assertFalse(repository.isBookmarked(101L).first())
+        assertTrue(repository.getBookmarks().first().isEmpty())
     }
 }

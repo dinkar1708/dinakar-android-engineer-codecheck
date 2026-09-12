@@ -1,7 +1,7 @@
-# Feature Specification: Repository Search & List Screen
+# Feature Specification: Repository Search
 
 ## 1. Overview & User Journey
-The **Repository Search & List Screen** is the primary entry point of the application. It enables users to search for open-source repositories hosted on GitHub, browse paginated results, view key repository health metrics (language, stargazers, forks), and navigate to detailed metrics.
+The **Repository Search** feature is the primary entry point of the application. It enables users to search for open-source repositories hosted on GitHub, browse paginated results, apply filters and sorting, view key repository health metrics (language, stargazers, forks), and navigate to detailed metrics.
 
 ```mermaid
 stateDiagram-v2

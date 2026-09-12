@@ -239,6 +239,6 @@ class SearchScreenTest {
         composeTestRule.onNodeWithText("MINIMUM STARS").assertIsDisplayed()
         composeTestRule.onNodeWithText("LAST UPDATED").assertIsDisplayed()
         composeTestRule.onNodeWithText("Reset").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Show repositories").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Show results").assertIsDisplayed()
     }
 }

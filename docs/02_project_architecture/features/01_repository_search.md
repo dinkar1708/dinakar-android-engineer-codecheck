@@ -260,7 +260,7 @@ enum class SearchSort(val apiValue: String) {
 **Design Decisions:**
 - Bottom sheet uses pure white background (`tonalElevation = 0.dp`)
 - No real-time repository count updates (avoids unnecessary API calls)
-- Static "Show repositories" button (applies filters on click)
+- Static "Show results" button (applies filters on click)
 - Filter criteria sent as GitHub API query parameters
 
 ```kotlin

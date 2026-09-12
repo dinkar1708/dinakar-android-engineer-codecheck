@@ -211,7 +211,7 @@ fun FilterBottomSheet(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "Show repositories",
+                            text = "Show results",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium,
                             color = AppWhite

@@ -46,7 +46,7 @@ Using the HTML/CSS specs as a reference, AI coding assistants (such as **Google 
 
 ### Stage 4: AI Code Review & Quality Gates
 Before merging, automated AI review agents check the code against Yumemi evaluation guidelines:
-- Enforcing repository review skills ([`yumemi-code-review`](file:///Users/dinakarmaurya/Documents/Personal/2-dinakar-android-engineer-codecheck/.agents/skills/yumemi-code-review/SKILL.md), [`review-code`](file:///Users/dinakarmaurya/Documents/Personal/2-dinakar-android-engineer-codecheck/.claude/skills/review-code/SKILL.md)).
+- Enforcing repository review skills ([`yumemi-code-review`](file:///Users/dinakarmaurya/Documents/Personal/dinakar-android-engineer-codecheck/.agents/skills/yumemi-code-review/SKILL.md), [`review-code`](file:///Users/dinakarmaurya/Documents/Personal/dinakar-android-engineer-codecheck/.claude/skills/review-code/SKILL.md)).
 - Auditing for memory leaks, coroutine cancellation, lifecycle awareness, and clean layer boundaries.
 
 ---

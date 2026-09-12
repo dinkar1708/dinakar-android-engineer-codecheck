@@ -38,6 +38,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import jp.co.yumemi.android.codecheck.feature.detail.R
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -104,7 +106,7 @@ internal fun DetailScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Repository",
+                        text = stringResource(R.string.detail_top_bar_title),
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.SemiBold,
                             color = AppWhite
@@ -115,7 +117,7 @@ internal fun DetailScreen(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Navigate back",
+                            contentDescription = stringResource(R.string.detail_navigate_back),
                             tint = AppWhite
                         )
                     }
@@ -135,7 +137,7 @@ internal fun DetailScreen(
         ) {
             when (val state = uiState) {
                 is DetailUiState.Loading -> {
-                    LoadingView(message = "Loading repository details...")
+                    LoadingView(message = stringResource(R.string.detail_loading_message))
                 }
                 is DetailUiState.Error -> {
                     ErrorView(
@@ -192,7 +194,7 @@ internal fun DetailContent(
 
                     SubcomposeAsyncImage(
                         model = repository.ownerIconUrl,
-                        contentDescription = "$displayName avatar",
+                        contentDescription = stringResource(R.string.detail_avatar_content_description, displayName),
                         modifier = Modifier
                             .size(56.dp)
                             .clip(CircleShape),
@@ -297,13 +299,13 @@ internal fun DetailContent(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     StatCard(
-                        label = "Stars",
+                        label = stringResource(R.string.detail_stat_stars),
                         value = formatDecimalNumber(repository.stargazersCount),
                         valueColor = Slate900,
                         modifier = Modifier.weight(1f)
                     )
                     StatCard(
-                        label = "Forks",
+                        label = stringResource(R.string.detail_stat_forks),
                         value = formatDecimalNumber(repository.forksCount),
                         valueColor = Slate900,
                         modifier = Modifier.weight(1f)
@@ -314,13 +316,13 @@ internal fun DetailContent(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     StatCard(
-                        label = "Watchers",
+                        label = stringResource(R.string.detail_stat_watchers),
                         value = formatDecimalNumber(repository.watchersCount),
                         valueColor = Slate900,
                         modifier = Modifier.weight(1f)
                     )
                     StatCard(
-                        label = "Open issues",
+                        label = stringResource(R.string.detail_stat_open_issues),
                         value = formatDecimalNumber(repository.openIssuesCount),
                         valueColor = AppAmber,
                         modifier = Modifier.weight(1f)
@@ -343,7 +345,7 @@ internal fun DetailContent(
                     contentPadding = PaddingValues(vertical = 12.dp)
                 ) {
                     Text(
-                        text = "View on GitHub",
+                        text = stringResource(R.string.detail_view_on_github),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
                     )

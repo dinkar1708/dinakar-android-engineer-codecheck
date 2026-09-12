@@ -30,6 +30,10 @@ fun RepositoryItemDto.toDomain(): RepositoryItem {
         openIssuesCount = this.openIssuesCount,
         description = this.description,
         htmlUrl = this.htmlUrl,
-        updatedAt = this.pushedAt ?: this.updatedAt
+        updatedAt = this.pushedAt ?: this.updatedAt,
+        defaultBranch = this.defaultBranch,
+        pushedAt = this.pushedAt ?: this.updatedAt,
+        license = this.license?.spdxId?.takeIf { it != "NOASSERTION" } ?: this.license?.name,
+        size = this.size
     )
 }

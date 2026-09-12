@@ -19,5 +19,18 @@ data class RepositoryItemDto(
     @SerialName("description") val description: String? = null,
     @SerialName("html_url") val htmlUrl: String? = null,
     @SerialName("updated_at") val updatedAt: String? = null,
-    @SerialName("pushed_at") val pushedAt: String? = null
+    @SerialName("pushed_at") val pushedAt: String? = null,
+    @SerialName("default_branch") val defaultBranch: String? = null,
+    @SerialName("license") val license: LicenseDto? = null,
+    @SerialName("size") val size: Long = 0L
+)
+
+/**
+ * Network DTO representing repository license metadata.
+ */
+@Serializable
+data class LicenseDto(
+    @SerialName("key") val key: String? = null,
+    @SerialName("name") val name: String? = null,
+    @SerialName("spdx_id") val spdxId: String? = null
 )

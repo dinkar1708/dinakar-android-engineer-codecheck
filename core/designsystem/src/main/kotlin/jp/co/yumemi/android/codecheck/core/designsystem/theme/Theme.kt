@@ -11,60 +11,53 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple200,
-    onPrimary = Color.Black,
-    primaryContainer = Purple700,
-    onPrimaryContainer = Color.White,
-    secondary = Teal200,
-    onSecondary = Color.Black,
-    background = DarkBackground,
-    onBackground = Color.White,
-    surface = DarkSurface,
-    onSurface = Color.White,
-    error = ErrorRed,
-    onError = Color.White
+// Unified ColorScheme using the definitive 6-color palette
+// (Light and dark theme use the same color palette for now; distinct dark mode will be activated later)
+private val AppColorScheme = lightColorScheme(
+    primary = AppBlue,
+    onPrimary = AppWhite,
+    primaryContainer = MonogramBlueBg,
+    onPrimaryContainer = AppBlue,
+    secondary = AppGreen,
+    onSecondary = AppWhite,
+    secondaryContainer = MonogramGreenBg,
+    onSecondaryContainer = AppGreen,
+    tertiary = AppAmber,
+    onTertiary = AppWhite,
+    tertiaryContainer = AppAmber.copy(alpha = 0.12f),
+    onTertiaryContainer = Slate900,
+    background = Slate50,
+    onBackground = Slate900,
+    surface = AppWhite,
+    onSurface = Slate900,
+    surfaceVariant = Slate100,
+    onSurfaceVariant = Slate600,
+    outline = Slate200,
+    outlineVariant = Slate300,
+    error = Color(0xFFDC2626),
+    onError = AppWhite
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple500,
-    onPrimary = Color.White,
-    primaryContainer = Purple700,
-    onPrimaryContainer = Color.White,
-    secondary = Teal700,
-    onSecondary = Color.White,
-    background = LightBackground,
-    onBackground = Color.Black,
-    surface = LightSurface,
-    onSurface = Color.Black,
-    error = ErrorRed,
-    onError = Color.White
-)
+// For now, both modes share AppColorScheme per design requirements
+private val DarkAppColorScheme = AppColorScheme
 
 /**
  * Global Material 3 theme for Yumemi Android Engineer CodeCheck.
+ * Implements the 6-color system (Navy, Blue, Green, Amber, Slate ramp, White).
  *
- * @param darkTheme Whether dark color scheme should be used. Defaults to system setting.
- * @param dynamicColor Whether dynamic color (Android 12+) should be enabled. Defaults to true.
+ * @param darkTheme Whether dark color scheme should be used.
+ * @param dynamicColor Whether dynamic color should be enabled. Defaults to false.
  * @param content Composable tree to be styled.
  */
 @Composable
 fun CodeCheckTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    @Suppress("UNUSED_PARAMETER") darkTheme: Boolean = isSystemInDarkTheme(),
+    @Suppress("UNUSED_PARAMETER") dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
+    // Both light and dark modes share AppColorScheme for now; dark mode will be activated in a future update
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = AppColorScheme,
         typography = Typography,
         content = content
     )

@@ -30,7 +30,7 @@ class SearchE2ETest {
     fun fullUserJourney_search_clickItem_openDetails_andNavigateBack() {
         // 1. Initial screen visible
         Thread.sleep(1500)
-        composeTestRule.onNodeWithText("GitHub Repository Search").assertIsDisplayed()
+        composeTestRule.onNode(hasContentDescription("GitHub Repository Search")).assertIsDisplayed()
         composeTestRule.onNodeWithText("Search GitHub Repositories").assertIsDisplayed()
 
         // 2. Type query into search field
@@ -71,7 +71,7 @@ class SearchE2ETest {
 
         // 10. Pause so user visibly sees the return back to the search results
         Thread.sleep(2000)
-        composeTestRule.onNodeWithText("GitHub Repository Search").assertIsDisplayed()
+        composeTestRule.onNode(hasContentDescription("GitHub Repository Search")).assertIsDisplayed()
         Thread.sleep(1500)
     }
 }

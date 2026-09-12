@@ -22,6 +22,10 @@ Before initiating source code implementation, enterprise mobile teams establish 
 
 ## 2. Figma Design System & Asset Workspace
 
+> [!TIP]
+> **AI-Assisted Design-to-Code Workflow:**
+> For details on how AI generative tools (Claude Design, Claude Artifacts) were used to create intermediate HTML/CSS specs and translate them into native Jetpack Compose Material 3 code, refer to [AI-Assisted Design-to-Code Workflow](./ai_assisted_design_workflow.md).
+
 ### 2.1 Figma Workspace Structure
 In production environments, UI engineering references a centralized Figma project organized into standardized pages:
 

@@ -5,5 +5,6 @@ package jp.co.yumemi.android.codecheck.core.domain.model
  * Zero Android framework dependencies (pure Kotlin / KMP).
  */
 data class Owner(
-    val avatarUrl: String = ""
+    val avatarUrl: String = "",
+    val login: String = ""
 )

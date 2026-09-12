@@ -1,18 +1,21 @@
 # Feature Specification: Repository Search
 
 ## 1. Overview & User Journey
-The **Repository Search** feature is the primary entry point of the application. It enables users to search for open-source repositories hosted on GitHub, browse paginated results, apply filters and sorting, view key repository health metrics (language, stargazers, forks), and navigate to detailed metrics.
+The **Repository Search** feature is the primary entry point of the application. It empowers users to search for open-source repositories hosted on GitHub, browse paginated results, apply multi-criteria filtering, switch sorting orders, view repository health metrics, and navigate to detailed repository inspection.
 
 ```mermaid
 stateDiagram-v2
     [*] --> Idle: App Launches
-    Idle --> Loading: User submits query / debounced input
-    Loading --> Success: API returns repositories (items > 0)
-    Loading --> Empty: API returns zero items
-    Loading --> Error: Network failure / HTTP 403 Rate Limit
-    Empty --> Loading: User enters new query
+    Idle --> Loading: User enters query / debounced input (500ms)
+    Loading --> Success: Repositories returned (count > 0)
+    Loading --> Empty: Zero results found
+    Loading --> Error: Network failure / Rate limit exceeded
+    Empty --> Loading: User edits query or filters
     Error --> Loading: User taps Retry button
-    Success --> Loading: User enters new query
+    Success --> Loading: Query change / Sort change / Filter apply
+    Success --> LoadingMore: User taps "Load more"
+    LoadingMore --> Success: Next page appended
+    LoadingMore --> Error: Next page fetch fails
 ```
 
 ---
@@ -20,303 +23,114 @@ stateDiagram-v2
 ## 2. Visual States & Behaviors
 
 ### State 1: `Idle` (Welcome State)
-- Displayed on cold start when no search query has been entered.
-- Visual elements: Welcome message prompting user to search repositories, search input bar with search leading icon and placeholder text.
-- Keyboard action: IME Search action initiates query.
+- **Condition**: Displayed on cold start when no search query has been entered.
+- **Visuals & Actions**: Prompts the user to search GitHub repositories; soft keyboard focus initiates input.
 
 ### State 2: `Loading`
-- Displayed immediately upon search dispatch.
-- Visual elements: Centered Material 3 `CircularProgressIndicator`.
-- State protection: Disables multiple parallel network dispatches.
+- **Condition**: Displayed immediately upon initiating a new search, changing sort order, or applying filters.
+- **Visuals & Protection**: Shows a centered progress indicator; prevents duplicate network dispatches.
 
 ### State 3: `Success` (Results List)
-- Displayed when repository list contains one or more items.
-- Visual elements: `LazyColumn` with vertical item spacing (8dp).
-- Each item is rendered via `RepositoryCard`:
-  - Circular owner avatar loaded asynchronously via Coil with crossfade animation.
-  - Repository full name (`owner/repo`) formatted with `titleMedium` typography, single line with `TextOverflow.Ellipsis`.
-  - Language chip badge: Pill container styled with `MaterialTheme.colorScheme.primaryContainer`.
-  - Stargazers count accompanied by a gold star icon (`#FFB800`).
-- Tap interaction: Clicking any item triggers navigation callback `onRepositoryClick(item)`.
+- **Condition**: Displayed when the query yields one or more repositories.
+- **Visuals & Layout**: Scrollable list of repository cards displaying:
+  - Owner avatar (asynchronously loaded with crossfade animation).
+  - Repository full name (`owner/name`) with overflow truncation.
+  - Repository description (when available).
+  - Language indicator badge.
+  - Engagement metrics (Stargazers and Forks counts).
+- **Interactions**: Tapping any card navigates to the **Repository Detail** screen.
+- **Pagination & Summary**: Displays total match counter and a **"Load more"** button when additional pages exist.
 
 ### State 4: `Empty`
-- Displayed when GitHub API returns 200 OK with `total_count: 0`.
-- Visual elements: Centered descriptive text ("No repositories found") styled with `bodyLarge`.
+- **Condition**: Displayed when GitHub API returns 200 OK with zero matching repositories.
+- **Visuals & Guidance**: Displays an empty state message suggesting query or filter refinements. Filter bar remains visible so users can easily adjust search criteria without starting over.
 
 ### State 5: `Error`
-- Displayed when network connection fails, timeout occurs, or GitHub API responds with non-2xx status (e.g., HTTP 403 Rate Limit).
-- Visual elements: Centered error message explaining failure reason, accompanied by an explicit **"Retry"** action button.
-- User recovery: Tapping **"Retry"** re-executes the last query without requiring manual text re-entry.
+- **Condition**: Displayed upon network failure, timeout, or HTTP 403 rate limiting.
+- **Visuals & Recovery**: Clear error description paired with an explicit **"Retry"** button that re-executes the last query.
 
 ---
 
-## 3. UI Component Architecture & Packaging
+## 3. Search Input & Debouncing
 
-To maintain clean separation of concerns and high cohesion, the UI layer follows the standard **3-File MVI/UDF Triad** accompanied by a feature-scoped `components/` directory:
+### Input Handling & Instant Search:
+- **500ms Debounce Window**: Automatically triggers search 500ms after the user stops typing, skipping duplicate queries.
+- **Keyboard Action**: Tapping the keyboard "Search" (IME) action triggers immediate execution and dismisses the keyboard.
+- **Fast-Typing Cancellation**: Rapid typing cancels prior pending requests silently; cancellation exceptions are caught and suppressed to prevent false error states.
+- **State Preservation**: The active query and state are retained across device rotation and process recreation via saved instance state.
+
+---
+
+## 4. Sorting Capabilities
+
+When an active search query exists, sorting tabs are displayed directly below the search bar:
+
+- **Best Match (Default)**: GitHub's relevance-based ranking combining query match density and activity.
+- **Most Stars**: Repositories ordered by stargazers count descending.
+- **Most Forks**: Repositories ordered by fork count descending.
+
+### Behavior:
+- Selection changes immediately trigger a fresh search.
+- Pagination is reset to page 1 upon changing the sort criterion.
+- The active sort selection is indicated by an underline tab indicator.
+
+---
+
+## 5. Filtering & Modal Bottom Sheet
+
+### Filter Bar:
+- Positioned alongside the sort options when a search query is present.
+- Displays a **"Filters"** trigger button with an active indicator when filters are applied.
+- Renders active filter chips (e.g., `Language: Kotlin`, `Stars: ≥1000`) with quick-remove (`×`) buttons.
+- Includes a **"Clear all"** action to reset all filters at once.
+
+### Filter Bottom Sheet (Modal):
+- **Language Filter**: Single selection from common languages (Rust, Kotlin, Python, Go, TypeScript, C++).
+- **Minimum Stars**: Segmented options (Any, 100+, 500+, 1,000+).
+- **Last Updated (Recency)**: Segmented options (Any time, This year, This month).
+- **Action Buttons**:
+  - **"Show results"**: Full-width primary action button applying selected criteria and closing the modal.
+  - **"Reset"**: Restores filter criteria to default settings.
+
+### Query Synthesis:
+Selected filters are dynamically converted into GitHub search qualifiers and appended to the API query:
+- Language selection translates to `language:<name>`.
+- Star threshold translates to `stars:>=<count>`.
+- Recency translates to `pushed:><date>`.
+
+---
+
+## 6. Pagination: Manual "Load More" Strategy
+
+### UX Rationale: Manual Button vs. Infinite Scrolling:
+1. **GitHub Platform Alignment**: Mirrors GitHub's own web and mobile search interface.
+2. **Intentional Evaluation**: Users searching for code repositories need time to review results rather than being forced into endless scrolling.
+3. **API Rate Limit Conservation**: Protects against rapid exhaustion of GitHub's unauthenticated/authenticated rate limits.
+4. **Bandwidth & Performance**: Prevents unwanted background page loading on metered or slow connections.
+5. **Accessibility & Screen Readers**: Provides a clear, predictable interactive element for assistive technologies.
+
+### Pagination Mechanics:
+- When additional pages exist, a full-width **"Load more"** button appears at the end of the results list.
+- During pagination requests, the button shows an inline loading spinner while keeping existing results on screen.
+- **Cumulative Result Counter**: Displays loaded range against total count (e.g., `1–30 OF 144,530`, then `1–60 OF 144,530` after loading page 2).
+- Loading stops and the button disappears when all items have been retrieved or the last page is reached.
+
+---
+
+## 7. Component Structure & Organization
+
+The search feature is modularized within `:feature:search` following Unidirectional Data Flow (UDF):
 
 ```text
-ui/features/search/
-├── SearchScreen.kt         # Stateful Screen container + Stateless Composable content
-├── SearchViewModel.kt      # State holder, coroutine scope, SavedStateHandle integration
-├── SearchUiState.kt        # Sealed interface defining Idle, Loading, Success, Empty, Error
-└── components/             # Feature-specific small views (used ONLY by Search)
-    ├── SearchInputField.kt # Debounced search bar with clear icon & keyboard actions
-    ├── RepositoryCard.kt   # Individual repository card with avatar & metrics
-    └── LanguageBadge.kt    # Pill badge displaying repository programming language
+feature/search/
+├── SearchScreen.kt             # Top-level screen composable & state observation
+├── SearchViewModel.kt          # Business logic, query debounce, pagination, filter state
+├── SearchUiState.kt            # Immutable UI state hierarchy (Idle, Loading, Success, Empty, Error)
+└── component/                  # Feature-specific components
+    ├── SearchTopBar.kt         # Search input bar and clear action
+    ├── SortTabs.kt             # Best Match, Most Stars, Most Forks tabs
+    ├── FilterBar.kt            # Active filter chips and filter sheet opener
+    ├── FilterBottomSheet.kt    # Filter modal with language, stars, and date selectors
+    ├── RepositoryCard.kt       # Repository item view with avatar, title, and metrics
+    └── LoadMoreButton.kt       # Manual pagination trigger with loading state
 ```
-
-### Component Placement Rule:
-- **Feature-Scoped Views** (e.g., `RepositoryCard`, `SearchInputField`): Placed directly under `ui/features/search/components/`. If the search feature is updated or refactored, all its sub-views remain localized.
-- **Cross-Feature Reusable Views** (e.g., `ErrorBanner`, `LoadingIndicator`, `EmptyStateView`): Placed in `ui/components/` (or `ui/common/`) to be shared across Search, Detail, and future screens.
-
----
-
-## 4. Key Implementation Details
-
-### Debounce & Keyboard Handling:
-```kotlin
-// Keyboard actions trigger immediate search and dismiss soft keyboard
-keyboardActions = KeyboardActions(
-    onSearch = {
-        keyboardController?.hide()
-        viewModel.searchRepositories()
-    }
-)
-```
-
-### Surviving Configuration Changes & Process Death:
-- Query text is bound to `SavedStateHandle`:
-```kotlin
-@HiltViewModel
-class SearchViewModel @Inject constructor(
-    private val gitHubRepository: GitHubRepository,
-    private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
-    val searchInput: StateFlow<String> = savedStateHandle.getStateFlow(KEY_SEARCH_INPUT, "")
-}
-```
-- Rotating device from Portrait to Landscape or OS process recreation restores query state without reloading.
-
----
-
-## 5. Pagination Strategy: Load More Button
-
-### Decision: Manual Load More vs. Infinite Scroll
-
-We implemented **manual "Load More" button pagination** instead of automatic infinite scroll for the following reasons:
-
-#### Why Load More Button:
-
-1. **Aligns with GitHub's UX Pattern**
-   - GitHub's own search results use explicit "Load more" interaction
-   - Maintains consistency with the platform being searched
-   - Users familiar with GitHub will recognize this pattern
-
-2. **Intentional Search Behavior**
-   - Repository search is a deliberate, evaluative task (not casual browsing)
-   - Users need to review and compare results carefully
-   - Manual control allows users to pause and analyze findings
-
-3. **API Rate Limit Protection**
-   - GitHub API enforces strict rate limits (5,000 requests/hour authenticated, 60/hour unauthenticated)
-   - Automatic scroll could trigger excessive API calls during fast scrolling
-   - Manual button prevents accidental exhaustion of rate limits
-
-4. **Performance & Network Efficiency**
-   - User controls when to initiate network requests
-   - Beneficial for slow or metered connections
-   - Prevents background loading when user isn't interested in more results
-
-5. **Accessibility & User Control**
-   - Screen readers can announce and interact with the button clearly
-   - Users with motor disabilities have predictable interaction target
-   - No unexpected navigation or loading during assistive technology use
-
-6. **Footer Reachability**
-   - If app has footer content or pagination info, it remains accessible
-   - Infinite scroll often makes bottom UI elements unreachable
-
-#### Implementation Details:
-
-```kotlin
-// SearchUiState.kt
-data class Success(
-    val repositories: List<RepositoryItem>,
-    val totalCount: Int,
-    val hasNextPage: Boolean,      // Controls button visibility
-    val isLoadingMore: Boolean      // Controls button loading state
-) : SearchUiState
-```
-
-```kotlin
-// LoadMoreButton.kt
-@Composable
-fun LoadMoreButton(
-    isLoading: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Surface(
-        modifier = modifier.clickable(enabled = !isLoading, onClick = onClick),
-        shape = RoundedCornerShape(4.dp),
-        color = AppWhite,
-        border = BorderStroke(1.dp, Slate300)
-    ) {
-        if (isLoading) {
-            CircularProgressIndicator(...)
-        } else {
-            Text("Load more")
-            Icon(Icons.Default.KeyboardArrowDown)
-        }
-    }
-}
-```
-
-**Result Counter Display:**
-- Shows cumulative loaded items: `"1–30 OF 3,120"`
-- After loading page 2: `"1–60 OF 3,120"`
-- Accurately represents all loaded items from first to current page
-
----
-
-## 6. Search Debouncing & Query Management
-
-### Debounce Implementation:
-
-To prevent excessive API calls during fast typing, search queries are debounced with a **500ms delay**:
-
-```kotlin
-// SearchViewModel.kt
-init {
-    viewModelScope.launch {
-        _query
-            .debounce(500L)              // Wait 500ms after last keystroke
-            .distinctUntilChanged()      // Skip duplicate queries
-            .collect { debouncedQuery ->
-                if (debouncedQuery.isNotBlank()) {
-                    executeSearch(debouncedQuery, page = 1)
-                }
-            }
-    }
-}
-```
-
-### Cancellation Exception Handling:
-
-When users type quickly, older search requests are cancelled. We properly handle `CancellationException` to avoid showing error messages:
-
-```kotlin
-try {
-    val result = searchRepositoriesUseCase(query, page, sort, filter)
-    _uiState.value = SearchUiState.Success(...)
-} catch (e: CancellationException) {
-    // Rethrow - this is expected during debouncing
-    // Don't show "something went wrong" to user
-    throw e
-} catch (throwable: Throwable) {
-    // Only real errors shown to user
-    _uiState.value = SearchUiState.Error(throwable.message)
-}
-```
-
-**Why 500ms?**
-- 400ms felt too aggressive (triggered mid-typing)
-- 500ms provides good balance between responsiveness and API efficiency
-- Users perceive near-instant results while reducing unnecessary calls
-
----
-
-## 7. Sorting & Filtering Features
-
-### Sort Tabs (Always Visible When Query Exists):
-
-Three sorting criteria matching GitHub's search API:
-
-```kotlin
-enum class SearchSort(val apiValue: String) {
-    BEST_MATCH(""),           // Default relevance ranking
-    MOST_STARS("stars"),      // Popularity-based
-    MOST_FORKS("forks")       // Community engagement
-}
-```
-
-**UI Design:**
-- Tab-style underline indicator for selected sort
-- Tabs visible below search box whenever query is not empty
-- Sort changes reset pagination (restart from page 1)
-
-### Filter Bar & Bottom Sheet:
-
-**Filter Bar:**
-- "Filters" button with sliders icon
-- Active filter chips with remove (×) actions
-- Filters button shows blue border when filters are active
-
-**Filter Bottom Sheet (Modal):**
-- **Language:** Rust, Kotlin, Python, Go, TypeScript, C++ (single selection)
-- **Minimum Stars:** Any, 100+, 500+, 1K+ (segment control)
-- **Last Updated:** Any time, This year, This month (segment control)
-
-**Design Decisions:**
-- Bottom sheet uses pure white background (`tonalElevation = 0.dp`)
-- No real-time repository count updates (avoids unnecessary API calls)
-- Static "Show results" button (applies filters on click)
-- Filter criteria sent as GitHub API query parameters
-
-```kotlin
-// Filter application example
-data class SearchFilter(
-    val language: String? = null,
-    val minStars: Int? = null,
-    val updatedPeriod: String = "any",
-    val updatedAfter: String? = null
-)
-
-// Converts to GitHub query string:
-// "kotlin stars:>1000 pushed:>2024-01-01"
-```
-
-### Visibility Logic:
-
-```kotlin
-// Sort tabs & filter bar always visible when user has typed query
-if (query.isNotEmpty()) {
-    SortTabs(selectedSort, onSortSelected)
-    FilterBar(filter, onOpenFilterSheet, ...)
-}
-```
-
-**Why Always Visible?**
-- Users can access filters during Loading, Error, Empty, and Success states
-- Prevents frustration when trying to refine zero-result searches
-- Allows filter adjustments before results fully load
-
----
-
-## 8. Design System Colors
-
-### Theme Color Tokens (Eliminates Hardcoded Colors):
-
-All search UI components use centralized theme colors from `Color.kt`:
-
-**Main Palette:**
-- `AppNavy` - Header backgrounds
-- `AppBlue` - Actions, links, focus states
-- `AppWhite` - Card surfaces, backgrounds
-- `Slate300` - Borders, drag handle
-- `Slate500` - Meta text, icons
-
-**Derived Tints:**
-- `SelectedBlueBg` - Active filter chip backgrounds (blue at 9% opacity)
-- `ScrimOverlay` - Bottom sheet overlay (navy at 60% opacity)
-
-**Usage Examples:**
-- Search box background uses `AppWhite`
-- Active filter chips use `SelectedBlueBg` with `AppBlue` border
-- Bottom sheet scrim uses `ScrimOverlay`
-- "Load more" button border uses `Slate300`
-
-**Design Consistency:**
-- All colors verified against design specification
-- No hardcoded color values in component files
-- Centralized color system supports future dark mode implementation

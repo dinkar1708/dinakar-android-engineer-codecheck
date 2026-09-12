@@ -181,14 +181,18 @@ internal fun DetailContent(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
-                    val initials = remember(repository.name, repository.owner.login) {
-                        val source = repository.owner.login.takeIf { it.isNotBlank() } ?: repository.name
+                    val ownerLogin = repository.owner.login.takeIf { it.isNotBlank() }
+                        ?: if (repository.name.contains("/")) repository.name.substringBefore("/") else null
+                    val displayName = if (repository.name.contains("/")) repository.name.substringAfter("/") else repository.name
+
+                    val initials = remember(displayName, ownerLogin) {
+                        val source = ownerLogin ?: displayName
                         getMonogramInitials(source)
                     }
 
                     SubcomposeAsyncImage(
                         model = repository.ownerIconUrl,
-                        contentDescription = "${repository.name} avatar",
+                        contentDescription = "$displayName avatar",
                         modifier = Modifier
                             .size(56.dp)
                             .clip(CircleShape),
@@ -226,7 +230,6 @@ internal fun DetailContent(
                     )
 
                     Column(modifier = Modifier.weight(1f)) {
-                        val ownerLogin = repository.owner.login.takeIf { it.isNotBlank() }
                         if (ownerLogin != null) {
                             Text(
                                 text = ownerLogin,
@@ -237,7 +240,7 @@ internal fun DetailContent(
                             )
                         }
                         Text(
-                            text = repository.name,
+                            text = displayName,
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
                             color = AppWhite,

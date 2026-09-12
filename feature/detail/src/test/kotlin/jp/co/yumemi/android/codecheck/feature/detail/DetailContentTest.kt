@@ -99,4 +99,22 @@ class DetailContentTest {
         composeTestRule.onNodeWithText("minimal-repo").assertIsDisplayed()
         composeTestRule.onNodeWithText("View on GitHub").assertDoesNotExist()
     }
+
+    @Test
+    fun detailContent_withCompositeRepoName_displaysExtractedOwnerAndRepoName() {
+        val compositeItem = RepositoryItem(
+            name = "ravidsrk/kotlinextensions.com",
+            owner = Owner(avatarUrl = "https://example.com/avatar.png", login = "ravidsrk")
+        )
+
+        composeTestRule.setContent {
+            DetailContent(
+                repository = compositeItem,
+                onOpenBrowser = null
+            )
+        }
+
+        composeTestRule.onNodeWithText("ravidsrk").assertIsDisplayed()
+        composeTestRule.onNodeWithText("kotlinextensions.com").assertIsDisplayed()
+    }
 }

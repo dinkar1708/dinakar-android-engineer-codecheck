@@ -1,5 +1,7 @@
 package jp.co.yumemi.android.codecheck.core.ui.component
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,17 +18,22 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppAmber
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate100
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
 
 /**
- * Modern error state with enhanced styling and prominent retry button.
+ * Error state component aligned with the design palette.
  */
 @Composable
 fun ErrorView(
@@ -35,31 +42,34 @@ fun ErrorView(
     modifier: Modifier = Modifier,
     retryLabel: String = "Retry"
 ) {
+    val iconBgColor = Slate100
+    val buttonColor = AppBlue
+    val buttonTextColor = AppWhite
+
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(40.dp),
+            .padding(32.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            // Error icon with circular background
-            Surface(
-                modifier = Modifier.size(96.dp),
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.2f)
+            // Circular container with amber warning icon
+            Box(
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(CircleShape)
+                    .background(iconBgColor),
+                contentAlignment = Alignment.Center
             ) {
-                Box(
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Warning,
-                        contentDescription = null,
-                        modifier = Modifier.size(48.dp),
-                        tint = MaterialTheme.colorScheme.error
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Default.Warning,
+                    contentDescription = null,
+                    modifier = Modifier.size(36.dp),
+                    tint = AppAmber
+                )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -67,35 +77,32 @@ fun ErrorView(
             Text(
                 text = "Oops! Something went wrong",
                 style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.Bold
                 ),
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = message,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
+                color = Slate500,
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             Button(
                 onClick = onRetry,
-                shape = RoundedCornerShape(12.dp),
-                elevation = ButtonDefaults.buttonElevation(
-                    defaultElevation = 2.dp,
-                    pressedElevation = 4.dp
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = buttonColor,
+                    contentColor = buttonTextColor
                 ),
-                contentPadding = PaddingValues(
-                    horizontal = 24.dp,
-                    vertical = 12.dp
-                )
+                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 10.dp)
             ) {
                 Text(
                     text = retryLabel,

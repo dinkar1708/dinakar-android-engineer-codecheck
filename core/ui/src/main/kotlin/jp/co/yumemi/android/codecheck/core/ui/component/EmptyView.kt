@@ -1,12 +1,9 @@
 package jp.co.yumemi.android.codecheck.core.ui.component
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -22,61 +20,60 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramBlueBg
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate300
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
 
 /**
- * Modern empty state with subtle animations and enhanced visual hierarchy.
+ * Empty state component matching the design system specifications.
+ * Features a circular tinted icon container, bold headline, slate description,
+ * and an optional outlined action button (e.g., "Clear search").
  */
 @Composable
 fun EmptyView(
     title: String,
     modifier: Modifier = Modifier,
-    description: String? = null
+    description: String? = null,
+    icon: ImageVector = Icons.Default.Search,
+    actionLabel: String? = null,
+    onActionClick: (() -> Unit)? = null
 ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "empty_pulse")
-    val alpha by infiniteTransition.animateFloat(
-        initialValue = 0.3f,
-        targetValue = 0.5f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2000, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "icon_alpha"
-    )
+    val iconBgColor = MonogramBlueBg
+    val iconTintColor = AppBlue
+    val buttonBorderColor = Slate300
 
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(40.dp),
+            .padding(32.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            // Icon with circular background
-            Surface(
-                modifier = Modifier.size(96.dp),
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+            // Circular container with 7% blue tint
+            Box(
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(CircleShape)
+                    .background(iconBgColor),
+                contentAlignment = Alignment.Center
             ) {
-                Box(
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(48.dp)
-                            .alpha(alpha),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    modifier = Modifier.size(36.dp),
+                    tint = iconTintColor
+                )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -84,21 +81,42 @@ fun EmptyView(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.Bold
                 ),
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            if (description != null) {
-                Spacer(modifier = Modifier.height(12.dp))
+            if (!description.isNullOrBlank()) {
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = description,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
+                    color = Slate500,
+                    modifier = Modifier.padding(horizontal = 16.dp)
                 )
+            }
+
+            if (!actionLabel.isNullOrBlank() && onActionClick != null) {
+                Spacer(modifier = Modifier.height(24.dp))
+                Surface(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .clickable(onClick = onActionClick),
+                    shape = RoundedCornerShape(8.dp),
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, buttonBorderColor)
+                ) {
+                    Text(
+                        text = actionLabel,
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             }
         }
     }

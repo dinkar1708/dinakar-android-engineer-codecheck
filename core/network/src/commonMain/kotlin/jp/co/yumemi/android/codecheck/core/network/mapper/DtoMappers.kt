@@ -10,7 +10,8 @@ import jp.co.yumemi.android.codecheck.core.network.model.RepositoryItemDto
  */
 fun OwnerDto?.toDomain(): Owner {
     return Owner(
-        avatarUrl = this?.avatarUrl.orEmpty()
+        avatarUrl = this?.avatarUrl.orEmpty(),
+        login = this?.login.orEmpty()
     )
 }
 

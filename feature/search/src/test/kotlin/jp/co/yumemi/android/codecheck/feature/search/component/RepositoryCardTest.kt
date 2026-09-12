@@ -25,12 +25,13 @@ class RepositoryCardTest {
 
     private val fakeItem = RepositoryItem(
         name = "compose-samples",
-        owner = Owner(avatarUrl = "https://example.com/avatar.png"),
+        owner = Owner(avatarUrl = "https://example.com/avatar.png", login = "android"),
         language = "Kotlin",
         stargazersCount = 14200L,
         watchersCount = 14200L,
         forksCount = 3500L,
-        openIssuesCount = 42L
+        openIssuesCount = 42L,
+        description = "Official Jetpack Compose samples."
     )
 
     @Test
@@ -43,8 +44,11 @@ class RepositoryCardTest {
         }
 
         composeTestRule.onNodeWithText("compose-samples").assertIsDisplayed()
+        composeTestRule.onNodeWithText("android").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Official Jetpack Compose samples.").assertIsDisplayed()
         composeTestRule.onNodeWithText("Kotlin").assertIsDisplayed()
-        composeTestRule.onNodeWithText("14200").assertIsDisplayed()
+        composeTestRule.onNodeWithText("14.2K").assertIsDisplayed()
+        composeTestRule.onNodeWithText("3.5K forks").assertIsDisplayed()
     }
 
     @Test
@@ -60,5 +64,14 @@ class RepositoryCardTest {
 
         composeTestRule.onNodeWithText("compose-samples").performClick()
         assertEquals(fakeItem, clickedItem)
+    }
+
+    @Test
+    fun monogramInitials_computation() {
+        assertEquals("DK", getMonogramInitials("dmtrKovalenko"))
+        assertEquals("DA", getMonogramInitials("dylan-araps"))
+        assertEquals("ME", getMonogramInitials("meekrosoft"))
+        assertEquals("TN", getMonogramInitials("tom_nom_nom"))
+        assertEquals("FF", getMonogramInitials("ffftp"))
     }
 }

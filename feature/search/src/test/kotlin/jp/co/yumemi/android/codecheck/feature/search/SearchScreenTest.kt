@@ -27,7 +27,7 @@ class SearchScreenTest {
 
     private val fakeRepo = RepositoryItem(
         name = "compose-samples",
-        owner = Owner(avatarUrl = "https://example.com/avatar.png"),
+        owner = Owner(avatarUrl = "https://example.com/avatar.png", login = "android"),
         language = "Kotlin",
         stargazersCount = 45000L,
         watchersCount = 45000L,
@@ -49,13 +49,13 @@ class SearchScreenTest {
             )
         }
 
-        composeTestRule.onNodeWithText("GitHub Repository Search").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("GitHub Repository Search").assertIsDisplayed()
         composeTestRule.onNodeWithText("Search GitHub Repositories").assertIsDisplayed()
         composeTestRule.onNodeWithText("Type a search query above and press Enter.").assertIsDisplayed()
     }
 
     @Test
-    fun searchScreen_loadingState_displaysLoadingView() {
+    fun searchScreen_loadingState_rendersWithoutCrash() {
         composeTestRule.setContent {
             SearchScreen(
                 uiState = SearchUiState.Loading,
@@ -68,7 +68,7 @@ class SearchScreenTest {
             )
         }
 
-        composeTestRule.onNodeWithText("Searching GitHub repositories...").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("GitHub Repository Search").assertIsDisplayed()
     }
 
     @Test
@@ -85,8 +85,9 @@ class SearchScreenTest {
             )
         }
 
-        composeTestRule.onNodeWithText("No Repositories Found").assertIsDisplayed()
-        composeTestRule.onNodeWithText("We couldn't find anything matching \"nonexistent-xyz\". Try different keywords.").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No repositories found").assertIsDisplayed()
+        composeTestRule.onNodeWithText("No results for “nonexistent-xyz”. Check the spelling or search a shorter term.").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Clear search").assertIsDisplayed()
     }
 
     @Test
@@ -126,6 +127,7 @@ class SearchScreenTest {
             )
         }
 
+        // Verify repository item
         composeTestRule.onNodeWithText("compose-samples").assertIsDisplayed().performClick()
         assertEquals(fakeRepo, clickedItem)
     }

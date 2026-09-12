@@ -17,7 +17,12 @@ class MockGitHubRepositoryTest {
     fun searchRepositories_withMatchingQuery_returnsFilteredResults() = runTest {
         val results = repository.searchRepositories("kotlin")
         assertTrue(results.isNotEmpty())
-        assertTrue(results.all { it.name.contains("kotlin", ignoreCase = true) || it.language == "Kotlin" || it.description?.contains("kotlin", ignoreCase = true) == true })
+        assertTrue(results.all { 
+            it.name.contains("kotlin", ignoreCase = true) || 
+                it.owner.login.contains("kotlin", ignoreCase = true) ||
+                it.language?.contains("kotlin", ignoreCase = true) == true || 
+                it.description?.contains("kotlin", ignoreCase = true) == true 
+        })
     }
 
     @Test

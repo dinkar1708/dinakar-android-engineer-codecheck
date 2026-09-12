@@ -202,6 +202,34 @@ class MockGitHubRepository(
                 openIssuesCount = 8_900L,
                 description = "The Go programming language open source project.",
                 htmlUrl = "https://github.com/golang/go"
+            ),
+            RepositoryItem(
+                name = "extremely-long-repository-name-that-stresses-ui-layout-wrapping-and-overflow-resilience-without-truncation-or-breakage",
+                owner = Owner(
+                    login = "super-verbose-organization-with-extremely-lengthy-username-account-name",
+                    avatarUrl = "https://avatars.githubusercontent.com/u/9919"
+                ),
+                language = "Visual Basic for Applications (.NET Framework Core Edition)",
+                stargazersCount = 9_999_999_999L,
+                watchersCount = 8_888_888_888L,
+                forksCount = 7_777_777_777L,
+                openIssuesCount = 6_666_666_666L,
+                description = "This is an exceptionally verbose, extensive, and multi-paragraph repository description crafted specifically to test edge-case rendering, text wrapping, and UI overflow behavior in Jetpack Compose and View hierarchies. It ensures that cards expand appropriately, text does not clip unexpectedly, and typography scales gracefully under high font scale settings.",
+                htmlUrl = "https://github.com/super-verbose-organization-with-extremely-lengthy-username-account-name/extremely-long-repository-name"
+            ),
+            RepositoryItem(
+                name = "超長文リポジトリ名_UI表示崩れ・折り返し・文字あふれ検証用テストケース_株式会社ゆめみ_Android課題提出用リポジトリ",
+                owner = Owner(
+                    login = "yumemi-inc-advanced-android-mobile-engineering-core-team",
+                    avatarUrl = "https://avatars.githubusercontent.com/u/1010328"
+                ),
+                language = "TypeScript / Kotlin Multiplatform",
+                stargazersCount = 123_456_789L,
+                watchersCount = 123_456_789L,
+                forksCount = 45_678_901L,
+                openIssuesCount = 98_765L,
+                description = "画面レイアウトの耐久性テスト用の長い日本語説明文です。テキストが複数行にわたって適切に折り返され、省略記号（Ellipsis）やカードの高さ調整が崩れることなく正常に描画されるかを検証します。極端に長い文字列や全角・半角混在テキストでもUIが美しく表示されることを確認するためのフィクスチャです。",
+                htmlUrl = "https://github.com/yumemi-inc-advanced-android-mobile-engineering-core-team/yumemi-stress-test"
             )
         )
     }

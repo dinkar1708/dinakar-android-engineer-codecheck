@@ -54,6 +54,9 @@ import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate700
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate800
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate900
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
+import jp.co.yumemi.android.codecheck.core.ui.util.formatForkCount
+import jp.co.yumemi.android.codecheck.core.ui.util.formatStarCount
+import jp.co.yumemi.android.codecheck.core.ui.util.getLanguageColor
 import kotlin.math.abs
 
 /**
@@ -375,42 +378,4 @@ internal fun getMonogramInitials(name: String): String {
     }
 
     return clean.take(2).uppercase()
-}
-
-/**
- * Maps languages to one of the 4 data colors (Blue, Green, Amber, Slate).
- */
-internal fun getLanguageColor(language: String?): Color {
-    val actionBlue = AppBlue
-    return when (language?.lowercase()) {
-        "rust", "go", "kotlin", "typescript", "ruby" -> actionBlue
-        "shell", "python", "vue", "html", "php" -> AppGreen
-        "c++", "java", "javascript", "swift" -> AppAmber
-        "c", "c#", "css" -> Slate500
-        else -> {
-            val hash = abs((language ?: "").hashCode())
-            when (hash % 4) {
-                0 -> actionBlue
-                1 -> AppGreen
-                2 -> AppAmber
-                else -> Slate500
-            }
-        }
-    }
-}
-
-internal fun formatStarCount(count: Long): String {
-    return when {
-        count >= 1000000 -> String.format("%.1fM", count / 1000000.0)
-        count >= 1000 -> String.format("%.1fK", count / 1000.0)
-        else -> count.toString()
-    }
-}
-
-internal fun formatForkCount(count: Long): String {
-    return when {
-        count >= 1000000 -> String.format("%.1fM", count / 1000000.0)
-        count >= 1000 -> String.format("%.1fK", count / 1000.0)
-        else -> count.toString()
-    }
 }

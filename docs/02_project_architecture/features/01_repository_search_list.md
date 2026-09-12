@@ -297,28 +297,26 @@ if (query.isNotEmpty()) {
 
 ### Theme Color Tokens (Eliminates Hardcoded Colors):
 
-All search UI components use centralized theme colors:
+All search UI components use centralized theme colors from `Color.kt`:
 
-```kotlin
-// Color.kt - Main palette
-val AppNavy = Color(0xFF2D3545)      // Header backgrounds
-val AppBlue = Color(0xFF3B50DF)      // Actions, links, focus
-val AppWhite = Color(0xFFFFFFFF)     // Card surfaces
-val Slate300 = Color(0xFFCBD5E1)     // Borders, drag handle
-val Slate500 = Color(0xFF64748B)     // Meta text, icons
+**Main Palette:**
+- `AppNavy` - Header backgrounds
+- `AppBlue` - Actions, links, focus states
+- `AppWhite` - Card surfaces, backgrounds
+- `Slate300` - Borders, drag handle
+- `Slate500` - Meta text, icons
 
-// Derived tints
-val SelectedBlueBg = AppBlue.copy(alpha = 0.09f)  // Active filter chips
-val ScrimOverlay = AppNavy.copy(alpha = 0.60f)    // Bottom sheet overlay
-```
+**Derived Tints:**
+- `SelectedBlueBg` - Active filter chip backgrounds (blue at 9% opacity)
+- `ScrimOverlay` - Bottom sheet overlay (navy at 60% opacity)
 
 **Usage Examples:**
-- Search box background: `AppWhite`
-- Active filter chip: `SelectedBlueBg` with `AppBlue` border
-- Bottom sheet scrim: `ScrimOverlay`
-- "Load more" button border: `Slate300`
+- Search box background uses `AppWhite`
+- Active filter chips use `SelectedBlueBg` with `AppBlue` border
+- Bottom sheet scrim uses `ScrimOverlay`
+- "Load more" button border uses `Slate300`
 
 **Design Consistency:**
-- All colors verified against design specification (100% match)
-- No hardcoded hex values in component files
-- Supports future dark mode implementation
+- All colors verified against design specification
+- No hardcoded color values in component files
+- Centralized color system supports future dark mode implementation

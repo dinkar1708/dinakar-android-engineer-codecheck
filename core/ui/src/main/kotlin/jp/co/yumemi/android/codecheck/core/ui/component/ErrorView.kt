@@ -26,11 +26,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppAmber
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate100
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
+import jp.co.yumemi.android.codecheck.core.ui.R
 
 /**
  * Error state component aligned with the design palette.
@@ -40,7 +42,7 @@ fun ErrorView(
     message: String,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
-    retryLabel: String = "Retry"
+    retryLabel: String = stringResource(R.string.common_retry)
 ) {
     val iconBgColor = Slate100
     val buttonColor = AppBlue

@@ -7,11 +7,16 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import jp.co.yumemi.android.codecheck.core.domain.model.Owner
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchFilter
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchResult
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
 import jp.co.yumemi.android.codecheck.core.domain.usecase.SearchRepositoriesUseCase
 import jp.co.yumemi.android.codecheck.feature.search.util.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -35,6 +40,16 @@ class SearchViewModelTest {
         openIssuesCount = 50L
     )
 
+    private val fakeRepoItem2 = RepositoryItem(
+        name = "android/nowinandroid",
+        owner = Owner(avatarUrl = "https://avatars.githubusercontent.com/u/32689599?v=4"),
+        language = "Kotlin",
+        stargazersCount = 18000L,
+        watchersCount = 18000L,
+        forksCount = 4000L,
+        openIssuesCount = 60L
+    )
+
     @Test
     fun initialUiState_whenNoSavedState_isIdle() = runTest {
         val savedStateHandle = SavedStateHandle()
@@ -44,11 +59,15 @@ class SearchViewModelTest {
             assertEquals(SearchUiState.Idle, awaitItem())
         }
         assertEquals("", viewModel.query.value)
+        assertEquals(SearchSort.BEST_MATCH, viewModel.selectedSort.value)
+        assertFalse(viewModel.filter.value.isActive)
     }
 
     @Test
     fun initialUiState_whenSavedStateContainsQuery_triggersSearch() = runTest {
-        coEvery { searchRepositoriesUseCase("kotlin") } returns listOf(fakeRepoItem)
+        coEvery {
+            searchRepositoriesUseCase("kotlin", page = 1, sort = SearchSort.BEST_MATCH, filter = any())
+        } returns SearchResult(listOf(fakeRepoItem), totalCount = 1, hasNextPage = false)
 
         val savedStateHandle = SavedStateHandle(mapOf("last_search_query" to "kotlin"))
         val viewModel = SearchViewModel(searchRepositoriesUseCase, savedStateHandle)
@@ -56,20 +75,33 @@ class SearchViewModelTest {
         viewModel.uiState.test {
             val item = awaitItem()
             assertTrue(item is SearchUiState.Success)
-            assertEquals(listOf(fakeRepoItem), (item as SearchUiState.Success).repositories)
+            val success = item as SearchUiState.Success
+            assertEquals(listOf(fakeRepoItem), success.repositories)
+            assertEquals(1, success.totalCount)
+            assertFalse(success.hasNextPage)
         }
         assertEquals("kotlin", viewModel.query.value)
     }
 
     @Test
-    fun onQueryChanged_updatesQueryAndSavedState() = runTest {
+    fun onQueryChanged_updatesQueryAndDebouncesSearch() = runTest {
+        coEvery {
+            searchRepositoriesUseCase("android", page = 1, sort = any(), filter = any())
+        } returns SearchResult(listOf(fakeRepoItem), totalCount = 1, hasNextPage = false)
+
         val savedStateHandle = SavedStateHandle()
         val viewModel = SearchViewModel(searchRepositoriesUseCase, savedStateHandle)
 
         viewModel.onQueryChanged("android")
-
         assertEquals("android", viewModel.query.value)
         assertEquals("android", savedStateHandle.get<String>("last_search_query"))
+
+        // Advance debounce time (past 500ms delay)
+        advanceTimeBy(600L)
+
+        val currentState = viewModel.uiState.value
+        assertTrue(currentState is SearchUiState.Success)
+        assertEquals(listOf(fakeRepoItem), (currentState as SearchUiState.Success).repositories)
     }
 
     @Test
@@ -84,7 +116,9 @@ class SearchViewModelTest {
 
     @Test
     fun searchRepositories_successNonEmpty_emitsSuccess() = runTest {
-        coEvery { searchRepositoriesUseCase("android") } returns listOf(fakeRepoItem)
+        coEvery {
+            searchRepositoriesUseCase("android", page = 1, sort = any(), filter = any())
+        } returns SearchResult(listOf(fakeRepoItem), totalCount = 1, hasNextPage = false)
 
         val savedStateHandle = SavedStateHandle()
         val viewModel = SearchViewModel(searchRepositoriesUseCase, savedStateHandle)
@@ -94,15 +128,20 @@ class SearchViewModelTest {
 
             viewModel.searchRepositories("android")
 
-            assertEquals(SearchUiState.Success(listOf(fakeRepoItem)), awaitItem())
+            assertEquals(
+                SearchUiState.Success(listOf(fakeRepoItem), totalCount = 1, hasNextPage = false),
+                awaitItem()
+            )
         }
 
-        coVerify(exactly = 1) { searchRepositoriesUseCase("android") }
+        coVerify(exactly = 1) { searchRepositoriesUseCase("android", 1, any(), any()) }
     }
 
     @Test
     fun searchRepositories_successEmpty_emitsEmpty() = runTest {
-        coEvery { searchRepositoriesUseCase("unknown_xyz") } returns emptyList()
+        coEvery {
+            searchRepositoriesUseCase("unknown_xyz", page = 1, sort = any(), filter = any())
+        } returns SearchResult(emptyList(), totalCount = 0, hasNextPage = false)
 
         val savedStateHandle = SavedStateHandle()
         val viewModel = SearchViewModel(searchRepositoriesUseCase, savedStateHandle)
@@ -115,12 +154,14 @@ class SearchViewModelTest {
             assertEquals(SearchUiState.Empty, awaitItem())
         }
 
-        coVerify(exactly = 1) { searchRepositoriesUseCase("unknown_xyz") }
+        coVerify(exactly = 1) { searchRepositoriesUseCase("unknown_xyz", 1, any(), any()) }
     }
 
     @Test
     fun searchRepositories_error_emitsError() = runTest {
-        coEvery { searchRepositoriesUseCase("error_query") } throws IOException("Network timeout")
+        coEvery {
+            searchRepositoriesUseCase("error_query", page = 1, sort = any(), filter = any())
+        } throws IOException("Network timeout")
 
         val savedStateHandle = SavedStateHandle()
         val viewModel = SearchViewModel(searchRepositoriesUseCase, savedStateHandle)
@@ -137,32 +178,56 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun retry_whenQueryPresent_reExecutesSearch() = runTest {
-        coEvery { searchRepositoriesUseCase("retry_query") } returns listOf(fakeRepoItem)
+    fun onSortChanged_triggersNewSearchWithUpdatedSort() = runTest {
+        coEvery {
+            searchRepositoriesUseCase("kotlin", page = 1, sort = SearchSort.STARS, filter = any())
+        } returns SearchResult(listOf(fakeRepoItem), totalCount = 1, hasNextPage = false)
 
-        val savedStateHandle = SavedStateHandle()
+        val savedStateHandle = SavedStateHandle(mapOf("last_search_query" to "kotlin"))
+        coEvery {
+            searchRepositoriesUseCase("kotlin", page = 1, sort = SearchSort.BEST_MATCH, filter = any())
+        } returns SearchResult(listOf(fakeRepoItem), totalCount = 1, hasNextPage = false)
+
         val viewModel = SearchViewModel(searchRepositoriesUseCase, savedStateHandle)
-        viewModel.onQueryChanged("retry_query")
+        viewModel.onSortChanged(SearchSort.STARS)
 
-        viewModel.retry()
-
-        assertEquals(SearchUiState.Success(listOf(fakeRepoItem)), viewModel.uiState.value)
-        coVerify(exactly = 1) { searchRepositoriesUseCase("retry_query") }
+        assertEquals(SearchSort.STARS, viewModel.selectedSort.value)
+        coVerify(exactly = 1) { searchRepositoriesUseCase("kotlin", page = 1, sort = SearchSort.STARS, filter = any()) }
     }
 
     @Test
-    fun retry_whenQueryBlank_doesNothing() = runTest {
+    fun loadNextPage_appendsItemsAndUpdatesPagination() = runTest {
+        coEvery {
+            searchRepositoriesUseCase("android", page = 1, sort = any(), filter = any())
+        } returns SearchResult(listOf(fakeRepoItem), totalCount = 2, hasNextPage = true)
+
+        coEvery {
+            searchRepositoriesUseCase("android", page = 2, sort = any(), filter = any())
+        } returns SearchResult(listOf(fakeRepoItem2), totalCount = 2, hasNextPage = false)
+
         val savedStateHandle = SavedStateHandle()
         val viewModel = SearchViewModel(searchRepositoriesUseCase, savedStateHandle)
+        viewModel.onQueryChanged("android")
+        viewModel.searchRepositories("android")
 
-        viewModel.retry()
+        val page1State = viewModel.uiState.value as SearchUiState.Success
+        assertEquals(1, page1State.repositories.size)
+        assertTrue(page1State.hasNextPage)
 
-        assertEquals(SearchUiState.Idle, viewModel.uiState.value)
+        viewModel.loadNextPage()
+
+        val page2State = viewModel.uiState.value as SearchUiState.Success
+        assertEquals(2, page2State.repositories.size)
+        assertEquals(listOf(fakeRepoItem, fakeRepoItem2), page2State.repositories)
+        assertFalse(page2State.hasNextPage)
+        assertFalse(page2State.isLoadingMore)
     }
 
     @Test
     fun clearQuery_resetsQueryAndStateToIdle() = runTest {
-        coEvery { searchRepositoriesUseCase("query") } returns listOf(fakeRepoItem)
+        coEvery {
+            searchRepositoriesUseCase("query", page = 1, sort = any(), filter = any())
+        } returns SearchResult(listOf(fakeRepoItem), totalCount = 1, hasNextPage = false)
 
         val savedStateHandle = SavedStateHandle()
         val viewModel = SearchViewModel(searchRepositoriesUseCase, savedStateHandle)

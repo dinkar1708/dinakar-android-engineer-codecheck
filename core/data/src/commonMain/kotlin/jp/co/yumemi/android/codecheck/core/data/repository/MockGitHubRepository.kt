@@ -2,6 +2,9 @@ package jp.co.yumemi.android.codecheck.core.data.repository
 
 import jp.co.yumemi.android.codecheck.core.domain.model.Owner
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchFilter
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchResult
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
 import jp.co.yumemi.android.codecheck.core.domain.repository.GitHubRepository
 import jp.co.yumemi.android.codecheck.core.network.error.NetworkException
 import kotlinx.coroutines.delay
@@ -17,12 +20,28 @@ class MockGitHubRepository(
     customDataset: List<RepositoryItem>? = null
 ) : GitHubRepository {
 
-    val mockData: List<RepositoryItem> = customDataset ?: defaultMockData
+    val mockData: List<RepositoryItem> = (customDataset ?: defaultMockData).mapIndexed { index, item ->
+        if (item.updatedAt == null) {
+            val generatedDate = when (index % 3) {
+                0 -> "2026-09-${(10 + (index % 3)).toString().padStart(2, '0')}T12:00:00Z"
+                1 -> "2026-0${1 + (index % 8)}-15T10:00:00Z"
+                else -> "2025-11-20T08:00:00Z"
+            }
+            item.copy(updatedAt = generatedDate)
+        } else {
+            item
+        }
+    }
 
-    override suspend fun searchRepositories(query: String): List<RepositoryItem> {
+    override suspend fun searchRepositories(
+        query: String,
+        page: Int,
+        sort: SearchSort,
+        filter: SearchFilter
+    ): SearchResult {
         val trimmed = query.trim()
         if (trimmed.isBlank()) {
-            return emptyList()
+            return SearchResult(emptyList(), 0, false)
         }
 
         if (simulatedDelayMs > 0) {
@@ -34,15 +53,68 @@ class MockGitHubRepository(
         }
 
         if (trimmed.equals("empty", ignoreCase = true)) {
-            return emptyList()
+            return SearchResult(emptyList(), 0, false)
         }
 
-        return mockData.filter { item ->
+        // 1. Text filter
+        var filtered = mockData.filter { item ->
             item.name.contains(trimmed, ignoreCase = true) ||
                 item.owner.login.contains(trimmed, ignoreCase = true) ||
                 (item.description?.contains(trimmed, ignoreCase = true) == true) ||
                 (item.language?.contains(trimmed, ignoreCase = true) == true)
         }
+
+        // 2. Language filter
+        if (!filter.language.isNullOrBlank()) {
+            filtered = filtered.filter { item ->
+                item.language?.equals(filter.language, ignoreCase = true) == true
+            }
+        }
+
+        // 3. Minimum stars filter
+        val minStars = filter.minStars
+        if (minStars != null && minStars > 0) {
+            filtered = filtered.filter { item ->
+                item.stargazersCount >= minStars
+            }
+        }
+
+        // 4. Recency filter
+        val updatedAfter = filter.updatedAfter ?: when (filter.updatedPeriod) {
+            "year" -> "2026-01-01"
+            "month" -> "2026-09-01"
+            else -> null
+        }
+        if (!updatedAfter.isNullOrBlank()) {
+            filtered = filtered.filter { item ->
+                (item.updatedAt ?: "") >= updatedAfter
+            }
+        }
+
+        // 5. Sorting
+        val sorted = when (sort) {
+            SearchSort.BEST_MATCH -> filtered
+            SearchSort.STARS -> filtered.sortedByDescending { it.stargazersCount }
+            SearchSort.FORKS -> filtered.sortedByDescending { it.forksCount }
+            SearchSort.UPDATED -> filtered.sortedByDescending { it.updatedAt ?: "" }
+        }
+
+        // 5. Pagination (10 items per page)
+        val pageSize = 10
+        val totalCount = sorted.size
+        val startIndex = (page - 1) * pageSize
+        val pagedItems = if (startIndex >= sorted.size) {
+            emptyList()
+        } else {
+            sorted.subList(startIndex, minOf(startIndex + pageSize, sorted.size))
+        }
+        val hasNextPage = (page * pageSize) < totalCount
+
+        return SearchResult(
+            items = pagedItems,
+            totalCount = totalCount,
+            hasNextPage = hasNextPage
+        )
     }
 
     override suspend fun getRepositoryDetails(owner: String, repo: String): RepositoryItem {
@@ -193,6 +265,28 @@ class MockGitHubRepository(
                 htmlUrl = "https://github.com/rust-lang/rust"
             ),
             RepositoryItem(
+                name = "tokio-rs/tokio",
+                owner = Owner(login = "tokio-rs", avatarUrl = "https://avatars.githubusercontent.com/u/41551030"),
+                language = "Rust",
+                stargazersCount = 26_400L,
+                watchersCount = 26_400L,
+                forksCount = 2_400L,
+                openIssuesCount = 210L,
+                description = "A runtime for writing reliable, asynchronous, and slim applications with the Rust programming language.",
+                htmlUrl = "https://github.com/tokio-rs/tokio"
+            ),
+            RepositoryItem(
+                name = "tauri-apps/tauri",
+                owner = Owner(login = "tauri-apps", avatarUrl = "https://avatars.githubusercontent.com/u/54033232"),
+                language = "Rust",
+                stargazersCount = 82_100L,
+                watchersCount = 82_100L,
+                forksCount = 2_800L,
+                openIssuesCount = 310L,
+                description = "Build smaller, faster, and more secure desktop and mobile applications with a web frontend.",
+                htmlUrl = "https://github.com/tauri-apps/tauri"
+            ),
+            RepositoryItem(
                 name = "golang/go",
                 owner = Owner(login = "golang", avatarUrl = "https://avatars.githubusercontent.com/u/4314092"),
                 language = "Go",
@@ -202,6 +296,127 @@ class MockGitHubRepository(
                 openIssuesCount = 8_900L,
                 description = "The Go programming language open source project.",
                 htmlUrl = "https://github.com/golang/go"
+            ),
+            RepositoryItem(
+                name = "gin-gonic/gin",
+                owner = Owner(login = "gin-gonic", avatarUrl = "https://avatars.githubusercontent.com/u/14945934"),
+                language = "Go",
+                stargazersCount = 76_500L,
+                watchersCount = 76_500L,
+                forksCount = 7_900L,
+                openIssuesCount = 80L,
+                description = "Gin is a HTTP web framework written in Go (Golang). It features a Martini-like API with much better performance.",
+                htmlUrl = "https://github.com/gin-gonic/gin"
+            ),
+            RepositoryItem(
+                name = "kubernetes/kubernetes",
+                owner = Owner(login = "kubernetes", avatarUrl = "https://avatars.githubusercontent.com/u/13629408"),
+                language = "Go",
+                stargazersCount = 110_000L,
+                watchersCount = 110_000L,
+                forksCount = 39_500L,
+                openIssuesCount = 2_400L,
+                description = "Production-Grade Container Scheduling and Management.",
+                htmlUrl = "https://github.com/kubernetes/kubernetes"
+            ),
+            RepositoryItem(
+                name = "pytorch/pytorch",
+                owner = Owner(login = "pytorch", avatarUrl = "https://avatars.githubusercontent.com/u/21003710"),
+                language = "Python",
+                stargazersCount = 84_300L,
+                watchersCount = 84_300L,
+                forksCount = 22_500L,
+                openIssuesCount = 16_000L,
+                description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration.",
+                htmlUrl = "https://github.com/pytorch/pytorch"
+            ),
+            RepositoryItem(
+                name = "psf/black",
+                owner = Owner(login = "psf", avatarUrl = "https://avatars.githubusercontent.com/u/5059136"),
+                language = "Python",
+                stargazersCount = 38_200L,
+                watchersCount = 38_200L,
+                forksCount = 2_450L,
+                openIssuesCount = 240L,
+                description = "The uncompromising Python code formatter.",
+                htmlUrl = "https://github.com/psf/black"
+            ),
+            RepositoryItem(
+                name = "huggingface/transformers",
+                owner = Owner(login = "huggingface", avatarUrl = "https://avatars.githubusercontent.com/u/25720743"),
+                language = "Python",
+                stargazersCount = 132_000L,
+                watchersCount = 132_000L,
+                forksCount = 25_800L,
+                openIssuesCount = 740L,
+                description = "State-of-the-art Machine Learning for Pytorch, TensorFlow, and JAX.",
+                htmlUrl = "https://github.com/huggingface/transformers"
+            ),
+            RepositoryItem(
+                name = "microsoft/typescript",
+                owner = Owner(login = "microsoft", avatarUrl = "https://avatars.githubusercontent.com/u/6154722"),
+                language = "TypeScript",
+                stargazersCount = 99_800L,
+                watchersCount = 99_800L,
+                forksCount = 12_600L,
+                openIssuesCount = 5_200L,
+                description = "TypeScript is a superset of JavaScript that compiles to clean JavaScript output.",
+                htmlUrl = "https://github.com/microsoft/typescript"
+            ),
+            RepositoryItem(
+                name = "facebook/react",
+                owner = Owner(login = "facebook", avatarUrl = "https://avatars.githubusercontent.com/u/69631"),
+                language = "TypeScript",
+                stargazersCount = 225_000L,
+                watchersCount = 225_000L,
+                forksCount = 45_800L,
+                openIssuesCount = 1_100L,
+                description = "The library for web and native user interfaces.",
+                htmlUrl = "https://github.com/facebook/react"
+            ),
+            RepositoryItem(
+                name = "vercel/next.js",
+                owner = Owner(login = "vercel", avatarUrl = "https://avatars.githubusercontent.com/u/14985020"),
+                language = "TypeScript",
+                stargazersCount = 124_000L,
+                watchersCount = 124_000L,
+                forksCount = 27_100L,
+                openIssuesCount = 2_800L,
+                description = "The React Framework for the Web.",
+                htmlUrl = "https://github.com/vercel/next.js"
+            ),
+            RepositoryItem(
+                name = "tensorflow/tensorflow",
+                owner = Owner(login = "tensorflow", avatarUrl = "https://avatars.githubusercontent.com/u/15658637"),
+                language = "C++",
+                stargazersCount = 184_000L,
+                watchersCount = 184_000L,
+                forksCount = 89_200L,
+                openIssuesCount = 3_500L,
+                description = "An Open Source Machine Learning Framework for Everyone.",
+                htmlUrl = "https://github.com/tensorflow/tensorflow"
+            ),
+            RepositoryItem(
+                name = "protocolbuffers/protobuf",
+                owner = Owner(login = "protocolbuffers", avatarUrl = "https://avatars.githubusercontent.com/u/38173599"),
+                language = "C++",
+                stargazersCount = 65_200L,
+                watchersCount = 65_200L,
+                forksCount = 15_400L,
+                openIssuesCount = 1_200L,
+                description = "Protocol Buffers - Google's data interchange format.",
+                htmlUrl = "https://github.com/protocolbuffers/protobuf"
+            ),
+            RepositoryItem(
+                name = "electron/electron",
+                owner = Owner(login = "electron", avatarUrl = "https://avatars.githubusercontent.com/u/13409222"),
+                language = "C++",
+                stargazersCount = 114_000L,
+                watchersCount = 114_000L,
+                forksCount = 15_100L,
+                openIssuesCount = 1_450L,
+                description = "Build cross-platform desktop apps with JavaScript, HTML, and CSS.",
+                htmlUrl = "https://github.com/electron/electron"
             ),
             RepositoryItem(
                 name = "extremely-long-repository-name-that-stresses-ui-layout-wrapping-and-overflow-resilience-without-truncation-or-breakage",

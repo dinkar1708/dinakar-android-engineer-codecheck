@@ -8,10 +8,11 @@ This section contains detailed specifications for each feature implemented in th
 
 ### Core Features
 
-1. **[Repository Search & List](./01_repository_search_list.md)**
+1. **[Repository Search](./01_repository_search.md)**
    - GitHub repository search functionality
-   - List view with search results
+   - Paginated results with "Load More" button
    - Sort and filter capabilities
+   - Debounced search with 500ms delay
 
 2. **[Repository Detail](./02_repository_detail.md)**
    - Detailed repository information

@@ -53,17 +53,33 @@ import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate900
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.core.ui.component.EmptyView
 import jp.co.yumemi.android.codecheck.core.ui.component.ErrorView
+import androidx.compose.ui.unit.em
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
+import jp.co.yumemi.android.codecheck.feature.search.component.LoadMoreButton
 import jp.co.yumemi.android.codecheck.feature.search.component.RepositoryCard
 import jp.co.yumemi.android.codecheck.feature.search.component.RepositoryCardSkeleton
+import jp.co.yumemi.android.codecheck.feature.search.component.SortTabs
+import java.text.NumberFormat
+import java.util.Locale
+
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchFilter
+import jp.co.yumemi.android.codecheck.feature.search.component.FilterBar
+import jp.co.yumemi.android.codecheck.feature.search.component.FilterBottomSheet
 
 /**
  * Screen composable for searching GitHub repositories matching the approved design specification:
  * - Dark Navy anchor header housing the search bar (#1d2331 / #12161f in dark)
- * - Brand Blue for action (#3b50df / #6b7cf0 in dark)
- * - Slate neutrals for structure (#0f172a -> #f5f6f8)
- * - Results count and sort controls
+ * - Sort underline tabs ("Best match", "Most stars", "Most forks")
+ * - Filter bar with "Filters" button and active filter chips
+ * - Filter sheet for Language, Min Stars, and Recency filtering
+ * - Sub-header results counter ("1–12 OF 3,120") and "Clear all"
+ * - Repository cards and "Load more" pagination button
  * - Skeleton loading and empty state with "Clear search" action
  */
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     onRepositoryClick: (RepositoryItem) -> Unit,
@@ -72,31 +88,50 @@ fun SearchScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val query by viewModel.query.collectAsState()
+    val selectedSort by viewModel.selectedSort.collectAsState()
+    val filter by viewModel.filter.collectAsState()
 
     SearchScreen(
         uiState = uiState,
         query = query,
+        selectedSort = selectedSort,
+        filter = filter,
         onQueryChanged = viewModel::onQueryChanged,
         onSearch = { viewModel.searchRepositories(query) },
+        onSortSelected = viewModel::onSortChanged,
+        onFilterChanged = viewModel::onFilterChanged,
+        onLoadNextPage = viewModel::loadNextPage,
         onClearQuery = viewModel::clearQuery,
+        onClearAll = {
+            viewModel.clearQuery()
+            viewModel.clearFilters()
+        },
         onRetry = viewModel::retry,
         onRepositoryClick = onRepositoryClick,
         modifier = modifier
     )
 }
 
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 internal fun SearchScreen(
     uiState: SearchUiState,
     query: String,
+    selectedSort: SearchSort = SearchSort.BEST_MATCH,
+    filter: SearchFilter = SearchFilter(),
     onQueryChanged: (String) -> Unit,
     onSearch: () -> Unit,
+    onSortSelected: (SearchSort) -> Unit = {},
+    onFilterChanged: (SearchFilter) -> Unit = {},
+    onLoadNextPage: () -> Unit = {},
     onClearQuery: () -> Unit,
+    onClearAll: () -> Unit = onClearQuery,
     onRetry: () -> Unit,
     onRepositoryClick: (RepositoryItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
+    var showFilterSheet by rememberSaveable { mutableStateOf(false) }
 
     val headerBgColor = AppNavy
     val searchBoxBgColor = AppWhite
@@ -197,6 +232,22 @@ internal fun SearchScreen(
                 }
             }
 
+            // Sort Tabs & Filter Bar always visible below search box
+            if (query.isNotEmpty()) {
+                SortTabs(
+                    selectedSort = selectedSort,
+                    onSortSelected = onSortSelected
+                )
+
+                FilterBar(
+                    filter = filter,
+                    onOpenFilterSheet = { showFilterSheet = true },
+                    onRemoveLanguage = { onFilterChanged(filter.copy(language = null)) },
+                    onRemoveMinStars = { onFilterChanged(filter.copy(minStars = null)) },
+                    onRemoveUpdatedPeriod = { onFilterChanged(filter.copy(updatedPeriod = "any", updatedAfter = null)) }
+                )
+            }
+
             // Body Area presenting stateful views
             Box(
                 modifier = Modifier
@@ -241,25 +292,73 @@ internal fun SearchScreen(
                     }
 
                     is SearchUiState.Success -> {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
-                            verticalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            items(
-                                items = state.repositories,
-                                key = { it.name + "/" + it.ownerIconUrl }
-                            ) { item ->
-                                RepositoryCard(
-                                    item = item,
-                                    onClick = onRepositoryClick
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            // Sub-header results counter & clear all (mockup 03b)
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 20.dp, end = 20.dp, top = 14.dp, bottom = 10.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                val totalFormatted = NumberFormat.getNumberInstance(Locale.US).format(state.totalCount)
+                                Text(
+                                    text = "1–${state.repositories.size} OF $totalFormatted",
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 0.05.em,
+                                    color = Slate500
                                 )
+
+                                Text(
+                                    text = "Clear all",
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = AppBlue,
+                                    modifier = Modifier.clickable(onClick = onClearAll)
+                                )
+                            }
+
+                            LazyColumn(
+                                modifier = Modifier.fillMaxSize(),
+                                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                                verticalArrangement = Arrangement.spacedBy(10.dp)
+                            ) {
+                                items(
+                                    items = state.repositories,
+                                    key = { it.name + "/" + it.ownerIconUrl }
+                                ) { item ->
+                                    RepositoryCard(
+                                        item = item,
+                                        onClick = onRepositoryClick
+                                    )
+                                }
+
+                                if (state.hasNextPage) {
+                                    item(key = "load_more_button") {
+                                        LoadMoreButton(
+                                            isLoading = state.isLoadingMore,
+                                            onClick = onLoadNextPage,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(top = 4.dp)
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    if (showFilterSheet) {
+        FilterBottomSheet(
+            initialFilter = filter,
+            onApplyFilter = onFilterChanged,
+            onDismiss = { showFilterSheet = false }
+        )
     }
 }
 

@@ -1,6 +1,9 @@
 package jp.co.yumemi.android.codecheck.core.domain.repository
 
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchFilter
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchResult
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
 
 /**
  * Domain repository contract defining operations on GitHub repository data.
@@ -9,12 +12,20 @@ import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 interface GitHubRepository {
 
     /**
-     * Search GitHub repositories by query keyword.
+     * Search GitHub repositories with pagination, sorting, and filtering.
      *
      * @param query Search keyword
-     * @return List of matching [RepositoryItem]
+     * @param page Page number (1-indexed)
+     * @param sort Sort ordering ([SearchSort])
+     * @param filter Filter criteria ([SearchFilter])
+     * @return Paginated [SearchResult]
      */
-    suspend fun searchRepositories(query: String): List<RepositoryItem>
+    suspend fun searchRepositories(
+        query: String,
+        page: Int = 1,
+        sort: SearchSort = SearchSort.BEST_MATCH,
+        filter: SearchFilter = SearchFilter()
+    ): SearchResult
 
     /**
      * Fetch detailed information for a specific repository.

@@ -16,7 +16,12 @@ class GetRepositoryDetailsUseCaseTest {
         var shouldThrow: Throwable? = null
         var returnItem: RepositoryItem? = null
 
-        override suspend fun searchRepositories(query: String): List<RepositoryItem> {
+        override suspend fun searchRepositories(
+            query: String,
+            page: Int,
+            sort: jp.co.yumemi.android.codecheck.core.domain.model.SearchSort,
+            filter: jp.co.yumemi.android.codecheck.core.domain.model.SearchFilter
+        ): jp.co.yumemi.android.codecheck.core.domain.model.SearchResult {
             throw UnsupportedOperationException()
         }
 

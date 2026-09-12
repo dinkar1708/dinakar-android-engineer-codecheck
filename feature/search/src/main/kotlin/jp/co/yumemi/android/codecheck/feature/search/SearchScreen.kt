@@ -62,14 +62,24 @@ import jp.co.yumemi.android.codecheck.feature.search.component.SortTabs
 import java.text.NumberFormat
 import java.util.Locale
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchFilter
+import jp.co.yumemi.android.codecheck.feature.search.component.FilterBar
+import jp.co.yumemi.android.codecheck.feature.search.component.FilterBottomSheet
+
 /**
  * Screen composable for searching GitHub repositories matching the approved design specification:
  * - Dark Navy anchor header housing the search bar (#1d2331 / #12161f in dark)
  * - Sort underline tabs ("Best match", "Most stars", "Most forks")
+ * - Filter bar with "Filters" button and active filter chips
+ * - Filter sheet for Language, Min Stars, and Recency filtering
  * - Sub-header results counter ("1–12 OF 3,120") and "Clear all"
  * - Repository cards and "Load more" pagination button
  * - Skeleton loading and empty state with "Clear search" action
  */
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     onRepositoryClick: (RepositoryItem) -> Unit,
@@ -79,14 +89,17 @@ fun SearchScreen(
     val uiState by viewModel.uiState.collectAsState()
     val query by viewModel.query.collectAsState()
     val selectedSort by viewModel.selectedSort.collectAsState()
+    val filter by viewModel.filter.collectAsState()
 
     SearchScreen(
         uiState = uiState,
         query = query,
         selectedSort = selectedSort,
+        filter = filter,
         onQueryChanged = viewModel::onQueryChanged,
         onSearch = { viewModel.searchRepositories(query) },
         onSortSelected = viewModel::onSortChanged,
+        onFilterChanged = viewModel::onFilterChanged,
         onLoadNextPage = viewModel::loadNextPage,
         onClearQuery = viewModel::clearQuery,
         onClearAll = {
@@ -99,14 +112,17 @@ fun SearchScreen(
     )
 }
 
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 internal fun SearchScreen(
     uiState: SearchUiState,
     query: String,
     selectedSort: SearchSort = SearchSort.BEST_MATCH,
+    filter: SearchFilter = SearchFilter(),
     onQueryChanged: (String) -> Unit,
     onSearch: () -> Unit,
     onSortSelected: (SearchSort) -> Unit = {},
+    onFilterChanged: (SearchFilter) -> Unit = {},
     onLoadNextPage: () -> Unit = {},
     onClearQuery: () -> Unit,
     onClearAll: () -> Unit = onClearQuery,
@@ -115,6 +131,7 @@ internal fun SearchScreen(
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
+    var showFilterSheet by rememberSaveable { mutableStateOf(false) }
 
     val headerBgColor = AppNavy
     val searchBoxBgColor = AppWhite
@@ -215,11 +232,19 @@ internal fun SearchScreen(
                 }
             }
 
-            // Sort Tabs directly under search field on results screen (mockup 03b)
-            if (uiState is SearchUiState.Success) {
+            // Sort Tabs & Filter Bar always visible below search box
+            if (query.isNotEmpty()) {
                 SortTabs(
                     selectedSort = selectedSort,
                     onSortSelected = onSortSelected
+                )
+
+                FilterBar(
+                    filter = filter,
+                    onOpenFilterSheet = { showFilterSheet = true },
+                    onRemoveLanguage = { onFilterChanged(filter.copy(language = null)) },
+                    onRemoveMinStars = { onFilterChanged(filter.copy(minStars = null)) },
+                    onRemoveUpdatedPeriod = { onFilterChanged(filter.copy(updatedPeriod = "any", updatedAfter = null)) }
                 )
             }
 
@@ -326,6 +351,14 @@ internal fun SearchScreen(
                 }
             }
         }
+    }
+
+    if (showFilterSheet) {
+        FilterBottomSheet(
+            initialFilter = filter,
+            onApplyFilter = onFilterChanged,
+            onDismiss = { showFilterSheet = false }
+        )
     }
 }
 

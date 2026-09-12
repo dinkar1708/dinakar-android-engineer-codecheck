@@ -41,6 +41,10 @@ val MonogramSlateText = Slate600
 // Interaction states
 val HoverTint = Slate900.copy(alpha = 0.04f)
 val ButtonHoverBlue = Color(0xFF2E3EB8) // Blue darkened one step
+val SelectedBlueBg = AppBlue.copy(alpha = 0.09f) // Selected/active state background (9%)
+
+// Modal & overlay states
+val ScrimOverlay = AppNavy.copy(alpha = 0.60f) // Bottom sheet scrim (60%)
 
 // ═══════════════════════════════════════════════════════════════════
 // DARK THEME SPECIFICATION

@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.yumemi.android.codecheck.core.domain.model.SearchFilter
 import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
 import jp.co.yumemi.android.codecheck.core.domain.usecase.SearchRepositoriesUseCase
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +31,7 @@ class SearchViewModel @Inject constructor(
 
     companion object {
         private const val KEY_LAST_QUERY = "last_search_query"
-        private const val DEBOUNCE_MILLIS = 400L
+        private const val DEBOUNCE_MILLIS = 500L
     }
 
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Idle)
@@ -153,6 +154,9 @@ class SearchViewModel @Inject constructor(
                     hasNextPage = result.hasNextPage,
                     isLoadingMore = false
                 )
+            } catch (e: CancellationException) {
+                // Ignore cancellation - this is expected when user navigates away or changes query
+                throw e
             } catch (throwable: Throwable) {
                 _uiState.value = currentState.copy(isLoadingMore = false)
             }
@@ -206,6 +210,10 @@ class SearchViewModel @Inject constructor(
                         isLoadingMore = false
                     )
                 }
+            } catch (e: CancellationException) {
+                // Ignore cancellation - this is expected during debouncing when user types quickly
+                // The job was cancelled by a newer search request, so don't show error
+                throw e
             } catch (throwable: Throwable) {
                 _uiState.value = SearchUiState.Error(
                     message = throwable.message ?: "An unexpected error occurred. Please try again."

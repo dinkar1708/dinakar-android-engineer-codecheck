@@ -22,7 +22,13 @@ class DefaultGitHubRepositoryTest {
         var throwOnSearch: Throwable? = null
         var throwOnDetail: Throwable? = null
 
-        override suspend fun searchRepositories(query: String): SearchResponseDto {
+        override suspend fun searchRepositories(
+            query: String,
+            page: Int,
+            perPage: Int,
+            sort: String?,
+            order: String?
+        ): SearchResponseDto {
             searchCallCount++
             throwOnSearch?.let { throw it }
             return searchResponse
@@ -68,9 +74,9 @@ class DefaultGitHubRepositoryTest {
         // First search call
         val result1 = repository.searchRepositories("kotlin")
         assertEquals(1, fakeApi.searchCallCount)
-        assertEquals(1, result1.size)
-        assertEquals("owner/repo", result1[0].name)
-        assertEquals("Kotlin", result1[0].language)
+        assertEquals(1, result1.items.size)
+        assertEquals("owner/repo", result1.items[0].name)
+        assertEquals("Kotlin", result1.items[0].language)
 
         // Second search call with same query (should hit in-memory cache)
         val result2 = repository.searchRepositories("kotlin")

@@ -1,6 +1,8 @@
 package jp.co.yumemi.android.codecheck.core.domain.usecase
 
-import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchFilter
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchResult
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
 import jp.co.yumemi.android.codecheck.core.domain.repository.GitHubRepository
 
 /**
@@ -11,16 +13,29 @@ class SearchRepositoriesUseCase(
     private val repository: GitHubRepository
 ) {
     /**
-     * Executes repository search.
+     * Executes paginated repository search.
      *
      * @param query Search keyword entered by the user
-     * @return List of matching [RepositoryItem], or empty list if query is blank
+     * @param page Page number (1-indexed)
+     * @param sort Sort ordering ([SearchSort])
+     * @param filter Filter criteria ([SearchFilter])
+     * @return Paginated [SearchResult]
      */
-    suspend operator fun invoke(query: String): List<RepositoryItem> {
+    suspend operator fun invoke(
+        query: String,
+        page: Int = 1,
+        sort: SearchSort = SearchSort.BEST_MATCH,
+        filter: SearchFilter = SearchFilter()
+    ): SearchResult {
         val trimmed = query.trim()
         if (trimmed.isBlank()) {
-            return emptyList()
+            return SearchResult(emptyList(), 0, false)
         }
-        return repository.searchRepositories(trimmed)
+        return repository.searchRepositories(
+            query = trimmed,
+            page = page,
+            sort = sort,
+            filter = filter
+        )
     }
 }

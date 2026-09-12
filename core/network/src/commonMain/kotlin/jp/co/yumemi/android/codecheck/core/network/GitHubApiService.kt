@@ -23,9 +23,15 @@ import kotlinx.serialization.json.Json
 interface GitHubApiService {
 
     /**
-     * Search repositories by keyword query.
+     * Search repositories by keyword query with pagination, sorting, and ordering.
      */
-    suspend fun searchRepositories(query: String): SearchResponseDto
+    suspend fun searchRepositories(
+        query: String,
+        page: Int = 1,
+        perPage: Int = 30,
+        sort: String? = null,
+        order: String? = null
+    ): SearchResponseDto
 
     /**
      * Fetch detailed repository metadata.
@@ -42,13 +48,23 @@ class GitHubApiServiceImpl(
 
     constructor() : this(createDefaultHttpClient())
 
-    override suspend fun searchRepositories(query: String): SearchResponseDto {
+    override suspend fun searchRepositories(
+        query: String,
+        page: Int,
+        perPage: Int,
+        sort: String?,
+        order: String?
+    ): SearchResponseDto {
         return safeApiCall {
             val endpoint = "$BASE_URL/search/repositories"
-            println("[GitHubApi] --> GET $endpoint?q=$query")
+            println("[GitHubApi] --> GET $endpoint?q=$query&page=$page&sort=$sort&order=$order")
             val response: HttpResponse = client.get(endpoint) {
                 header("Accept", "application/vnd.github.v3+json")
                 parameter("q", query)
+                parameter("page", page)
+                parameter("per_page", perPage)
+                if (!sort.isNullOrBlank()) parameter("sort", sort)
+                if (!order.isNullOrBlank()) parameter("order", order)
             }
             println("[GitHubApi] <-- ${response.status.value} ${response.status.description} (${response.call.request.url})")
             handleHttpResponse(response)

@@ -14,7 +14,12 @@ sealed interface SearchUiState {
     data object Loading : SearchUiState
 
     /** Successfully retrieved non-empty list of repositories */
-    data class Success(val repositories: List<RepositoryItem>) : SearchUiState
+    data class Success(
+        val repositories: List<RepositoryItem>,
+        val totalCount: Int = repositories.size,
+        val hasNextPage: Boolean = false,
+        val isLoadingMore: Boolean = false
+    ) : SearchUiState
 
     /** Search completed but returned zero results */
     data object Empty : SearchUiState

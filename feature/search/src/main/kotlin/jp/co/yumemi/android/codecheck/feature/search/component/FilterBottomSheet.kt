@@ -80,11 +80,12 @@ fun FilterBottomSheet(
         onActionClick = { draftFilter = SearchFilter() },
         modifier = modifier
     ) {
-        // Body Sections
-        Column(
+        Column(modifier = Modifier.fillMaxWidth()) {
+            // Body Sections
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(20.dp),
+                    .padding(horizontal = 20.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 // Section 1: Language
@@ -183,41 +184,46 @@ fun FilterBottomSheet(
                         }
                     }
                 }
+            }
 
-                // Bottom Action: Apply Button
-                Column(
-                    modifier = Modifier.fillMaxWidth()
+            // Bottom Action: Apply Button
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                HorizontalDivider(thickness = 1.dp, color = Slate200)
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Surface(
+                    onClick = {
+                        onApplyFilter(draftFilter)
+                        onDismiss()
+                    },
+                    shape = RoundedCornerShape(4.dp),
+                    color = AppBlue,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
                 ) {
-                    HorizontalDivider(thickness = 1.dp, color = Slate200)
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    Surface(
-                        onClick = {
-                            onApplyFilter(draftFilter)
-                            onDismiss()
-                        },
-                        shape = RoundedCornerShape(4.dp),
-                        color = AppBlue,
-                        modifier = Modifier.fillMaxWidth()
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp, vertical = 14.dp),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 14.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = "Show repositories",
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = AppWhite
-                            )
-                        }
+                        Text(
+                            text = "Show repositories",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = AppWhite
+                        )
                     }
                 }
+
+                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }
+}
 
 @Composable
 private fun FilterPill(

@@ -96,8 +96,8 @@ class SearchViewModelTest {
         assertEquals("android", viewModel.query.value)
         assertEquals("android", savedStateHandle.get<String>("last_search_query"))
 
-        // Advance debounce time
-        advanceTimeBy(450L)
+        // Advance debounce time (past 500ms delay)
+        advanceTimeBy(600L)
 
         val currentState = viewModel.uiState.value
         assertTrue(currentState is SearchUiState.Success)

@@ -7,7 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 
 /**
  * Ambient background concentric circles drawn in the corners of the splash canvas
@@ -33,5 +35,13 @@ fun SplashBackground(
             center = Offset(x = size.width + 80.dp.toPx(), y = size.height + 75.dp.toPx()),
             style = Stroke(width = 1.dp.toPx())
         )
+    }
+}
+
+@Preview(name = "Splash Background", showBackground = true, backgroundColor = 0xFF2D3545, widthDp = 412, heightDp = 892)
+@Composable
+private fun SplashBackgroundPreview() {
+    CodeCheckTheme {
+        SplashBackground()
     }
 }

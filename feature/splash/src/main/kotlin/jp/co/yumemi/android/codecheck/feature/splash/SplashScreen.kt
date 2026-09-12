@@ -22,6 +22,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.res.stringResource
+import jp.co.yumemi.android.codecheck.feature.splash.R
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -233,7 +235,7 @@ fun SplashScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Repository Search",
+                    text = stringResource(R.string.splash_title),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
@@ -242,7 +244,7 @@ fun SplashScreen(
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "Find any repo on GitHub",
+                    text = stringResource(R.string.splash_subtitle),
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Normal,
                     color = Color(0xFFA9B4C4),

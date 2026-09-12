@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import jp.co.yumemi.android.codecheck.feature.splash.R
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,7 +59,7 @@ fun SplashFooter(
         Spacer(modifier = Modifier.height(18.dp))
 
         Text(
-            text = "GITHUB REST API V3",
+            text = stringResource(R.string.splash_api_label),
             fontSize = 11.sp,
             fontWeight = FontWeight.Medium,
             letterSpacing = 0.5.sp,

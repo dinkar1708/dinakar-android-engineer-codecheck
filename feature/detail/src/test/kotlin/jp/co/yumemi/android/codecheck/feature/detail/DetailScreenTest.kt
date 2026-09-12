@@ -84,4 +84,19 @@ class DetailScreenTest {
         backButton.assertIsDisplayed().performClick()
         assertTrue(backClicked)
     }
+
+    @Test
+    @Config(qualifiers = "ja")
+    fun detailScreen_japaneseLocale_displaysJapaneseStrings() {
+        composeTestRule.setContent {
+            DetailScreen(
+                uiState = DetailUiState.Loading,
+                onBackClick = {},
+                onRetry = {}
+            )
+        }
+
+        composeTestRule.onNodeWithText("リポジトリ詳細").assertIsDisplayed()
+        composeTestRule.onNodeWithText("リポジトリ詳細を読み込み中…").assertIsDisplayed()
+    }
 }

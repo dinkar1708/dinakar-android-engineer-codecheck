@@ -40,6 +40,21 @@ class SplashScreenTest {
     }
 
     @Test
+    @Config(qualifiers = "ja")
+    fun splashScreen_japaneseLocale_displaysJapaneseStrings() {
+        composeTestRule.setContent {
+            SplashScreen(
+                onSplashFinished = {}
+            )
+        }
+
+        composeTestRule.onNodeWithTag("SplashScreenRoot").assertIsDisplayed()
+        composeTestRule.onNodeWithText("リポジトリ検索").assertIsDisplayed()
+        composeTestRule.onNodeWithText("GitHub 上のリポジトリを検索").assertIsDisplayed()
+        composeTestRule.onNodeWithText("GITHUB REST API V3").assertIsDisplayed()
+    }
+
+    @Test
     fun splashScreen_invokesFinishedCallback_whenDurationElapsed() {
         var callbackInvoked = false
 

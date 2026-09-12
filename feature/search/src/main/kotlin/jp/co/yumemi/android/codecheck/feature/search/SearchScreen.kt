@@ -41,6 +41,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
@@ -53,8 +54,9 @@ import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate900
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.core.ui.component.EmptyView
 import jp.co.yumemi.android.codecheck.core.ui.component.ErrorView
-import androidx.compose.ui.unit.em
 import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
+import androidx.compose.ui.res.stringResource
+import jp.co.yumemi.android.codecheck.feature.search.R
 import jp.co.yumemi.android.codecheck.feature.search.component.LoadMoreButton
 import jp.co.yumemi.android.codecheck.feature.search.component.RepositoryCard
 import jp.co.yumemi.android.codecheck.feature.search.component.RepositoryCardSkeleton
@@ -138,11 +140,12 @@ internal fun SearchScreen(
     val searchBoxBorderColor = Slate200
     val searchIconColor = AppBlue
     val searchTextColor = Slate900
+    val screenTitle = stringResource(R.string.search_screen_title)
 
     Scaffold(
         modifier = modifier
             .fillMaxSize()
-            .semantics { contentDescription = "GitHub Repository Search" },
+            .semantics { contentDescription = screenTitle },
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
@@ -171,7 +174,7 @@ internal fun SearchScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Submit search",
+                            contentDescription = stringResource(R.string.search_submit_content_description),
                             modifier = Modifier
                                 .size(20.dp)
                                 .clickable {
@@ -204,7 +207,7 @@ internal fun SearchScreen(
                             decorationBox = { innerTextField ->
                                 if (query.isEmpty()) {
                                     Text(
-                                        text = "Search repositories...",
+                                        text = stringResource(R.string.search_input_placeholder),
                                         style = MaterialTheme.typography.bodyLarge.copy(
                                             fontSize = 15.sp
                                         ),
@@ -222,7 +225,7 @@ internal fun SearchScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Clear,
-                                    contentDescription = "Clear search",
+                                    contentDescription = stringResource(R.string.search_clear_content_description),
                                     modifier = Modifier.size(18.dp),
                                     tint = Slate500
                                 )
@@ -257,8 +260,8 @@ internal fun SearchScreen(
                 when (val state = uiState) {
                     is SearchUiState.Idle -> {
                         EmptyView(
-                            title = "Search GitHub Repositories",
-                            description = "Type a search query above and press Enter."
+                            title = stringResource(R.string.search_idle_title),
+                            description = stringResource(R.string.search_idle_description)
                         )
                     }
 
@@ -277,9 +280,9 @@ internal fun SearchScreen(
 
                     is SearchUiState.Empty -> {
                         EmptyView(
-                            title = "No repositories found",
-                            description = "No results for “$query”. Check the spelling or search a shorter term.",
-                            actionLabel = "Clear search",
+                            title = stringResource(R.string.search_empty_title),
+                            description = stringResource(R.string.search_empty_description, query),
+                            actionLabel = stringResource(R.string.search_clear_search),
                             onActionClick = onClearQuery
                         )
                     }
@@ -303,7 +306,7 @@ internal fun SearchScreen(
                             ) {
                                 val totalFormatted = NumberFormat.getNumberInstance(Locale.US).format(state.totalCount)
                                 Text(
-                                    text = "1–${state.repositories.size} OF $totalFormatted",
+                                    text = stringResource(R.string.search_results_counter, 1, state.repositories.size, totalFormatted),
                                     fontSize = 11.sp,
                                     fontWeight = FontWeight.Bold,
                                     letterSpacing = 0.05.em,
@@ -311,7 +314,7 @@ internal fun SearchScreen(
                                 )
 
                                 Text(
-                                    text = "Clear all",
+                                    text = stringResource(R.string.search_clear_all),
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.SemiBold,
                                     color = AppBlue,

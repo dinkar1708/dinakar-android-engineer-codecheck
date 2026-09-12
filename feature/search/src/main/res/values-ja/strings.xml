@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Search Bar -->
+    <string name="search_screen_title">GitHub リポジトリ検索</string>
+    <string name="search_input_placeholder">リポジトリを検索…</string>
+    <string name="search_submit_content_description">検索を実行</string>
+    <string name="search_clear_content_description">検索をクリア</string>
+
+    <!-- State Views -->
+    <string name="search_idle_title">GitHub リポジトリを検索</string>
+    <string name="search_idle_description">キーワードを入力して検索してください。</string>
+    <string name="search_empty_title">リポジトリが見つかりませんでした</string>
+    <string name="search_empty_description">“%1$s” に一致するリポジトリは見つかりませんでした。スペルを確認するか、短いキーワードをお試しください。</string>
+    <string name="search_clear_search">検索をクリア</string>
+
+    <!-- Results List & Counter -->
+    <string name="search_results_counter">%1$d–%2$d OF %3$s</string>
+    <string name="search_clear_all">すべてクリア</string>
+    <string name="search_load_more">さらに読み込む</string>
+    <string name="search_forks_suffix">%1$s フォーク</string>
+    <string name="search_avatar_content_description">%1$s のアバター</string>
+
+    <!-- Sort Tabs -->
+    <string name="search_sort_best_match">関連度順</string>
+    <string name="search_sort_most_stars">スター数順</string>
+    <string name="search_sort_most_forks">フォーク数順</string>
+
+    <!-- Filter Bar & Sheet -->
+    <string name="search_filter_button">絞り込み</string>
+    <string name="search_filter_title">絞り込み</string>
+    <string name="search_filter_reset">リセット</string>
+    <string name="search_filter_section_language">言語</string>
+    <string name="search_filter_section_min_stars">最小スター数</string>
+    <string name="search_filter_section_last_updated">最終更新</string>
+    <string name="search_filter_stars_any">指定なし</string>
+    <string name="search_filter_stars_suffix">%1$d+ スター</string>
+    <string name="search_filter_stars_k_suffix">%1$dK+ スター</string>
+    <string name="search_filter_period_any_time">いつでも</string>
+    <string name="search_filter_period_this_year">今年</string>
+    <string name="search_filter_period_this_month">今月</string>
+    <string name="search_filter_remove_content_description">%1$s フィルターを解除</string>
+    <string name="search_filter_show_results">検索結果を表示</string>
+</resources>

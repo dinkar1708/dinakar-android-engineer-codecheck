@@ -241,4 +241,24 @@ class SearchScreenTest {
         composeTestRule.onNodeWithText("Reset").assertIsDisplayed()
         composeTestRule.onNodeWithText("Show results").assertIsDisplayed()
     }
+
+    @Test
+    @Config(qualifiers = "ja")
+    fun searchScreen_japaneseLocale_displaysJapaneseStrings() {
+        composeTestRule.setContent {
+            SearchScreen(
+                uiState = SearchUiState.Idle,
+                query = "",
+                onQueryChanged = {},
+                onSearch = {},
+                onClearQuery = {},
+                onRetry = {},
+                onRepositoryClick = {}
+            )
+        }
+
+        composeTestRule.onNodeWithContentDescription("GitHub リポジトリ検索").assertIsDisplayed()
+        composeTestRule.onNodeWithText("GitHub リポジトリを検索").assertIsDisplayed()
+        composeTestRule.onNodeWithText("キーワードを入力して検索してください。").assertIsDisplayed()
+    }
 }

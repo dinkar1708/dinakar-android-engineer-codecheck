@@ -61,22 +61,22 @@ fun RepositoryCard(
                     stiffness = Spring.StiffnessLow
                 )
             ),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 2.dp,
-            pressedElevation = 4.dp,
-            hoveredElevation = 3.dp
+            defaultElevation = 1.dp,
+            pressedElevation = 2.dp,
+            hoveredElevation = 1.dp
         )
     ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
                 // Avatar with subtle shadow - 48dp follows Material 3 list item specs
                 Surface(
                     modifier = Modifier.size(48.dp),

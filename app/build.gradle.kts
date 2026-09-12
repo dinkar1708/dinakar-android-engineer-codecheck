@@ -10,8 +10,29 @@ android {
         applicationId = "jp.co.yumemi.android.codecheck"
     }
 
+    flavorDimensions += "environment"
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            buildConfigField("String", "FLAVOR_MODE", "\"dev\"")
+        }
+        create("mock") {
+            dimension = "environment"
+            applicationIdSuffix = ".mock"
+            versionNameSuffix = "-mock"
+            buildConfigField("String", "FLAVOR_MODE", "\"mock\"")
+        }
+        create("prod") {
+            dimension = "environment"
+            buildConfigField("String", "FLAVOR_MODE", "\"prod\"")
+        }
+    }
+
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     packaging {

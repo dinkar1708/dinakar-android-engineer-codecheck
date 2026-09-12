@@ -19,4 +19,15 @@ object DataModule {
     ): GitHubRepository {
         return DefaultGitHubRepository(apiService = apiService)
     }
+
+    /**
+     * Provide a 100% offline [MockGitHubRepository].
+     */
+    fun provideMockGitHubRepository(
+        simulatedDelayMs: Long = 300L
+    ): GitHubRepository {
+        return jp.co.yumemi.android.codecheck.core.data.repository.MockGitHubRepository(
+            simulatedDelayMs = simulatedDelayMs
+        )
+    }
 }

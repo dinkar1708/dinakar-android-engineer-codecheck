@@ -9,22 +9,27 @@ Android GitHub repository search application with modern architecture and best p
 ## 🚀 Quick Start
 
 ```bash
-# Build debug APK
+# Build Android debug APK
 ./gradlew clean assembleDebug
 
-# Run tests
+# Run Android unit tests
 ./gradlew test
 
 # Run test coverage report
 ./gradlew koverHtmlReport
+
+# Build KMP iOS framework & open native SwiftUI companion app
+./gradlew :shared-core:linkDebugFrameworkIosSimulatorArm64
+open iosApp/CodeCheck-iOS.xcodeproj
 ```
 
-**Prerequisites:** JDK 17+, Android Studio Iguana+, Gradle 8.5
+**Prerequisites:** JDK 17+, Android Studio Iguana+, Gradle 8.5 | Xcode 15+ (for iOS companion)
 
 - **Test Suite:** 81 automated unit/UI tests + on-device E2E tests covering domain use cases/models (`:core:domain`), data cache/repositories (`:core:data`), Ktor network API/mappers (`:core:network`), presentation ViewModels, Compose screens/components (`:core:ui`, `:feature:search`, `:feature:detail`), and app navigation/DI (`:app`).
+- **iOS Test Suite:** Automated Swift Testing unit tests (`iosApp/CodeCheck-iOSTests`) verifying KMP SharedCore interop.
 - **Code Coverage:** 81.0% repository-wide line coverage via Kotlinx Kover (100% `:core:domain`, 94.9% `:core:ui`, 89.6% `:core:data`, 89.1% `:feature:search`, 89.1% `:feature:detail`, 68.9% `:core:network`, 25.3% `:app`).
 
-📖 **Full guide:** See [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md)
+📖 **Full guide:** See [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md) | [iosApp/README.md](./iosApp/README.md)
 
 ---
 
@@ -33,6 +38,7 @@ Android GitHub repository search application with modern architecture and best p
 - **[Start Here](./docs/00_START_HERE.md)** ⭐ - Solution overview and reviewer navigation
 - **[Getting Started](./docs/GETTING_STARTED.md)** - Build, run, and prerequisite instructions
 - **[Architecture Overview](./docs/ARCHITECTURE_OVERVIEW.md)** - System design and technology choices
+- **[iOS Companion App Guide](./iosApp/README.md)** 🍏 - Native SwiftUI companion powered by KMP
 - **[Issues Summary](./docs/03_sprint_execution/03_issues_summary.md)** - Breakdown and roadmap for all 9 Yumemi issues
 - **[Contributing Guidelines](./CONTRIBUTING.md)** - Branch naming, commit conventions, and workflow
 - **[Agent Guidelines & Context](./GEMINI.md)** 🤖 - AI pairing rules, guardrails, and architectural directives
@@ -63,11 +69,28 @@ Android GitHub repository search application with modern architecture and best p
 
 ## 🏗️ Architecture
 
-- **Pattern:** Clean Architecture + MVVM + UDF
-- **UI:** Jetpack Compose + Material 3
-- **DI:** Hilt
-- **Network:** Ktor HTTP Client
-- **Modules:** Multi-module architecture (feature + core modules)
+- **Pattern:** Clean Architecture + MVVM + UDF (Unidirectional Data Flow)
+- **UI:** Jetpack Compose + Material 3 (Android) | SwiftUI (iOS Companion)
+- **DI:** Hilt (`:app`) | Kotlin Multiplatform Facade (`:shared-core` for iOS)
+- **Network:** Ktor HTTP Client with Darwin (iOS) & OkHttp (Android) engines
+- **Cross-Platform:** Kotlin Multiplatform (KMP) sharing `:core:domain`, `:core:network`, and `:core:data` as an Apple native binary (`shared_core.framework`)
+- **Modules:** Multi-module Clean Architecture (`:core:*`, `:feature:*`, `:app`, `:shared-core`)
+
+---
+
+## 🍏 Native iOS Companion App (Kotlin Multiplatform)
+
+> [!NOTE]
+> **Technical Demonstration Only — Not a Full iOS Application**  
+> The iOS companion app (`iosApp/CodeCheck-iOS.xcodeproj`) is strictly a **lightweight technical demonstration** designed to prove that our Kotlin domain, networking, and caching logic (`:shared-core`) compiles into Apple native binaries and runs seamlessly inside a native SwiftUI frontend. It intentionally focuses on a clean search list with console logging to showcase KMP interop without superfluous mobile UI complexity.
+
+- **100% Shared Business Logic:** Repository contracts, use cases, Ktor network engine, caching, and offline datasets are shared from `:shared-core`.
+- **First-Class Swift Concurrency:** Kotlin `suspend` functions bridge automatically into Swift `async`/`await` (`try await repository.searchRepositories(query: trimmed)`).
+- **Design System Parity:** Native SwiftUI views implement the exact same color palette (`ColorTheme.swift`) as Android Material 3 (`:core:designsystem`).
+- **Flavor Switching:** Xcode schemes support 4 configurations: **Mock** (100% offline, zero rate limits), **Dev**, **Stg**, and **Prod** (Live GitHub REST API).
+- **Automated Native Tests:** Native Swift Testing suite (`CodeCheck-iOSTests`) tests KMP repository interop directly.
+
+See the **[iOS Companion App Guide](./iosApp/README.md)** for complete details and Xcode build instructions.
 
 ---
 
@@ -86,12 +109,14 @@ In alignment with the [Yumemi Code Challenge AI policy](https://github.com/yumem
 ### Implemented
 - GitHub repository search
 - Repository detail view
-- Multi-Module Clean Architecture (`:core:*`, `:feature:*`, `:app`)
-- Jetpack Compose UI (Baseline functional UI)
+- Multi-Module Clean Architecture (`:core:*`, `:feature:*`, `:app`, `:shared-core`)
+- Jetpack Compose UI (Material 3 with custom brand tokens)
 - Hilt Dependency Injection
 - Unidirectional Data Flow (UDF) with StateFlow
 - KMP Ktor Network Client with HTTP Logging
 - Query in-memory caching and resilient error handling
+- 100% Offline Mock Flavor (`mock` vs `prod`) & deterministic fixtures
+- **Native iOS SwiftUI Companion App (`CodeCheck-iOS`) consuming KMP SharedCore**
 
 ### Planned
 - Comprehensive unit and integration testing (Issue #9)

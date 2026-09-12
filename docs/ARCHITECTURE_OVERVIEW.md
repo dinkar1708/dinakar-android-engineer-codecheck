@@ -83,6 +83,7 @@ Rather than a big-bang rewrite, the architecture evolves incrementally across PR
 | Jetpack Compose | UI framework |
 | Hilt | Dependency injection |
 | Ktor | HTTP client |
+| Kotlin Multiplatform (KMP) | Headless logic sharing (`:shared-core`) with native iOS SwiftUI app |
 | Detekt | Static analysis |
 
 ---
@@ -96,6 +97,17 @@ Each change:
 - ✅ Addresses specific issues
 - ✅ Maintains working state
 - ✅ Adds value incrementally
+
+---
+
+## Kotlin Multiplatform & Native iOS Companion Demonstration
+
+The architecture includes a headless KMP core (`:shared-core`) that packages domain models, repository contracts, Ktor networking, and query caching as a universal Apple native binary (`shared_core.framework`).
+
+A companion **native SwiftUI iOS application** (`iosApp/CodeCheck-iOS.xcodeproj`) is included in `iosApp/`:
+- **Role**: *Architectural demonstration only* (not a full-fledged iOS product) showcasing cross-platform logic reuse from Kotlin Multiplatform.
+- **Features**: Single search list screen with instant query clearing, 4 flavor schemes (`mock`, `dev`, `stg`, `prod`), and design token parity (`ColorTheme.swift`) matching Android `:core:designsystem`.
+- **Reference**: See [`iosApp/README.md`](../iosApp/README.md) for full architectural documentation, Xcode setup, and build instructions.
 
 ---
 

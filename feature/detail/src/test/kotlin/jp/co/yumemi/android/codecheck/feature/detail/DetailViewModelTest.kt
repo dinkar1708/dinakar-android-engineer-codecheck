@@ -7,6 +7,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import jp.co.yumemi.android.codecheck.core.domain.model.Owner
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
+import jp.co.yumemi.android.codecheck.core.domain.repository.BookmarkRepository
 import jp.co.yumemi.android.codecheck.core.domain.usecase.GetRepositoryDetailsUseCase
 import jp.co.yumemi.android.codecheck.feature.detail.util.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,6 +25,7 @@ class DetailViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val getRepositoryDetailsUseCase: GetRepositoryDetailsUseCase = mockk()
+    private val bookmarkRepository: BookmarkRepository = mockk(relaxed = true)
 
     private val fakeRepoItem = RepositoryItem(
         name = "android/compose-samples",
@@ -42,7 +44,7 @@ class DetailViewModelTest {
         coEvery { getRepositoryDetailsUseCase("android", "compose-samples") } returns fakeRepoItem
 
         val savedStateHandle = SavedStateHandle(mapOf("owner" to "android", "repo" to "compose-samples"))
-        val viewModel = DetailViewModel(getRepositoryDetailsUseCase, savedStateHandle)
+        val viewModel = DetailViewModel(getRepositoryDetailsUseCase, bookmarkRepository, savedStateHandle)
 
         viewModel.uiState.test {
             val item = awaitItem()
@@ -56,7 +58,7 @@ class DetailViewModelTest {
     @Test
     fun initialUiState_whenNoSavedState_remainsLoading() = runTest {
         val savedStateHandle = SavedStateHandle()
-        val viewModel = DetailViewModel(getRepositoryDetailsUseCase, savedStateHandle)
+        val viewModel = DetailViewModel(getRepositoryDetailsUseCase, bookmarkRepository, savedStateHandle)
 
         viewModel.uiState.test {
             assertEquals(DetailUiState.Loading, awaitItem())
@@ -70,7 +72,7 @@ class DetailViewModelTest {
         coEvery { getRepositoryDetailsUseCase("JetBrains", "kotlin") } returns fakeRepoItem
 
         val savedStateHandle = SavedStateHandle()
-        val viewModel = DetailViewModel(getRepositoryDetailsUseCase, savedStateHandle)
+        val viewModel = DetailViewModel(getRepositoryDetailsUseCase, bookmarkRepository, savedStateHandle)
 
         viewModel.uiState.test {
             assertEquals(DetailUiState.Loading, awaitItem())
@@ -90,7 +92,7 @@ class DetailViewModelTest {
         coEvery { getRepositoryDetailsUseCase("owner", "error_repo") } throws IOException("Repository not found")
 
         val savedStateHandle = SavedStateHandle()
-        val viewModel = DetailViewModel(getRepositoryDetailsUseCase, savedStateHandle)
+        val viewModel = DetailViewModel(getRepositoryDetailsUseCase, bookmarkRepository, savedStateHandle)
 
         viewModel.uiState.test {
             assertEquals(DetailUiState.Loading, awaitItem())
@@ -106,7 +108,7 @@ class DetailViewModelTest {
     @Test
     fun setRepository_directlySetsSuccessState() = runTest {
         val savedStateHandle = SavedStateHandle()
-        val viewModel = DetailViewModel(getRepositoryDetailsUseCase, savedStateHandle)
+        val viewModel = DetailViewModel(getRepositoryDetailsUseCase, bookmarkRepository, savedStateHandle)
 
         viewModel.setRepository(fakeRepoItem)
 
@@ -119,7 +121,7 @@ class DetailViewModelTest {
         coEvery { getRepositoryDetailsUseCase("android", "compose-samples") } returns fakeRepoItem
 
         val savedStateHandle = SavedStateHandle(mapOf("owner" to "android", "repo" to "compose-samples"))
-        val viewModel = DetailViewModel(getRepositoryDetailsUseCase, savedStateHandle)
+        val viewModel = DetailViewModel(getRepositoryDetailsUseCase, bookmarkRepository, savedStateHandle)
 
         viewModel.retry()
 
@@ -130,11 +132,23 @@ class DetailViewModelTest {
     @Test
     fun retry_whenOwnerOrRepoBlank_doesNothing() = runTest {
         val savedStateHandle = SavedStateHandle()
-        val viewModel = DetailViewModel(getRepositoryDetailsUseCase, savedStateHandle)
+        val viewModel = DetailViewModel(getRepositoryDetailsUseCase, bookmarkRepository, savedStateHandle)
 
         viewModel.retry()
 
         assertEquals(DetailUiState.Loading, viewModel.uiState.value)
         coVerify(exactly = 0) { getRepositoryDetailsUseCase(any(), any()) }
     }
+
+    @Test
+    fun toggleBookmark_whenSuccess_invokesBookmarkRepositoryToggle() = runTest {
+        val savedStateHandle = SavedStateHandle()
+        val viewModel = DetailViewModel(getRepositoryDetailsUseCase, bookmarkRepository, savedStateHandle)
+        viewModel.setRepository(fakeRepoItem)
+
+        viewModel.toggleBookmark()
+
+        coVerify(exactly = 1) { bookmarkRepository.toggleBookmark(fakeRepoItem) }
+    }
 }
+

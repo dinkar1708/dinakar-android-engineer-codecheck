@@ -19,6 +19,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -81,9 +83,12 @@ fun DetailScreen(
     viewModel: DetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val isBookmarked by viewModel.isBookmarked.collectAsState()
     DetailScreen(
         uiState = uiState,
+        isBookmarked = isBookmarked,
         onBackClick = onBackClick,
+        onToggleBookmark = viewModel::toggleBookmark,
         onRetry = viewModel::retry,
         modifier = modifier,
         onOpenBrowser = onOpenBrowser
@@ -94,7 +99,9 @@ fun DetailScreen(
 @Composable
 internal fun DetailScreen(
     uiState: DetailUiState,
+    isBookmarked: Boolean = false,
     onBackClick: () -> Unit,
+    onToggleBookmark: () -> Unit = {},
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
     onOpenBrowser: ((String) -> Unit)? = null
@@ -120,6 +127,21 @@ internal fun DetailScreen(
                             contentDescription = stringResource(R.string.detail_navigate_back),
                             tint = AppWhite
                         )
+                    }
+                },
+                actions = {
+                    if (uiState is DetailUiState.Success) {
+                        IconButton(onClick = onToggleBookmark) {
+                            Icon(
+                                imageVector = if (isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                                contentDescription = if (isBookmarked) {
+                                    stringResource(R.string.detail_remove_bookmark)
+                                } else {
+                                    stringResource(R.string.detail_add_bookmark)
+                                },
+                                tint = if (isBookmarked) AppAmber else AppWhite
+                            )
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

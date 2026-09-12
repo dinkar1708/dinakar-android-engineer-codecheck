@@ -56,19 +56,50 @@ The 4 flavors map directly to the promotion pipeline defined in [Contributing Gu
 
 ---
 
-## Dependency Injection Wiring (`RepositoryModule.kt`)
+## Dependency Injection Wiring (Zero `if/else` Flavor Source Sets)
 
+Rather than relying on runtime `if/else` checks, the project uses **Gradle Flavor Source Sets** (`src/mock`, `src/dev`, `src/stg`, `src/prod`) for pure compile-time DI binding with zero runtime overhead:
+
+```
+app/src/
+├── main/kotlin/.../di/
+│   └── UseCaseModule.kt            --> Provides flavor-agnostic Search & Detail UseCases
+├── mock/kotlin/.../di/
+│   └── RepositoryModule.kt         --> Provides MockGitHubRepository (100% offline)
+├── dev/kotlin/.../di/
+│   └── RepositoryModule.kt         --> Provides DefaultGitHubRepository (GitHub REST API)
+├── stg/kotlin/.../di/
+│   └── RepositoryModule.kt         --> Provides DefaultGitHubRepository (GitHub REST API)
+└── prod/kotlin/.../di/
+    └── RepositoryModule.kt         --> Provides DefaultGitHubRepository (GitHub REST API)
+```
+
+### Mock Flavor (`app/src/mock/.../RepositoryModule.kt`):
 ```kotlin
-@Provides
-@Singleton
-fun provideGitHubRepository(
-    defaultRepo: DefaultGitHubRepository,
-    mockRepo: MockGitHubRepository
-): GitHubRepository {
-    return if (BuildConfig.FLAVOR_MODE == "mock") {
-        mockRepo
-    } else {
-        defaultRepo
+@Module
+@InstallIn(SingletonComponent::class)
+object RepositoryModule {
+    @Provides
+    @Singleton
+    fun provideGitHubRepository(
+        @Suppress("UNUSED_PARAMETER") apiService: GitHubApiService
+    ): GitHubRepository {
+        return DataModule.provideMockGitHubRepository(simulatedDelayMs = 300L)
+    }
+}
+```
+
+### Live Flavors (`app/src/{dev,stg,prod}/.../RepositoryModule.kt`):
+```kotlin
+@Module
+@InstallIn(SingletonComponent::class)
+object RepositoryModule {
+    @Provides
+    @Singleton
+    fun provideGitHubRepository(
+        apiService: GitHubApiService
+    ): GitHubRepository {
+        return DataModule.provideGitHubRepository(apiService = apiService)
     }
 }
 ```

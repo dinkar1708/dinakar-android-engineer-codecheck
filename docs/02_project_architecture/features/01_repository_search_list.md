@@ -96,3 +96,229 @@ class SearchViewModel @Inject constructor(
 }
 ```
 - Rotating device from Portrait to Landscape or OS process recreation restores query state without reloading.
+
+---
+
+## 5. Pagination Strategy: Load More Button
+
+### Decision: Manual Load More vs. Infinite Scroll
+
+We implemented **manual "Load More" button pagination** instead of automatic infinite scroll for the following reasons:
+
+#### Why Load More Button:
+
+1. **Aligns with GitHub's UX Pattern**
+   - GitHub's own search results use explicit "Load more" interaction
+   - Maintains consistency with the platform being searched
+   - Users familiar with GitHub will recognize this pattern
+
+2. **Intentional Search Behavior**
+   - Repository search is a deliberate, evaluative task (not casual browsing)
+   - Users need to review and compare results carefully
+   - Manual control allows users to pause and analyze findings
+
+3. **API Rate Limit Protection**
+   - GitHub API enforces strict rate limits (5,000 requests/hour authenticated, 60/hour unauthenticated)
+   - Automatic scroll could trigger excessive API calls during fast scrolling
+   - Manual button prevents accidental exhaustion of rate limits
+
+4. **Performance & Network Efficiency**
+   - User controls when to initiate network requests
+   - Beneficial for slow or metered connections
+   - Prevents background loading when user isn't interested in more results
+
+5. **Accessibility & User Control**
+   - Screen readers can announce and interact with the button clearly
+   - Users with motor disabilities have predictable interaction target
+   - No unexpected navigation or loading during assistive technology use
+
+6. **Footer Reachability**
+   - If app has footer content or pagination info, it remains accessible
+   - Infinite scroll often makes bottom UI elements unreachable
+
+#### Implementation Details:
+
+```kotlin
+// SearchUiState.kt
+data class Success(
+    val repositories: List<RepositoryItem>,
+    val totalCount: Int,
+    val hasNextPage: Boolean,      // Controls button visibility
+    val isLoadingMore: Boolean      // Controls button loading state
+) : SearchUiState
+```
+
+```kotlin
+// LoadMoreButton.kt
+@Composable
+fun LoadMoreButton(
+    isLoading: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier.clickable(enabled = !isLoading, onClick = onClick),
+        shape = RoundedCornerShape(4.dp),
+        color = AppWhite,
+        border = BorderStroke(1.dp, Slate300)
+    ) {
+        if (isLoading) {
+            CircularProgressIndicator(...)
+        } else {
+            Text("Load more")
+            Icon(Icons.Default.KeyboardArrowDown)
+        }
+    }
+}
+```
+
+**Result Counter Display:**
+- Shows cumulative loaded items: `"1–30 OF 3,120"`
+- After loading page 2: `"1–60 OF 3,120"`
+- Accurately represents all loaded items from first to current page
+
+---
+
+## 6. Search Debouncing & Query Management
+
+### Debounce Implementation:
+
+To prevent excessive API calls during fast typing, search queries are debounced with a **500ms delay**:
+
+```kotlin
+// SearchViewModel.kt
+init {
+    viewModelScope.launch {
+        _query
+            .debounce(500L)              // Wait 500ms after last keystroke
+            .distinctUntilChanged()      // Skip duplicate queries
+            .collect { debouncedQuery ->
+                if (debouncedQuery.isNotBlank()) {
+                    executeSearch(debouncedQuery, page = 1)
+                }
+            }
+    }
+}
+```
+
+### Cancellation Exception Handling:
+
+When users type quickly, older search requests are cancelled. We properly handle `CancellationException` to avoid showing error messages:
+
+```kotlin
+try {
+    val result = searchRepositoriesUseCase(query, page, sort, filter)
+    _uiState.value = SearchUiState.Success(...)
+} catch (e: CancellationException) {
+    // Rethrow - this is expected during debouncing
+    // Don't show "something went wrong" to user
+    throw e
+} catch (throwable: Throwable) {
+    // Only real errors shown to user
+    _uiState.value = SearchUiState.Error(throwable.message)
+}
+```
+
+**Why 500ms?**
+- 400ms felt too aggressive (triggered mid-typing)
+- 500ms provides good balance between responsiveness and API efficiency
+- Users perceive near-instant results while reducing unnecessary calls
+
+---
+
+## 7. Sorting & Filtering Features
+
+### Sort Tabs (Always Visible When Query Exists):
+
+Three sorting criteria matching GitHub's search API:
+
+```kotlin
+enum class SearchSort(val apiValue: String) {
+    BEST_MATCH(""),           // Default relevance ranking
+    MOST_STARS("stars"),      // Popularity-based
+    MOST_FORKS("forks")       // Community engagement
+}
+```
+
+**UI Design:**
+- Tab-style underline indicator for selected sort
+- Tabs visible below search box whenever query is not empty
+- Sort changes reset pagination (restart from page 1)
+
+### Filter Bar & Bottom Sheet:
+
+**Filter Bar:**
+- "Filters" button with sliders icon
+- Active filter chips with remove (×) actions
+- Filters button shows blue border when filters are active
+
+**Filter Bottom Sheet (Modal):**
+- **Language:** Rust, Kotlin, Python, Go, TypeScript, C++ (single selection)
+- **Minimum Stars:** Any, 100+, 500+, 1K+ (segment control)
+- **Last Updated:** Any time, This year, This month (segment control)
+
+**Design Decisions:**
+- Bottom sheet uses pure white background (`tonalElevation = 0.dp`)
+- No real-time repository count updates (avoids unnecessary API calls)
+- Static "Show repositories" button (applies filters on click)
+- Filter criteria sent as GitHub API query parameters
+
+```kotlin
+// Filter application example
+data class SearchFilter(
+    val language: String? = null,
+    val minStars: Int? = null,
+    val updatedPeriod: String = "any",
+    val updatedAfter: String? = null
+)
+
+// Converts to GitHub query string:
+// "kotlin stars:>1000 pushed:>2024-01-01"
+```
+
+### Visibility Logic:
+
+```kotlin
+// Sort tabs & filter bar always visible when user has typed query
+if (query.isNotEmpty()) {
+    SortTabs(selectedSort, onSortSelected)
+    FilterBar(filter, onOpenFilterSheet, ...)
+}
+```
+
+**Why Always Visible?**
+- Users can access filters during Loading, Error, Empty, and Success states
+- Prevents frustration when trying to refine zero-result searches
+- Allows filter adjustments before results fully load
+
+---
+
+## 8. Design System Colors
+
+### Theme Color Tokens (Eliminates Hardcoded Colors):
+
+All search UI components use centralized theme colors:
+
+```kotlin
+// Color.kt - Main palette
+val AppNavy = Color(0xFF2D3545)      // Header backgrounds
+val AppBlue = Color(0xFF3B50DF)      // Actions, links, focus
+val AppWhite = Color(0xFFFFFFFF)     // Card surfaces
+val Slate300 = Color(0xFFCBD5E1)     // Borders, drag handle
+val Slate500 = Color(0xFF64748B)     // Meta text, icons
+
+// Derived tints
+val SelectedBlueBg = AppBlue.copy(alpha = 0.09f)  // Active filter chips
+val ScrimOverlay = AppNavy.copy(alpha = 0.60f)    // Bottom sheet overlay
+```
+
+**Usage Examples:**
+- Search box background: `AppWhite`
+- Active filter chip: `SelectedBlueBg` with `AppBlue` border
+- Bottom sheet scrim: `ScrimOverlay`
+- "Load more" button border: `Slate300`
+
+**Design Consistency:**
+- All colors verified against design specification (100% match)
+- No hardcoded hex values in component files
+- Supports future dark mode implementation

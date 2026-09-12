@@ -42,6 +42,7 @@ fun ErrorView(
     message: String,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
+    title: String = stringResource(R.string.common_error_title),
     retryLabel: String = stringResource(R.string.common_retry)
 ) {
     val iconBgColor = Slate100
@@ -77,7 +78,7 @@ fun ErrorView(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "Oops! Something went wrong",
+                text = title,
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),

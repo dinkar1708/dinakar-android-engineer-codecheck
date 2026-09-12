@@ -49,4 +49,18 @@ class ErrorViewTest {
         composeTestRule.onNodeWithText("Try Again").performClick()
         assertTrue(retryTriggered)
     }
+
+    @Test
+    @Config(qualifiers = "ja")
+    fun errorView_japaneseLocale_displaysJapaneseStrings() {
+        composeTestRule.setContent {
+            ErrorView(
+                message = "通信エラー",
+                onRetry = {}
+            )
+        }
+
+        composeTestRule.onNodeWithText("エラーが発生しました").assertIsDisplayed()
+        composeTestRule.onNodeWithText("再試行").assertIsDisplayed()
+    }
 }

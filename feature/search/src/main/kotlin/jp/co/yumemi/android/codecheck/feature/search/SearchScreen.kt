@@ -41,6 +41,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
@@ -139,11 +140,12 @@ internal fun SearchScreen(
     val searchBoxBorderColor = Slate200
     val searchIconColor = AppBlue
     val searchTextColor = Slate900
+    val screenTitle = stringResource(R.string.search_screen_title)
 
     Scaffold(
         modifier = modifier
             .fillMaxSize()
-            .semantics { contentDescription = "GitHub Repository Search" },
+            .semantics { contentDescription = screenTitle },
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(

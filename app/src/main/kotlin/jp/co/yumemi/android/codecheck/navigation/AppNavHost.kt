@@ -11,10 +11,12 @@ import androidx.navigation.navArgument
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.feature.detail.DetailScreen
 import jp.co.yumemi.android.codecheck.feature.search.SearchScreen
+import jp.co.yumemi.android.codecheck.feature.splash.SplashScreen
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 sealed class Screen(val route: String) {
+    data object Splash : Screen("splash")
     data object Search : Screen("search")
     data object Detail : Screen("detail/{owner}/{repo}") {
         fun createRoute(owner: String, repo: String): String {
@@ -29,7 +31,7 @@ sealed class Screen(val route: String) {
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = Screen.Search.route,
+    startDestination: String = Screen.Splash.route,
     onOpenBrowser: ((String) -> Unit)? = null
 ) {
     NavHost(
@@ -37,6 +39,16 @@ fun AppNavHost(
         startDestination = startDestination,
         modifier = modifier
     ) {
+        composable(Screen.Splash.route) {
+            SplashScreen(
+                onSplashFinished = {
+                    navController.navigate(Screen.Search.route) {
+                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    }
+                }
+            )
+        }
+
         composable(Screen.Search.route) {
             SearchScreen(
                 onRepositoryClick = { item: RepositoryItem ->

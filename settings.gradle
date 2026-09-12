@@ -31,5 +31,6 @@ include ':core:designsystem'
 include ':core:ui'
 
 // Feature modules
+include ':feature:splash'
 include ':feature:search'
 include ':feature:detail'

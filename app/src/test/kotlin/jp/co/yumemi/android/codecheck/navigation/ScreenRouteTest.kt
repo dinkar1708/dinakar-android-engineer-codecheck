@@ -9,6 +9,11 @@ import org.junit.Test
 class ScreenRouteTest {
 
     @Test
+    fun screenSplash_routeIsConsistent() {
+        assertEquals("splash", Screen.Splash.route)
+    }
+
+    @Test
     fun screenSearch_routeIsConsistent() {
         assertEquals("search", Screen.Search.route)
     }

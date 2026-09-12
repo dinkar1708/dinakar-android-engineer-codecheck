@@ -79,6 +79,7 @@ All AI skills reference concrete locations in the codebase. When referencing or 
 | **Data Layer (Caching & Impl)** | [`core/data/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/data/repository/GitHubRepositoryImpl.kt`](../../core/data/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/data/repository/GitHubRepositoryImpl.kt) | `review-code`, `yumemi-issue-workflow` |
 | **Search Feature (UI & ViewModel)** | [`feature/search/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/search/`](../../feature/search/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/search/) | `review-code`, `yumemi-issue-workflow` |
 | **Detail Feature (UI & ViewModel)** | [`feature/detail/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/detail/`](../../feature/detail/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/detail/) | `review-code`, `yumemi-issue-workflow` |
+| **Design System & AI Workflow** | [`docs/02_project_architecture/design/ai_assisted_design_workflow.md`](../02_project_architecture/design/ai_assisted_design_workflow.md) | `review-code`, `yumemi-code-review` |
 | **Application Shell & DI** | [`app/src/main/kotlin/jp/co/yumemi/android/codecheck/`](../../app/src/main/kotlin/jp/co/yumemi/android/codecheck/) | `create-pr`, `review-code` |
 | **ADR Storage** | [`docs/02_project_architecture/adr/`](../02_project_architecture/adr/) | `create-adr`, `create-documentation` |
 | **Sprint & Issue Roadmap**| [`docs/03_sprint_execution/`](../03_sprint_execution/) | `yumemi-issue-workflow`, `create-documentation` |

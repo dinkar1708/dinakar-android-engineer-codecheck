@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Splash Screen -->
+    <string name="splash_title">Repository Search</string>
+    <string name="splash_subtitle">Find any repo on GitHub</string>
+    <string name="splash_api_label">GITHUB REST API V3</string>
+</resources>

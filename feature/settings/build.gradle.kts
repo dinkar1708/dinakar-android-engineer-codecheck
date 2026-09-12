@@ -6,6 +6,3 @@ android {
     namespace = "jp.co.yumemi.android.codecheck.feature.settings"
 }
 
-dependencies {
-    implementation(libs.androidx.compose.material.icons.extended)
-}

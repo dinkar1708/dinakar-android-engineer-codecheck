@@ -58,6 +58,7 @@ import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
 import androidx.compose.ui.res.stringResource
 import jp.co.yumemi.android.codecheck.feature.search.R
 import jp.co.yumemi.android.codecheck.feature.search.component.LoadMoreButton
+import jp.co.yumemi.android.codecheck.feature.search.component.RecentSearchesSection
 import jp.co.yumemi.android.codecheck.feature.search.component.RepositoryCard
 import jp.co.yumemi.android.codecheck.feature.search.component.RepositoryCardSkeleton
 import jp.co.yumemi.android.codecheck.feature.search.component.SortTabs
@@ -92,14 +93,21 @@ fun SearchScreen(
     val query by viewModel.query.collectAsState()
     val selectedSort by viewModel.selectedSort.collectAsState()
     val filter by viewModel.filter.collectAsState()
+    val searchHistory by viewModel.searchHistory.collectAsState()
 
     SearchScreen(
         uiState = uiState,
         query = query,
         selectedSort = selectedSort,
         filter = filter,
+        searchHistory = searchHistory,
         onQueryChanged = viewModel::onQueryChanged,
         onSearch = { viewModel.searchRepositories(query) },
+        onRecentQueryClick = { recentQuery ->
+            viewModel.onQueryChanged(recentQuery)
+            viewModel.searchRepositories(recentQuery)
+        },
+        onRemoveRecentQuery = viewModel::removeSearchHistory,
         onSortSelected = viewModel::onSortChanged,
         onFilterChanged = viewModel::onFilterChanged,
         onLoadNextPage = viewModel::loadNextPage,
@@ -121,8 +129,11 @@ internal fun SearchScreen(
     query: String,
     selectedSort: SearchSort = SearchSort.BEST_MATCH,
     filter: SearchFilter = SearchFilter(),
+    searchHistory: List<String> = emptyList(),
     onQueryChanged: (String) -> Unit,
     onSearch: () -> Unit,
+    onRecentQueryClick: (String) -> Unit = {},
+    onRemoveRecentQuery: (String) -> Unit = {},
     onSortSelected: (SearchSort) -> Unit = {},
     onFilterChanged: (SearchFilter) -> Unit = {},
     onLoadNextPage: () -> Unit = {},
@@ -259,10 +270,18 @@ internal fun SearchScreen(
             ) {
                 when (val state = uiState) {
                     is SearchUiState.Idle -> {
-                        EmptyView(
-                            title = stringResource(R.string.search_idle_title),
-                            description = stringResource(R.string.search_idle_description)
-                        )
+                        if (searchHistory.isNotEmpty()) {
+                            RecentSearchesSection(
+                                history = searchHistory,
+                                onQueryClick = onRecentQueryClick,
+                                onRemoveQuery = onRemoveRecentQuery
+                            )
+                        } else {
+                            EmptyView(
+                                title = stringResource(R.string.search_idle_title),
+                                description = stringResource(R.string.search_idle_description)
+                            )
+                        }
                     }
 
                     is SearchUiState.Loading -> {

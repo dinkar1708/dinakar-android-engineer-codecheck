@@ -9,6 +9,8 @@
     <!-- State Views -->
     <string name="search_idle_title">GitHub リポジトリを検索</string>
     <string name="search_idle_description">キーワードを入力して検索してください。</string>
+    <string name="search_recent_title">最近の検索</string>
+    <string name="search_remove_recent">%1$s を検索履歴から削除</string>
     <string name="search_empty_title">リポジトリが見つかりませんでした</string>
     <string name="search_empty_description">“%1$s” に一致するリポジトリは見つかりませんでした。スペルを確認するか、短いキーワードをお試しください。</string>
     <string name="search_clear_search">検索をクリア</string>

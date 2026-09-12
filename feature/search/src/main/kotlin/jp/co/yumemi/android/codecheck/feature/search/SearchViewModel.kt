@@ -6,15 +6,18 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.yumemi.android.codecheck.core.domain.model.SearchFilter
 import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
+import jp.co.yumemi.android.codecheck.core.domain.repository.SearchHistoryRepository
 import jp.co.yumemi.android.codecheck.core.domain.usecase.SearchRepositoriesUseCase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,6 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val searchRepositoriesUseCase: SearchRepositoriesUseCase,
+    private val searchHistoryRepository: SearchHistoryRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -39,6 +43,13 @@ class SearchViewModel @Inject constructor(
 
     private val _query = MutableStateFlow(savedStateHandle.get<String>(KEY_LAST_QUERY).orEmpty())
     val query: StateFlow<String> = _query.asStateFlow()
+
+    val searchHistory: StateFlow<List<String>> = searchHistoryRepository.getSearchHistory()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000L),
+            initialValue = emptyList()
+        )
 
     private val _selectedSort = MutableStateFlow(SearchSort.BEST_MATCH)
     val selectedSort: StateFlow<SearchSort> = _selectedSort.asStateFlow()
@@ -203,6 +214,7 @@ class SearchViewModel @Inject constructor(
                 if (result.items.isEmpty()) {
                     _uiState.value = SearchUiState.Empty
                 } else {
+                    searchHistoryRepository.addSearchQuery(query)
                     _uiState.value = SearchUiState.Success(
                         repositories = result.items,
                         totalCount = result.totalCount,
@@ -219,6 +231,24 @@ class SearchViewModel @Inject constructor(
                     message = throwable.message ?: "An unexpected error occurred. Please try again."
                 )
             }
+        }
+    }
+
+    /**
+     * Removes a query from search history.
+     */
+    fun removeSearchHistory(historyQuery: String) {
+        viewModelScope.launch {
+            searchHistoryRepository.removeSearchQuery(historyQuery)
+        }
+    }
+
+    /**
+     * Clears all recorded search history.
+     */
+    fun clearSearchHistory() {
+        viewModelScope.launch {
+            searchHistoryRepository.clearSearchHistory()
         }
     }
 }

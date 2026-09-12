@@ -44,7 +44,7 @@ class DetailScreenTest {
             )
         }
 
-        composeTestRule.onNodeWithText("Repository Details").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Repository").assertIsDisplayed()
         composeTestRule.onNodeWithText("Loading repository details...").assertIsDisplayed()
     }
 
@@ -77,7 +77,7 @@ class DetailScreenTest {
             )
         }
 
-        composeTestRule.onNodeWithText("Repository Details").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Repository").assertIsDisplayed()
         composeTestRule.onNodeWithText("compose-samples").assertIsDisplayed()
 
         val backButton = composeTestRule.onNodeWithContentDescription("Navigate back")

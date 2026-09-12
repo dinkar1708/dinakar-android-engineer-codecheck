@@ -29,7 +29,7 @@ class DetailContentTest {
         owner = Owner(avatarUrl = "https://example.com/avatar.png"),
         language = "Kotlin",
         stargazersCount = 14200L,
-        watchersCount = 14200L,
+        watchersCount = 12500L,
         forksCount = 3500L,
         openIssuesCount = 42L,
         description = "Official Jetpack Compose samples",
@@ -46,15 +46,16 @@ class DetailContentTest {
         }
 
         composeTestRule.onNodeWithText("compose-samples").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Written in Kotlin").performScrollTo().assertIsDisplayed()
-        composeTestRule.onNodeWithText("Stars").performScrollTo().assertIsDisplayed()
-        composeTestRule.onNodeWithText("14200 stars").performScrollTo().assertIsDisplayed()
-        composeTestRule.onNodeWithText("Watchers").performScrollTo().assertIsDisplayed()
-        composeTestRule.onNodeWithText("14200 watchers").performScrollTo().assertIsDisplayed()
-        composeTestRule.onNodeWithText("Forks").performScrollTo().assertIsDisplayed()
-        composeTestRule.onNodeWithText("3500 forks").performScrollTo().assertIsDisplayed()
-        composeTestRule.onNodeWithText("Open Issues").performScrollTo().assertIsDisplayed()
-        composeTestRule.onNodeWithText("42 open issues").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("Official Jetpack Compose samples").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("Kotlin").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("STARS").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("14,200").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("WATCHERS").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("12,500").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("FORKS").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("3,500").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("OPEN ISSUES").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("42").performScrollTo().assertIsDisplayed()
     }
 
     @Test
@@ -97,5 +98,23 @@ class DetailContentTest {
 
         composeTestRule.onNodeWithText("minimal-repo").assertIsDisplayed()
         composeTestRule.onNodeWithText("View on GitHub").assertDoesNotExist()
+    }
+
+    @Test
+    fun detailContent_withCompositeRepoName_displaysExtractedOwnerAndRepoName() {
+        val compositeItem = RepositoryItem(
+            name = "ravidsrk/kotlinextensions.com",
+            owner = Owner(avatarUrl = "https://example.com/avatar.png", login = "ravidsrk")
+        )
+
+        composeTestRule.setContent {
+            DetailContent(
+                repository = compositeItem,
+                onOpenBrowser = null
+            )
+        }
+
+        composeTestRule.onNodeWithText("ravidsrk").assertIsDisplayed()
+        composeTestRule.onNodeWithText("kotlinextensions.com").assertIsDisplayed()
     }
 }

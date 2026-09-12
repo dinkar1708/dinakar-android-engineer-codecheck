@@ -57,6 +57,7 @@ import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.core.ui.util.formatForkCount
 import jp.co.yumemi.android.codecheck.core.ui.util.formatStarCount
 import jp.co.yumemi.android.codecheck.core.ui.util.getLanguageColor
+import jp.co.yumemi.android.codecheck.core.ui.util.getMonogramInitials
 import kotlin.math.abs
 
 /**
@@ -358,24 +359,4 @@ internal fun getMonogramStyle(key: String): MonogramStyle {
             textColor = MonogramSlateText
         )
     }
-}
-
-/**
- * Derives a 2-character monogram string from an owner handle.
- */
-internal fun getMonogramInitials(name: String): String {
-    val clean = name.trim()
-    if (clean.isEmpty()) return "?"
-
-    val parts = clean.split(Regex("[\\s._-]+")).filter { it.isNotEmpty() }
-    if (parts.size >= 2) {
-        return "${parts[0].first().uppercaseChar()}${parts[1].first().uppercaseChar()}"
-    }
-
-    val upperIndices = clean.indices.filter { it > 0 && clean[it].isUpperCase() }
-    if (upperIndices.isNotEmpty()) {
-        return "${clean.first().uppercaseChar()}${clean[upperIndices.first()].uppercaseChar()}"
-    }
-
-    return clean.take(2).uppercase()
 }

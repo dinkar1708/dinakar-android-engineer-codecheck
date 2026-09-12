@@ -152,4 +152,54 @@ class SearchScreenTest {
         clearButton.assertIsDisplayed().performClick()
         assertTrue(cleared)
     }
+
+    @Test
+    fun searchScreen_successState_displaysSortTabsAndHandlesClick() {
+        var selectedSort: jp.co.yumemi.android.codecheck.core.domain.model.SearchSort? = null
+
+        composeTestRule.setContent {
+            SearchScreen(
+                uiState = SearchUiState.Success(listOf(fakeRepo)),
+                query = "kotlin",
+                selectedSort = jp.co.yumemi.android.codecheck.core.domain.model.SearchSort.BEST_MATCH,
+                onQueryChanged = {},
+                onSearch = {},
+                onSortSelected = { selectedSort = it },
+                onClearQuery = {},
+                onRetry = {},
+                onRepositoryClick = {}
+            )
+        }
+
+        composeTestRule.onNodeWithText("Best match").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Most stars").assertIsDisplayed().performClick()
+        assertEquals(jp.co.yumemi.android.codecheck.core.domain.model.SearchSort.STARS, selectedSort)
+    }
+
+    @Test
+    fun searchScreen_successState_displaysResultsCountAndLoadMore() {
+        var loadMoreClicked = false
+
+        composeTestRule.setContent {
+            SearchScreen(
+                uiState = SearchUiState.Success(
+                    repositories = listOf(fakeRepo),
+                    totalCount = 42,
+                    hasNextPage = true
+                ),
+                query = "kotlin",
+                onQueryChanged = {},
+                onSearch = {},
+                onLoadNextPage = { loadMoreClicked = true },
+                onClearQuery = {},
+                onRetry = {},
+                onRepositoryClick = {}
+            )
+        }
+
+        composeTestRule.onNodeWithText("1–1 OF 42").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Clear all").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Load more").assertIsDisplayed().performClick()
+        assertTrue(loadMoreClicked)
+    }
 }

@@ -53,15 +53,21 @@ import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate900
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.core.ui.component.EmptyView
 import jp.co.yumemi.android.codecheck.core.ui.component.ErrorView
+import androidx.compose.ui.unit.em
+import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
+import jp.co.yumemi.android.codecheck.feature.search.component.LoadMoreButton
 import jp.co.yumemi.android.codecheck.feature.search.component.RepositoryCard
 import jp.co.yumemi.android.codecheck.feature.search.component.RepositoryCardSkeleton
+import jp.co.yumemi.android.codecheck.feature.search.component.SortTabs
+import java.text.NumberFormat
+import java.util.Locale
 
 /**
  * Screen composable for searching GitHub repositories matching the approved design specification:
  * - Dark Navy anchor header housing the search bar (#1d2331 / #12161f in dark)
- * - Brand Blue for action (#3b50df / #6b7cf0 in dark)
- * - Slate neutrals for structure (#0f172a -> #f5f6f8)
- * - Results count and sort controls
+ * - Sort underline tabs ("Best match", "Most stars", "Most forks")
+ * - Sub-header results counter ("1–12 OF 3,120") and "Clear all"
+ * - Repository cards and "Load more" pagination button
  * - Skeleton loading and empty state with "Clear search" action
  */
 @Composable
@@ -72,13 +78,21 @@ fun SearchScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val query by viewModel.query.collectAsState()
+    val selectedSort by viewModel.selectedSort.collectAsState()
 
     SearchScreen(
         uiState = uiState,
         query = query,
+        selectedSort = selectedSort,
         onQueryChanged = viewModel::onQueryChanged,
         onSearch = { viewModel.searchRepositories(query) },
+        onSortSelected = viewModel::onSortChanged,
+        onLoadNextPage = viewModel::loadNextPage,
         onClearQuery = viewModel::clearQuery,
+        onClearAll = {
+            viewModel.clearQuery()
+            viewModel.clearFilters()
+        },
         onRetry = viewModel::retry,
         onRepositoryClick = onRepositoryClick,
         modifier = modifier
@@ -89,9 +103,13 @@ fun SearchScreen(
 internal fun SearchScreen(
     uiState: SearchUiState,
     query: String,
+    selectedSort: SearchSort = SearchSort.BEST_MATCH,
     onQueryChanged: (String) -> Unit,
     onSearch: () -> Unit,
+    onSortSelected: (SearchSort) -> Unit = {},
+    onLoadNextPage: () -> Unit = {},
     onClearQuery: () -> Unit,
+    onClearAll: () -> Unit = onClearQuery,
     onRetry: () -> Unit,
     onRepositoryClick: (RepositoryItem) -> Unit,
     modifier: Modifier = Modifier
@@ -197,6 +215,14 @@ internal fun SearchScreen(
                 }
             }
 
+            // Sort Tabs directly under search field on results screen (mockup 03b)
+            if (uiState is SearchUiState.Success) {
+                SortTabs(
+                    selectedSort = selectedSort,
+                    onSortSelected = onSortSelected
+                )
+            }
+
             // Body Area presenting stateful views
             Box(
                 modifier = Modifier
@@ -241,19 +267,59 @@ internal fun SearchScreen(
                     }
 
                     is SearchUiState.Success -> {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
-                            verticalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            items(
-                                items = state.repositories,
-                                key = { it.name + "/" + it.ownerIconUrl }
-                            ) { item ->
-                                RepositoryCard(
-                                    item = item,
-                                    onClick = onRepositoryClick
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            // Sub-header results counter & clear all (mockup 03b)
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 20.dp, end = 20.dp, top = 14.dp, bottom = 10.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                val totalFormatted = NumberFormat.getNumberInstance(Locale.US).format(state.totalCount)
+                                Text(
+                                    text = "1–${state.repositories.size} OF $totalFormatted",
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 0.05.em,
+                                    color = Slate500
                                 )
+
+                                Text(
+                                    text = "Clear all",
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = AppBlue,
+                                    modifier = Modifier.clickable(onClick = onClearAll)
+                                )
+                            }
+
+                            LazyColumn(
+                                modifier = Modifier.fillMaxSize(),
+                                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                                verticalArrangement = Arrangement.spacedBy(10.dp)
+                            ) {
+                                items(
+                                    items = state.repositories,
+                                    key = { it.name + "/" + it.ownerIconUrl }
+                                ) { item ->
+                                    RepositoryCard(
+                                        item = item,
+                                        onClick = onRepositoryClick
+                                    )
+                                }
+
+                                if (state.hasNextPage) {
+                                    item(key = "load_more_button") {
+                                        LoadMoreButton(
+                                            isLoading = state.isLoadingMore,
+                                            onClick = onLoadNextPage,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(top = 4.dp)
+                                        )
+                                    }
+                                }
                             }
                         }
                     }

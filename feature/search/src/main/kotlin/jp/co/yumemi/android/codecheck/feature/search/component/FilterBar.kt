@@ -20,6 +20,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import jp.co.yumemi.android.codecheck.feature.search.R
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -93,7 +95,7 @@ fun FilterBar(
                         tint = if (filter.isActive) AppBlue else Slate800
                     )
                     Text(
-                        text = "Filters",
+                        text = stringResource(R.string.search_filter_button),
                         fontSize = 13.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = if (filter.isActive) AppBlue else Slate800
@@ -112,7 +114,11 @@ fun FilterBar(
             // Min stars active filter chip
             val minStars = filter.minStars
             if (minStars != null && minStars > 0) {
-                val label = if (minStars >= 1000) "${minStars / 1000}K+ stars" else "$minStars+ stars"
+                val label = if (minStars >= 1000) {
+                    stringResource(R.string.search_filter_stars_k_suffix, minStars / 1000)
+                } else {
+                    stringResource(R.string.search_filter_stars_suffix, minStars)
+                }
                 ActiveFilterChip(
                     label = label,
                     onRemove = onRemoveMinStars
@@ -121,7 +127,11 @@ fun FilterBar(
 
             // Updated period active filter chip
             if (filter.updatedPeriod != "any") {
-                val label = if (filter.updatedPeriod == "year") "This year" else "This month"
+                val label = if (filter.updatedPeriod == "year") {
+                    stringResource(R.string.search_filter_period_this_year)
+                } else {
+                    stringResource(R.string.search_filter_period_this_month)
+                }
                 ActiveFilterChip(
                     label = label,
                     onRemove = onRemoveUpdatedPeriod
@@ -156,7 +166,7 @@ private fun ActiveFilterChip(
             )
             Icon(
                 imageVector = Icons.Default.Clear,
-                contentDescription = "Remove $label filter",
+                contentDescription = stringResource(R.string.search_filter_remove_content_description, label),
                 tint = AppBlue,
                 modifier = Modifier
                     .size(14.dp)

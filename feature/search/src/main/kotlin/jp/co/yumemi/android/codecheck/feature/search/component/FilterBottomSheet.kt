@@ -27,6 +27,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import jp.co.yumemi.android.codecheck.feature.search.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -63,22 +65,22 @@ fun FilterBottomSheet(
 
     val languages = listOf("Rust", "Kotlin", "Python", "Go", "TypeScript", "C++")
     val starOptions = listOf(
-        null to "Any",
+        null to stringResource(R.string.search_filter_stars_any),
         100 to "100+",
         500 to "500+",
         1000 to "1K+"
     )
     val periodOptions = listOf(
-        "any" to "Any time",
-        "year" to "This year",
-        "month" to "This month"
+        "any" to stringResource(R.string.search_filter_period_any_time),
+        "year" to stringResource(R.string.search_filter_period_this_year),
+        "month" to stringResource(R.string.search_filter_period_this_month)
     )
 
     CommonBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        title = "Filters",
-        actionLabel = "Reset",
+        title = stringResource(R.string.search_filter_title),
+        actionLabel = stringResource(R.string.search_filter_reset),
         onActionClick = { draftFilter = SearchFilter() },
         modifier = modifier
     ) {
@@ -97,7 +99,7 @@ fun FilterBottomSheet(
                 // Section 1: Language
                 Column {
                     Text(
-                        text = "LANGUAGE",
+                        text = stringResource(R.string.search_filter_section_language),
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.05.em,
@@ -128,7 +130,7 @@ fun FilterBottomSheet(
                 // Section 2: Minimum stars
                 Column {
                     Text(
-                        text = "MINIMUM STARS",
+                        text = stringResource(R.string.search_filter_section_min_stars),
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.05.em,
@@ -157,7 +159,7 @@ fun FilterBottomSheet(
                 // Section 3: Last updated
                 Column {
                     Text(
-                        text = "LAST UPDATED",
+                        text = stringResource(R.string.search_filter_section_last_updated),
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.05.em,
@@ -215,7 +217,7 @@ fun FilterBottomSheet(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "Show results",
+                            text = stringResource(R.string.search_filter_show_results),
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium,
                             color = AppWhite

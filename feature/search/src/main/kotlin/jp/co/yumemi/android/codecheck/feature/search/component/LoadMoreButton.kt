@@ -19,6 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import jp.co.yumemi.android.codecheck.feature.search.R
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -68,7 +70,7 @@ fun LoadMoreButton(
                 )
             } else {
                 Text(
-                    text = "Load more",
+                    text = stringResource(R.string.search_load_more),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
                     color = Slate800

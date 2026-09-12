@@ -27,6 +27,8 @@ import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate200
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
 import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
+import androidx.compose.ui.res.stringResource
+import jp.co.yumemi.android.codecheck.feature.search.R
 
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.width
@@ -44,9 +46,9 @@ fun SortTabs(
     modifier: Modifier = Modifier
 ) {
     val tabs = listOf(
-        SearchSort.BEST_MATCH to "Best match",
-        SearchSort.STARS to "Most stars",
-        SearchSort.FORKS to "Most forks"
+        SearchSort.BEST_MATCH to stringResource(R.string.search_sort_best_match),
+        SearchSort.STARS to stringResource(R.string.search_sort_most_stars),
+        SearchSort.FORKS to stringResource(R.string.search_sort_most_forks)
     )
 
     Box(

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Search Bar -->
+    <string name="search_input_placeholder">Search repositories…</string>
+    <string name="search_submit_content_description">Submit search</string>
+    <string name="search_clear_content_description">Clear search</string>
+
+    <!-- State Views -->
+    <string name="search_idle_title">Search GitHub Repositories</string>
+    <string name="search_idle_description">Type a search query above and press Enter.</string>
+    <string name="search_empty_title">No repositories found</string>
+    <string name="search_empty_description">No results for “%1$s”. Check the spelling or search a shorter term.</string>
+    <string name="search_clear_search">Clear search</string>
+
+    <!-- Results List & Counter -->
+    <string name="search_results_counter">%1$d–%2$d OF %3$s</string>
+    <string name="search_clear_all">Clear all</string>
+    <string name="search_load_more">Load more</string>
+    <string name="search_forks_suffix">%1$s forks</string>
+    <string name="search_avatar_content_description">%1$s avatar</string>
+
+    <!-- Sort Tabs -->
+    <string name="search_sort_best_match">Best match</string>
+    <string name="search_sort_most_stars">Most stars</string>
+    <string name="search_sort_most_forks">Most forks</string>
+
+    <!-- Filter Bar & Sheet -->
+    <string name="search_filter_button">Filters</string>
+    <string name="search_filter_title">Filters</string>
+    <string name="search_filter_reset">Reset</string>
+    <string name="search_filter_section_language">LANGUAGE</string>
+    <string name="search_filter_section_min_stars">MINIMUM STARS</string>
+    <string name="search_filter_section_last_updated">LAST UPDATED</string>
+    <string name="search_filter_stars_any">Any</string>
+    <string name="search_filter_stars_suffix">%1$d+ stars</string>
+    <string name="search_filter_stars_k_suffix">%1$dK+ stars</string>
+    <string name="search_filter_period_any_time">Any time</string>
+    <string name="search_filter_period_this_year">This year</string>
+    <string name="search_filter_period_this_month">This month</string>
+    <string name="search_filter_remove_content_description">Remove %1$s filter</string>
+    <string name="search_filter_show_results">Show results</string>
+</resources>

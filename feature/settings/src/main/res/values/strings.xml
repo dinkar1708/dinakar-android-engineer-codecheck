@@ -1,0 +1,18 @@
+<resources>
+    <string name="settings_title">Settings &amp; Preferences</string>
+    <string name="language_section">Language Settings</string>
+    <string name="follow_system">Follow System</string>
+    <string name="follow_system_language_subtitle">Adhere to device OS language</string>
+    <string name="english">English (US)</string>
+    <string name="japanese">日本語 (Japanese)</string>
+    <string name="theme_section">Theme &amp; Appearance</string>
+    <string name="follow_system_theme_subtitle">Adhere to device dark/light setting</string>
+    <string name="theme_light">Light Mode</string>
+    <string name="theme_dark">Dark Mode</string>
+    <string name="app_info_section">Application Information</string>
+    <string name="app_version">Version</string>
+    <string name="app_environment">Environment</string>
+    <string name="api_source">API Service</string>
+    <string name="developer_note">Mobile Platform Engineering</string>
+    <string name="architecture_stack">Clean Architecture • Kotlin Multiplatform • Jetpack Compose</string>
+</resources>

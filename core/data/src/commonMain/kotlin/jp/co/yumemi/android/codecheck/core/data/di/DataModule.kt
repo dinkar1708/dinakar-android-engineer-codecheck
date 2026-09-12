@@ -30,4 +30,20 @@ object DataModule {
             simulatedDelayMs = simulatedDelayMs
         )
     }
+
+    /**
+     * Provide a singleton or instance of [jp.co.yumemi.android.codecheck.core.domain.repository.SearchHistoryRepository].
+     */
+    fun provideSearchHistoryRepository(
+        maxItems: Int = 7
+    ): jp.co.yumemi.android.codecheck.core.domain.repository.SearchHistoryRepository {
+        return jp.co.yumemi.android.codecheck.core.data.repository.DefaultSearchHistoryRepository(maxItems = maxItems)
+    }
+
+    /**
+     * Provide a singleton or instance of [jp.co.yumemi.android.codecheck.core.domain.repository.BookmarkRepository].
+     */
+    fun provideBookmarkRepository(): jp.co.yumemi.android.codecheck.core.domain.repository.BookmarkRepository {
+        return jp.co.yumemi.android.codecheck.core.data.repository.DefaultBookmarkRepository()
+    }
 }

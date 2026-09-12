@@ -11,6 +11,7 @@
 |:---|:---|
 | **Get started quickly** | [Getting Started](./GETTING_STARTED.md) ⭐ |
 | **Understand the architecture** | [Architecture Overview](./ARCHITECTURE_OVERVIEW.md) ⭐ |
+| **iOS Companion Demo** | [Native iOS Companion (KMP)](../iosApp/README.md) 🍏 |
 | **See what's been done** | [Issues Summary](./03_sprint_execution/03_issues_summary.md) ⭐ |
 | **Full project overview** | [Root README.md](../README.md) |
 
@@ -44,6 +45,7 @@ This solution addresses all **9 Yumemi challenge issues** through a structured, 
 3. **100% Jetpack Compose** (Material 3) ✓
 4. **Hilt Dependency Injection** ✓
 5. **Comprehensive Testing** (Turbine + MockEngine) ✓
+6. **KMP Cross-Platform Headless Architecture** (Shared domain/network/data with native SwiftUI iOS demonstration app) ✓
 
 ---
 

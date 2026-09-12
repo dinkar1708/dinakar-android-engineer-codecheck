@@ -93,3 +93,8 @@ temp/
 !.claude/skills/
 !.claude/README.md
 
+# Xcode & iOS
+*.xcuserstate
+xcuserdata/
+DerivedData/
+

@@ -6,6 +6,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import jp.co.yumemi.android.codecheck.core.domain.model.Owner
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
+import jp.co.yumemi.android.codecheck.core.ui.util.getMonogramInitials
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test

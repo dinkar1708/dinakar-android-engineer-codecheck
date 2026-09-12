@@ -19,44 +19,56 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppAmber
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppNavy
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate200
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate300
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate400
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate600
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate900
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.core.ui.component.ErrorView
 import jp.co.yumemi.android.codecheck.core.ui.component.LoadingView
+import jp.co.yumemi.android.codecheck.core.ui.util.formatDecimalNumber
+import jp.co.yumemi.android.codecheck.core.ui.util.getMonogramInitials
 
 /**
- * Repository detail screen composable rendering repository metadata using the approved design palette.
+ * Repository detail screen composable strictly adhering to the design specification:
+ * - Dark Navy header (#2D3545) with back navigation, avatar, owner handle, repo title, description, and language chip
+ * - Light background with 2x2 grid of StatCards (Stars, Forks, Watchers, Open Issues)
+ * - Full-width "View on GitHub" brand blue action button
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,8 +97,6 @@ internal fun DetailScreen(
     modifier: Modifier = Modifier,
     onOpenBrowser: ((String) -> Unit)? = null
 ) {
-    val topBarBg = AppNavy
-
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
@@ -94,9 +104,10 @@ internal fun DetailScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Repository Details",
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Bold
+                        text = "Repository",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = AppWhite
                         )
                     )
                 },
@@ -110,7 +121,7 @@ internal fun DetailScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = topBarBg,
+                    containerColor = AppNavy,
                     titleContentColor = AppWhite,
                     navigationIconContentColor = AppWhite
                 )
@@ -149,147 +160,239 @@ internal fun DetailContent(
     onOpenBrowser: ((String) -> Unit)?,
     modifier: Modifier = Modifier
 ) {
-    val actionButtonColor = AppBlue
-    val actionButtonTextColor = AppWhite
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .verticalScroll(scrollState)
     ) {
-        SubcomposeAsyncImage(
-            model = repository.ownerIconUrl,
-            contentDescription = "${repository.name} avatar",
+        // Hero Header Section (Navy Background matching 01-05 Core Screens.dc.html)
+        Box(
             modifier = Modifier
-                .size(112.dp)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = repository.name,
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-
-        if (!repository.language.isNullOrBlank()) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(8.dp)
-                        .clip(CircleShape)
-                        .background(AppBlue)
-                )
-                Text(
-                    text = "Written in ${repository.language}",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = AppBlue,
-                    fontWeight = FontWeight.Medium
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
-            ),
-            border = BorderStroke(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outline
-            ),
-            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                .fillMaxWidth()
+                .background(AppNavy)
+                .padding(start = 20.dp, end = 20.dp, top = 4.dp, bottom = 24.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp)
-            ) {
-                MetricRow(
-                    label = "Stars",
-                    value = "${repository.stargazersCount} stars",
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp),
-                            tint = AppAmber
+            Column(modifier = Modifier.fillMaxWidth()) {
+                // Owner + Repo Name row with Avatar
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
+                    val initials = remember(repository.name, repository.owner.login) {
+                        val source = repository.owner.login.takeIf { it.isNotBlank() } ?: repository.name
+                        getMonogramInitials(source)
+                    }
+
+                    SubcomposeAsyncImage(
+                        model = repository.ownerIconUrl,
+                        contentDescription = "${repository.name} avatar",
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop,
+                        loading = {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Slate600),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = initials,
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = AppWhite
+                                )
+                            }
+                        },
+                        error = {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Slate600),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = initials,
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = AppWhite
+                                )
+                            }
+                        }
+                    )
+
+                    Column(modifier = Modifier.weight(1f)) {
+                        val ownerLogin = repository.owner.login.takeIf { it.isNotBlank() }
+                        if (ownerLogin != null) {
+                            Text(
+                                text = ownerLogin,
+                                fontSize = 13.sp,
+                                color = Slate400,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                        Text(
+                            text = repository.name,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = AppWhite,
+                            lineHeight = 28.sp,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
-                )
-                HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
-                MetricRow(label = "Watchers", value = "${repository.watchersCount} watchers")
-                HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
-                MetricRow(label = "Forks", value = "${repository.forksCount} forks")
-                HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
-                MetricRow(label = "Open Issues", value = "${repository.openIssuesCount} open issues")
+                }
+
+                // Description (if present)
+                val description = repository.description
+                if (!description.isNullOrBlank()) {
+                    Spacer(modifier = Modifier.height(14.dp))
+                    Text(
+                        text = description,
+                        fontSize = 13.sp,
+                        lineHeight = 20.sp,
+                        color = Slate300
+                    )
+                }
+
+                // Language Chip (if present)
+                val language = repository.language
+                if (!language.isNullOrBlank()) {
+                    Spacer(modifier = Modifier.height(14.dp))
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        color = Slate600,
+                        contentColor = Slate300
+                    ) {
+                        Text(
+                            text = language,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier.padding(horizontal = 11.dp, vertical = 5.dp)
+                        )
+                    }
+                }
             }
         }
 
-        if (!repository.htmlUrl.isNullOrBlank() && onOpenBrowser != null) {
-            Spacer(modifier = Modifier.height(32.dp))
-            Button(
-                onClick = { onOpenBrowser(repository.htmlUrl.orEmpty()) },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = actionButtonColor,
-                    contentColor = actionButtonTextColor
-                ),
-                contentPadding = PaddingValues(vertical = 14.dp)
-            ) {
-                Text(
-                    text = "View on GitHub",
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        fontWeight = FontWeight.SemiBold
+        // Body Content: 2x2 Stat Cards and Action Button
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            // 2x2 StatCard Grid
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    StatCard(
+                        label = "Stars",
+                        value = formatDecimalNumber(repository.stargazersCount),
+                        valueColor = Slate900,
+                        modifier = Modifier.weight(1f)
                     )
-                )
+                    StatCard(
+                        label = "Forks",
+                        value = formatDecimalNumber(repository.forksCount),
+                        valueColor = Slate900,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    StatCard(
+                        label = "Watchers",
+                        value = formatDecimalNumber(repository.watchersCount),
+                        valueColor = Slate900,
+                        modifier = Modifier.weight(1f)
+                    )
+                    StatCard(
+                        label = "Open issues",
+                        value = formatDecimalNumber(repository.openIssuesCount),
+                        valueColor = AppAmber,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+
+            // Action Button: View on GitHub
+            if (!repository.htmlUrl.isNullOrBlank() && onOpenBrowser != null) {
+                Button(
+                    onClick = { onOpenBrowser(repository.htmlUrl.orEmpty()) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = AppBlue,
+                        contentColor = AppWhite
+                    ),
+                    contentPadding = PaddingValues(vertical = 12.dp)
+                ) {
+                    Text(
+                        text = "View on GitHub",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
             }
         }
     }
 }
 
+/**
+ * Metric StatCard component adhering to StatCard.dc.html specification:
+ * - 8dp rounded card container with 1dp Slate200 border
+ * - 11sp bold uppercase label in Slate500
+ * - 24sp bold metric value with dynamic value color
+ */
 @Composable
-private fun MetricRow(
+fun StatCard(
     label: String,
     value: String,
     modifier: Modifier = Modifier,
-    icon: (@Composable () -> Unit)? = null
+    valueColor: Color = Slate900
 ) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = AppWhite
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = Slate200
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge,
-            color = Slate500
-        )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         ) {
-            icon?.invoke()
+            Text(
+                text = label.uppercase(),
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.05.em,
+                color = Slate500
+            )
+            Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = value,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = valueColor
             )
         }
     }

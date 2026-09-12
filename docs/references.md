@@ -92,6 +92,12 @@ Every reference included below has been verified for availability (HTTP 200 OK) 
 - **EditorConfig Specification**: [https://editorconfig.org/](https://editorconfig.org/)  
   *Application in Project:* Cross-IDE consistency for indentation, character encodings, and line endings.
 
+### 2.5 Build System, Flavors & Environment Isolation
+- **Configure Build Variants & Product Flavors**: [https://developer.android.com/build/build-variants#product-flavors](https://developer.android.com/build/build-variants#product-flavors)  
+  *Application in Project:* Establishes four product flavors (`mock`, `dev`, `stg`, `prod`) under the `environment` dimension in `:app`, enabling offline mocking, isolated application IDs, and environment-specific configurations.
+- **Source Sets**: [https://developer.android.com/build/build-variants#sourcesets](https://developer.android.com/build/build-variants#sourcesets)  
+  *Application in Project:* Uses Gradle flavor source sets (`app/src/mock/`, `app/src/dev/`, `app/src/stg/`, `app/src/prod/`) to provide compile-time DI bindings with zero runtime `if/else` checks.
+
 ---
 
 ## 3. Kotlin & Multiplatform (KMP)

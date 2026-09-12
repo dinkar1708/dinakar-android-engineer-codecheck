@@ -36,54 +36,49 @@ Offline mock mode leverages the project's **Clean Architecture** and Hilt's comp
          └───► MockGitHubRepository    (Offline Mock: in-memory dataset, search filtering, 300ms delay)
 ```
 
-In `RepositoryModule.kt`, Hilt binds the appropriate repository implementation based on `BuildConfig.FLAVOR_MODE` with zero framework boilerplate and zero production UI changes:
+In the app layer, Hilt binds the appropriate repository implementation using **Gradle Flavor Source Sets** (`src/mock`, `src/dev`, `src/stg`, `src/prod`) with pure compile-time binding and zero runtime `if/else` checks:
 
+```
+app/src/
+├── main/kotlin/.../di/
+│   └── UseCaseModule.kt            --> Provides shared Search & Detail UseCases
+├── mock/kotlin/.../di/
+│   └── RepositoryModule.kt         --> Injects MockGitHubRepository (100% offline)
+├── dev/kotlin/.../di/
+│   └── RepositoryModule.kt         --> Injects DefaultGitHubRepository (GitHub REST API)
+├── stg/kotlin/.../di/
+│   └── RepositoryModule.kt         --> Injects DefaultGitHubRepository (GitHub REST API)
+└── prod/kotlin/.../di/
+    └── RepositoryModule.kt         --> Injects DefaultGitHubRepository (GitHub REST API)
+```
+
+### Mock Flavor Module (`app/src/mock/.../RepositoryModule.kt`):
 ```kotlin
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
-
-    @Provides
-    @Singleton
-    fun provideDefaultGitHubRepository(
-        apiService: GitHubApiService,
-        @IoDispatcher ioDispatcher: CoroutineDispatcher
-    ): DefaultGitHubRepository = DefaultGitHubRepository(apiService, ioDispatcher)
-
-    @Provides
-    @Singleton
-    fun provideMockGitHubRepository(): MockGitHubRepository =
-        MockGitHubRepository(simulatedDelayMs = 300)
-
     @Provides
     @Singleton
     fun provideGitHubRepository(
-        defaultRepo: DefaultGitHubRepository,
-        mockRepo: MockGitHubRepository
-    ): GitHubRepository {
-        return if (BuildConfig.FLAVOR_MODE == "mock") {
-            mockRepo
-        } else {
-            defaultRepo
-        }
-    }
+        @Suppress("UNUSED_PARAMETER") apiService: GitHubApiService
+    ): GitHubRepository = DataModule.provideMockGitHubRepository(simulatedDelayMs = 300L)
 }
 ```
 
-> 💡 **Full Multiplatform Support**: `MockGitHubRepository` resides in `:shared/commonMain`, making it natively accessible to both Android and iOS targets without duplicate mock implementations.
+> 💡 **Full Multiplatform Support**: `MockGitHubRepository` resides in `:core:data/commonMain`, making it natively accessible to both Android, unit tests, and the iOS SwiftUI companion app without duplicate mock implementations.
 
 ---
 
 ## 3. Product Flavors Matrix
 
-The project defines dedicated product flavors in `app/build.gradle`:
+The project defines dedicated product flavors in `app/build.gradle.kts` with distinct launcher labels for instant home screen recognition:
 
-| Flavor | Dimension | Application ID Suffix | Data Source | Target Use Case |
-| :--- | :--- | :--- | :--- | :--- |
-| **`dev`** | `environment` | `.dev` | Live GitHub REST API | Daily feature development with live API connectivity |
-| **`mock`** | `environment` | `.mock` | In-Memory `MockGitHubRepository` | CI test automation, offline development, UI snapshot testing |
-| **`stg`** | `environment` | `.stg` | Live GitHub REST API / Staging | Pre-release staging validation and QA testing |
-| **`prod`** | `environment` | *(none)* | Live GitHub REST API | Production release builds |
+| Flavor | Dimension | Application ID Suffix | Launcher App Name | Data Source | Target Use Case |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **`mock`** | `environment` | `.mock` | **`Mock-Android Engineer CodeCheck`** | In-Memory `MockGitHubRepository` | CI test automation, offline development, UI stress testing |
+| **`dev`** | `environment` | `.dev` | **`Dev-Android Engineer CodeCheck`** | Live GitHub REST API | Daily feature development with live API connectivity & debug logging |
+| **`stg`** | `environment` | `.stg` | **`Stg-Android Engineer CodeCheck`** | Live GitHub REST API | Pre-release staging validation and QA testing |
+| **`prod`** | `environment` | *(none)* | **`Android Engineer CodeCheck`** | Live GitHub REST API | Production release builds |
 
 ---
 

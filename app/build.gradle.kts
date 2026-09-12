@@ -8,10 +8,42 @@ android {
 
     defaultConfig {
         applicationId = "jp.co.yumemi.android.codecheck"
+        manifestPlaceholders["appName"] = "Android Engineer CodeCheck"
+    }
+
+    flavorDimensions += "environment"
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            manifestPlaceholders["appName"] = "Dev-Android Engineer CodeCheck"
+            buildConfigField("String", "FLAVOR_MODE", "\"dev\"")
+        }
+        create("stg") {
+            dimension = "environment"
+            applicationIdSuffix = ".stg"
+            versionNameSuffix = "-stg"
+            manifestPlaceholders["appName"] = "Stg-Android Engineer CodeCheck"
+            buildConfigField("String", "FLAVOR_MODE", "\"stg\"")
+        }
+        create("mock") {
+            dimension = "environment"
+            applicationIdSuffix = ".mock"
+            versionNameSuffix = "-mock"
+            manifestPlaceholders["appName"] = "Mock-Android Engineer CodeCheck"
+            buildConfigField("String", "FLAVOR_MODE", "\"mock\"")
+        }
+        create("prod") {
+            dimension = "environment"
+            manifestPlaceholders["appName"] = "Android Engineer CodeCheck"
+            buildConfigField("String", "FLAVOR_MODE", "\"prod\"")
+        }
     }
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     packaging {

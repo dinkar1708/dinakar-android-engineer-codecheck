@@ -25,10 +25,10 @@ class DependencyInjectionTest {
     }
 
     @Test
-    fun repositoryModule_providesUseCases() {
+    fun useCaseModule_providesUseCases() {
         val fakeRepo = mockk<GitHubRepository>(relaxed = true)
-        val searchUseCase = RepositoryModule.provideSearchRepositoriesUseCase(fakeRepo)
-        val detailsUseCase = RepositoryModule.provideGetRepositoryDetailsUseCase(fakeRepo)
+        val searchUseCase = UseCaseModule.provideSearchRepositoriesUseCase(fakeRepo)
+        val detailsUseCase = UseCaseModule.provideGetRepositoryDetailsUseCase(fakeRepo)
 
         assertNotNull(searchUseCase)
         assertNotNull(detailsUseCase)

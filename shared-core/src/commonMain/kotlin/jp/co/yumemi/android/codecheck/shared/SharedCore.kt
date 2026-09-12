@@ -11,6 +11,11 @@ import jp.co.yumemi.android.codecheck.core.domain.usecase.SearchRepositoriesUseC
  */
 object SharedCore {
     val repository: GitHubRepository by lazy { DataModule.provideGitHubRepository() }
+    val mockRepository: GitHubRepository by lazy { DataModule.provideMockGitHubRepository() }
     val searchRepositoriesUseCase: SearchRepositoriesUseCase by lazy { SearchRepositoriesUseCase(repository) }
     val getRepositoryDetailsUseCase: GetRepositoryDetailsUseCase by lazy { GetRepositoryDetailsUseCase(repository) }
+
+    fun createLiveRepository(): GitHubRepository = DataModule.provideGitHubRepository()
+    fun createMockRepository(simulatedDelayMs: Long = 300L): GitHubRepository =
+        DataModule.provideMockGitHubRepository(simulatedDelayMs = simulatedDelayMs)
 }

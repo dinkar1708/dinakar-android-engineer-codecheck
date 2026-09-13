@@ -49,7 +49,11 @@ class MockGitHubRepository(
         }
 
         if (trimmed.equals("error", ignoreCase = true)) {
-            throw NetworkException.UnknownNetworkException("Simulated mock network failure for testing")
+            throw NetworkException.NoConnectivityException("No internet connection available. Please check your network and retry.")
+        }
+
+        if (trimmed.equals("loading", ignoreCase = true) || trimmed.equals("load", ignoreCase = true)) {
+            delay(10000L)
         }
 
         if (trimmed.equals("empty", ignoreCase = true)) {

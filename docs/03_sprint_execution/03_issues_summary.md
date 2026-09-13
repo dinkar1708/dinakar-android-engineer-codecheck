@@ -10,17 +10,17 @@ All **9 code challenge issues** (mapped to **GitHub Issues #3 through #11**, see
 > **Issue Number Mapping & Offset Rationale (+2):**  
 > This repository was initially configured as a **Private** repository. Due to GitHub Actions CI execution and billing limits on private repositories, PR #1 (build fixes) and PR #2 (foundational documentation) were created and merged before running the automated issue copying action (`copy-issues.yml`). Because GitHub allocates a single shared sequential counter for both PRs and Issues, Challenge Issues #1 through #9 are tracked as **GitHub Issues #3 through #11**.
 
-| Challenge Task | GitHub Issue | Title | Level | Status |
-|:---:|:---:|:------|:-----:|:------:|
-| **#1** | [**#3**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/3) | ソースコードの可読性の向上 | 初級 | ✅ Done (PR #17) |
-| **#2** | [**#4**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/4) | ソースコードの安全性の向上 | 初級 | ✅ Done (PR #18) |
-| **#3** | [**#5**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/5) | バグを修正 | 初級 | ✅ Done (PR #19) |
-| **#4** | [**#6**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/6) | Fat Fragment の回避 | 初級 | ✅ Done (PR #20) |
-| **#5** | [**#7**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/7) | プログラム構造をリファクタリング | 中級 | ✅ Done (PR #21) |
-| **#6** | [**#8**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/8) | アーキテクチャを適用 | 中級 | ✅ Done (PRs 8.1, 8.2, 8.3) |
-| **#7** | [**#9**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/9) | テストを追加 | 中級 | ✅ Done (PR #22) |
-| **#8** | [**#10**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/10) | UI をブラッシュアップ | ボーナス | ✅ Done (PRs #35, #36, #37) |
-| **#9** | [**#11**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/11) | 新機能を追加 | ボーナス | ✅ Done (PRs #41, #42) |
+| Challenge Task | GitHub Issue | Title | Level | Status | Merged PR(s) |
+|:---:|:---:|:------|:-----:|:------:|:---|
+| **#1** | [**#3**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/3) | ソースコードの可読性の向上 | 初級 | ✅ Closed | [#14](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/14) (`close #3`) |
+| **#2** | [**#4**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/4) | ソースコードの安全性の向上 | 初級 | ✅ Closed | [#15](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/15) (`close #4`) |
+| **#3** | [**#5**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/5) | バグを修正 | 初級 | ✅ Closed | [#18](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/18) (`close #5`) |
+| **#4** | [**#6**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/6) | Fat Fragment の回避 | 初級 | ✅ Closed | [#19](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/19) (`close #6`) |
+| **#5** | [**#7**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/7) | プログラム構造をリファクタリング | 中級 | ✅ Closed | [#21](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/21) (`close #7`) |
+| **#6** | [**#8**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/8) | アーキテクチャを適用 | 中級 | ✅ Closed | [#25](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/25), [#26](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/26), [#27](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/27) (`closes #8`) |
+| **#7** | [**#9**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/9) | テストを追加 | 中級 | ✅ Closed | [#28](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/28), [#29](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/29), [#30](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/30), [#31](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/31), [#32](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/32) (`close #9`) |
+| **#8** | [**#10**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/10) | UI をブラッシュアップ | ボーナス | ✅ Closed | [#33](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/33), [#34](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/34), [#39](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/39), [#40](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/40) (`refs #10`) |
+| **#9** | [**#11**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/11) | 新機能を追加 | ボーナス | ✅ Closed | [#35](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/35), [#37](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/37), [#38](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/38), [#41](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/41), [#42](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/42) (`refs #11`) |
 
 **Legend**: 初級 = Beginner, 中級 = Intermediate, ボーナス = Bonus
 

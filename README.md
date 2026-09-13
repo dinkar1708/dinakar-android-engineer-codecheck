@@ -49,6 +49,35 @@ Visual walkthroughs demonstrating the application running live across both phone
 
 ---
 
+## ✅ Challenge Issue Completion Status
+
+All **9 Yumemi coding challenge issues** have been successfully completed and verified.
+
+> [!NOTE]
+> **Issue Number Offset:** This repository was initially private. PRs #1-2 were merged before copying challenge issues, resulting in a +2 offset (Challenge #1 = GitHub Issue #3, etc.).
+
+| Challenge Task | GitHub Issue | Level | Status | Merged PR(s) |
+|:---|:---:|:---:|:---:|:---|
+| **#1: ソースコードの可読性の向上**<br>*(Improve Code Readability)* | [#3](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/3) | 初級 | ✅ Closed | [#14](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/14) (`close #3`) |
+| **#2: ソースコードの安全性の向上**<br>*(Improve Code Safety)* | [#4](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/4) | 初級 | ✅ Closed | [#15](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/15) (`close #4`) |
+| **#3: バグを修正**<br>*(Fix Bugs)* | [#5](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/5) | 初級 | ✅ Closed | [#18](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/18) (`close #5`) |
+| **#4: Fat Fragment の回避**<br>*(Avoid Fat Fragment)* | [#6](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/6) | 初級 | ✅ Closed | [#19](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/19) (`close #6`) |
+| **#5: プログラム構造をリファクタリング**<br>*(Refactor Program Structure)* | [#7](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/7) | 中級 | ✅ Closed | [#21](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/21) (`close #7`) |
+| **#6: アーキテクチャを適用**<br>*(Apply Architecture)* | [#8](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/8) | 中級 | ✅ Closed | [#25](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/25), [#26](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/26), [#27](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/27) (`closes #8`) |
+| **#7: テストを追加**<br>*(Add Tests)* | [#9](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/9) | 中級 | ✅ Closed | [#28](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/28), [#29](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/29), [#30](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/30), [#31](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/31), [#32](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/32) (`close #9`) |
+| **#8: UI をブラッシュアップ**<br>*(Polish UI)* | [#10](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/10) | ボーナス | ✅ Closed | [#33](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/33), [#34](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/34), [#39](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/39), [#40](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/40) (`refs #10`) |
+| **#9: 新機能を追加**<br>*(Add New Features)* | [#11](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/11) | ボーナス | ✅ Closed | [#35](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/35), [#37](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/37), [#38](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/38), [#41](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/41), [#42](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/42) (`refs #11`) |
+
+📖 **Detailed Issue Breakdown:** [docs/03_sprint_execution/03_issues_summary.md](./docs/03_sprint_execution/03_issues_summary.md) &nbsp;|&nbsp; 📋 **[GitHub Project Delivery Board](https://github.com/users/dinkar1708/projects/1/views/1)**
+
+<div align="center">
+
+![GitHub Project Delivery Board](./docs/screenshots/github-project/project-board.png)
+
+</div>
+
+---
+
 > 📊 **Executive & Reviewer Overview:** For a 3-minute leadership walkthrough, see the [**Executive Presentation Deck (`docs/presentation/README.md`)**](./docs/presentation/README.md) covering multi-platform architecture, team velocity, quality gates, and technical ROI.
 
 ## 🎯 About This Project
@@ -331,35 +360,6 @@ open docs/03_design/00\ Index.html
 | Design Palette & Tokens | UI Component Specifications |
 |:---:|:---:|
 | <img src="./docs/screenshots/claude-design/screens/Screenshot 2026-09-13 at 22.16.37.png" width="460" /> | <img src="./docs/screenshots/claude-design/screens/Screenshot 2026-09-13 at 22.16.46.png" width="460" /> |
-
-</div>
-
----
-
-## ✅ Challenge Issue Completion Status
-
-All **9 Yumemi coding challenge issues** have been successfully completed.
-
-> [!NOTE]
-> **Issue Number Offset:** This repository was initially private. PRs #1-2 were merged before copying challenge issues, resulting in a +2 offset (Challenge #1 = GitHub Issue #3, etc.).
-
-| Challenge Task | GitHub Issue | Level | Status | PRs |
-|:---|:---:|:---:|:---:|:---:|
-| **#1: ソースコードの可読性の向上**<br>*(Improve Code Readability)* | [#3](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/3) | 初級 | ✅ Done | [#17](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/17) |
-| **#2: ソースコードの安全性の向上**<br>*(Improve Code Safety)* | [#4](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/4) | 初級 | ✅ Done | [#18](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/18) |
-| **#3: バグを修正**<br>*(Fix Bugs)* | [#5](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/5) | 初級 | ✅ Done | [#19](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/19) |
-| **#4: Fat Fragment の回避**<br>*(Avoid Fat Fragment)* | [#6](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/6) | 初級 | ✅ Done | [#20](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/20) |
-| **#5: プログラム構造をリファクタリング**<br>*(Refactor Program Structure)* | [#7](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/7) | 中級 | ✅ Done | [#21](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/21) |
-| **#6: アーキテクチャを適用**<br>*(Apply Architecture)* | [#8](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/8) | 中級 | ✅ Done | Multiple |
-| **#7: テストを追加**<br>*(Add Tests)* | [#9](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/9) | 中級 | ✅ Done | [#22](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/22) |
-| **#8: UI をブラッシュアップ**<br>*(Polish UI)* | [#10](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/10) | ボーナス | ✅ Done | [#35](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/35), [#36](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/36), [#37](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/37) |
-| **#9: 新機能を追加**<br>*(Add New Features)* | [#11](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/11) | ボーナス | ✅ Done | [#41](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/41), [#42](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/42) |
-
-📖 **Detailed Issue Breakdown:** [docs/03_sprint_execution/03_issues_summary.md](./docs/03_sprint_execution/03_issues_summary.md) &nbsp;|&nbsp; 📋 **[GitHub Project Delivery Board](https://github.com/users/dinkar1708/projects/1/views/1)**
-
-<div align="center">
-
-![GitHub Project Delivery Board](./docs/screenshots/github-project/project-board.png)
 
 </div>
 

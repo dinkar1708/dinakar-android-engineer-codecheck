@@ -39,32 +39,76 @@ This project follows **industry-standard semantic branch prefixes** for consiste
 
 ## 📝 Commit Message Convention
 
-Follow [Conventional Commits](https://www.conventionalcommits.org/) format:
+All commits in this repository strictly adhere to the [Conventional Commits v1.0.0](https://www.conventionalcommits.org/) specification. This provides an explicit, readable commit history, simplifies changelog generation, and ensures consistent quality gates.
 
+### Format Structure
+
+```text
+<type>(<optional-scope>): <imperative summary>
+
+[optional body explaining motivation and technical context]
+
+[optional footer(s): closes #issue-number, BREAKING CHANGE: <reason>]
 ```
-<type>: <description>
 
-[optional body]
+---
 
-[optional footer]
-```
+### Commit Type Prefixes & Meanings
 
-**Types:** `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `perf`, `ci`, `build`, `revert`
+| Prefix | Name & Purpose | When to Use | Examples |
+|:---|:---|:---|:---|
+| **`feat`** | **New Feature** | Adding new user-facing functionality, public API capability, or UI screens. | `feat(search): add repository sorting tabs by stars and forks`<br>`feat(theme): support system dynamic dark mode switching` |
+| **`fix`** | **Bug Fix** | Correcting a defect, unexpected crash, regression, memory leak, or logic error. | `fix(search): correct forks_count mapping key typo`<br>`fix(detail): nullify ViewBinding in onDestroyView to prevent leak` |
+| **`chore`** | **Routine Maintenance** | Housekeeping tasks, repo configuration, cleanup, or maintenance that does **not** alter app production code, business logic, or test logic. | `chore(repo): update .gitignore for local IDE cache files`<br>`chore(release): prepare v1.0.0 milestone changelog`<br>`chore(license): add MIT license header to source files` |
+| **`refactor`** | **Refactoring** | Restructuring production code without changing external behavior or fixing bugs (e.g. modularization, extracting classes, improving readability). | `refactor(domain): decouple repository contract from network client`<br>`refactor(detail): extract repository detail card into composable component` |
+| **`build`** | **Build System & Dependencies** | Changes that affect Gradle build scripts, dependency catalogs, SDK upgrades, compiler flags, or ProGuard rules. | `build(deps): bump Kotlin from 1.9.20 to 1.9.22`<br>`build(gradle): configure build-logic convention plugin for Java 17` |
+| **`ci`** | **Continuous Integration** | Changes to CI/CD workflows, automation scripts, test matrices, or pipeline configuration files. | `ci(github): add automated unit test and lint verification workflow`<br>`ci(actions): cache Gradle dependencies to speed up PR checks` |
+| **`test`** | **Testing** | Adding new automated tests, modifying test doubles, fixing flaky tests, or increasing coverage without altering production logic. | `test(search): add Turbine flow test for SearchViewModel error state`<br>`test(data): add Ktor MockEngine tests for 403 rate limit handling` |
+| **`docs`** | **Documentation** | Updating or adding markdown documentation, architecture decision records (ADRs), guides, diagrams, or KDoc comments. | `docs(architecture): add clean architecture layer boundary diagram`<br>`docs(contributing): explain semantic commit prefixes and workflow` |
+| **`perf`** | **Performance Improvement** | Code changes focused specifically on improving execution speed, reducing memory footprint, or optimizing UI rendering. | `perf(search): debounce search text input by 300ms to reduce network calls`<br>`perf(list): enable stable keys in LazyColumn for optimal recomposition` |
+| **`style`** | **Code Style & Formatting** | Cosmetic changes that do not affect code logic (whitespace, indentation, import reordering, line breaks). | `style(ui): reorder imports and apply spotless ktlint formatting` |
+| **`revert`** | **Revert Commit** | Reverting a previous commit that introduced a regression or unintended change. | `revert: "feat(search): add experimental query caching"` |
 
-**Examples:**
-```bash
-chore: upgrade to Gradle 8.5
+---
 
-docs: add architecture overview
+### 🔍 Deep Dive: Understanding `chore` vs `build` vs `refactor`
 
-feat: implement multi-module architecture
+Developers often wonder when to choose `chore` versus other prefixes. Here is the rule of thumb:
 
-fix: resolve memory leak in ViewBinding cleanup
+1. **`chore` (Housekeeping & Maintenance)**:
+   - Use `chore` for general repository housekeeping that doesn't change runtime code behavior or build definitions.
+   - *Examples*: updating `.gitignore`, cleaning up obsolete asset files, updating release templates, organizing documentation folders, deleting scratch scripts.
+   - *Mnemonic*: "If it's an administrative or housekeeping task that doesn't alter how the app runs or compiles, it's a `chore`."
 
-refactor: extract ViewModel logic from Fragment
+2. **`build` vs `chore`**:
+   - If the change modifies `build.gradle.kts`, `settings.gradle.kts`, `gradle/libs.versions.toml`, Gradle wrapper, or compilation plugins, use **`build`** (e.g. `build(deps): update ktor to 2.3.7`).
+   - If the change is non-compilation tooling or broad maintenance, use **`chore`** (e.g. `chore: clean up deprecated IDE files`).
 
-test: add unit tests for Repository layer
-```
+3. **`refactor` vs `chore`**:
+   - If code inside `src/main/` is modified to restructure, rename, or improve code design, it is always a **`refactor`** (never a `chore`).
+   - *Rule*: Never use `chore` for changes to application architecture or source code.
+
+---
+
+### 💡 Best Practices for Writing Commit Messages
+
+1. **Use the Imperative Mood**:
+   - ✅ `feat: add search query debouncing`
+   - ❌ `feat: added search query debouncing`
+   - ❌ `feat: adds search query debouncing`
+   - *Rule*: The commit message should complete the sentence: *"If applied, this commit will..."*
+
+2. **Follow the 50/72 Rule**:
+   - Keep the summary line under **50 characters** (maximum 72 characters).
+   - If more detail is necessary, leave one blank line and wrap body paragraphs at **72 characters**.
+
+3. **Keep Commits Atomic**:
+   - Each commit should represent one logical unit of work.
+   - Do not combine formatting refactors (`style`), bug fixes (`fix`), and new features (`feat`) in a single commit.
+
+4. **Specify Scopes When Applicable**:
+   - Useful scopes for this project: `search`, `detail`, `settings`, `starred`, `domain`, `data`, `network`, `ui`, `branding`, `deps`, `workflow`.
+   - *Example*: `feat(branding): replace app icons across Android and iOS with high-res dark theme assets`
 
 ---
 

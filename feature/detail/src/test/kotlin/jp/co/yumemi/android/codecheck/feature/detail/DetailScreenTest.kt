@@ -99,4 +99,23 @@ class DetailScreenTest {
         composeTestRule.onNodeWithText("リポジトリ詳細").assertIsDisplayed()
         composeTestRule.onNodeWithText("リポジトリ詳細を読み込み中…").assertIsDisplayed()
     }
+
+    @Test
+    fun launchChromeCustomTab_launchesCustomTabsIntentWithUrl() {
+        val context = androidx.test.core.app.ApplicationProvider.getApplicationContext<android.content.Context>()
+        launchChromeCustomTab(context, "https://github.com/android/compose-samples")
+        val shadowApp = org.robolectric.Shadows.shadowOf(context as android.app.Application)
+        val nextIntent = shadowApp.nextStartedActivity
+        org.junit.Assert.assertNotNull(nextIntent)
+        org.junit.Assert.assertEquals(android.content.Intent.ACTION_VIEW, nextIntent.action)
+        org.junit.Assert.assertEquals("https://github.com/android/compose-samples", nextIntent.dataString)
+    }
+
+    @Test
+    fun launchChromeCustomTab_withBlankUrl_doesNotLaunchIntent() {
+        val context = androidx.test.core.app.ApplicationProvider.getApplicationContext<android.content.Context>()
+        launchChromeCustomTab(context, "")
+        val shadowApp = org.robolectric.Shadows.shadowOf(context as android.app.Application)
+        org.junit.Assert.assertNull(shadowApp.nextStartedActivity)
+    }
 }

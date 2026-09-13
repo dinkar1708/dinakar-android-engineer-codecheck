@@ -104,14 +104,10 @@ class RepositoryCardTest {
             }
         }
 
-        val cardNode = composeTestRule.onNodeWithText("extremely-long-repository-name-that-s", substring = true, useUnmergedTree = true).fetchSemanticsNode()
-        val descNode = composeTestRule.onNodeWithText("verbose, extensive", substring = true, useUnmergedTree = true).fetchSemanticsNode()
-        val langNode = composeTestRule.onNodeWithText("Visual Basic", substring = true, useUnmergedTree = true).fetchSemanticsNode()
-        val starNode = composeTestRule.onNodeWithText("10000.0M", useUnmergedTree = true).fetchSemanticsNode()
-
-        println("CARD NODE BOUNDS: ${cardNode.boundsInRoot}")
-        println("DESC NODE BOUNDS: ${descNode.boundsInRoot}")
-        println("LANG NODE BOUNDS: ${langNode.boundsInRoot}")
-        println("STAR NODE BOUNDS: ${starNode.boundsInRoot}")
+        composeTestRule.onNodeWithText("extremely-long-repository-name-that-s", substring = true).assertIsDisplayed()
+        composeTestRule.onNodeWithText("verbose, extensive", substring = true).assertIsDisplayed()
+        composeTestRule.onNodeWithText("Visual Basic", substring = true).assertIsDisplayed()
+        composeTestRule.onNodeWithText("10000.0M").assertIsDisplayed()
+        composeTestRule.onNodeWithText("7777.8M forks").assertIsDisplayed()
     }
 }

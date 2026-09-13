@@ -6,6 +6,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,6 +57,7 @@ import kotlin.math.abs
  * - Slate neutrals for structure
  * - Language dot and star count are the only colors carrying data
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RepositoryCard(
     item: RepositoryItem,
@@ -145,10 +148,10 @@ fun RepositoryCard(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // Data row: Language, Stars, Forks
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(14.dp)
+                // Data row: Language, Stars, Forks (wrapping gracefully for long metrics)
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(14.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     // Language with data color dot
                     if (!item.language.isNullOrBlank()) {
@@ -165,7 +168,9 @@ fun RepositoryCard(
                             Text(
                                 text = item.language.orEmpty(),
                                 fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
                             )
                         }
                     }
@@ -185,7 +190,8 @@ fun RepositoryCard(
                             text = formatStarCount(item.stargazersCount),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onSurface,
+                            maxLines = 1
                         )
                     }
 
@@ -193,7 +199,9 @@ fun RepositoryCard(
                     Text(
                         text = stringResource(R.string.search_forks_suffix, formatForkCount(item.forksCount)),
                         fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }

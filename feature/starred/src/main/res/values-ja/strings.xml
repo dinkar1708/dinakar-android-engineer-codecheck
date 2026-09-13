@@ -1,14 +1,16 @@
 <resources>
-    <string name="starred_title">スター付きリポジトリ</string>
+    <string name="starred_title">スター</string>
     <string name="starred_empty_title">スター付きリポジトリはありません</string>
-    <string name="starred_empty_subtitle">詳細画面からリポジトリにスターを付けると、オフラインでも閲覧できます。</string>
+    <string name="starred_empty_subtitle">詳細画面でリポジトリのスターをタップすると、このセッション中ここに保存されます。</string>
+    <string name="starred_search_repositories">リポジトリを検索</string>
     <string name="starred_remove_content_description">%s のスターを解除</string>
     <string name="starred_clear_all">すべて解除</string>
     <string name="starred_clear_confirm_title">すべてのスターを解除しますか？</string>
     <string name="starred_clear_confirm_message">オフラインに保存されたすべてのスター付きリポジトリが解除されます。</string>
     <string name="starred_cancel">キャンセル</string>
     <string name="starred_clear">解除</string>
-    <string name="starred_count">%d 件</string>
+    <string name="starred_count_singular">1 件のリポジトリ</string>
+    <string name="starred_count_plural">%d 件のリポジトリ</string>
     <string name="starred_forks_suffix">%s フォーク</string>
     <string name="starred_avatar_content_description">%s のアバター</string>
 </resources>

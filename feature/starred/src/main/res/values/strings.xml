@@ -1,14 +1,16 @@
 <resources>
-    <string name="starred_title">Starred Repositories</string>
+    <string name="starred_title">Starred</string>
     <string name="starred_empty_title">No starred repositories</string>
-    <string name="starred_empty_subtitle">Star repositories from details to browse them offline.</string>
+    <string name="starred_empty_subtitle">Tap the star on any repository\'s detail screen and it will be kept here for this session.</string>
+    <string name="starred_search_repositories">Search repositories</string>
     <string name="starred_remove_content_description">Remove %s from starred</string>
-    <string name="starred_clear_all">Clear All</string>
+    <string name="starred_clear_all">Clear all</string>
     <string name="starred_clear_confirm_title">Clear all starred repositories?</string>
     <string name="starred_clear_confirm_message">This will remove all repositories from your offline starred list.</string>
     <string name="starred_cancel">Cancel</string>
     <string name="starred_clear">Clear</string>
-    <string name="starred_count">%d items</string>
+    <string name="starred_count_singular">1 REPOSITORY</string>
+    <string name="starred_count_plural">%d REPOSITORIES</string>
     <string name="starred_forks_suffix">%s forks</string>
     <string name="starred_avatar_content_description">Avatar for %s</string>
 </resources>

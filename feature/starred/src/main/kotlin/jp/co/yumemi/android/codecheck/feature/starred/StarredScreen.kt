@@ -20,15 +20,19 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -48,10 +52,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppAmber
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppNavy
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramBlueBg
@@ -61,10 +67,14 @@ import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramGreenText
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramSlateBg
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramSlateText
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate200
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate300
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate400
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate50
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate600
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate700
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate800
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate900
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.core.ui.util.formatForkCount
 import jp.co.yumemi.android.codecheck.core.ui.util.formatStarCount
@@ -79,6 +89,7 @@ import kotlin.math.abs
 fun StarredScreen(
     onRepositoryClick: (RepositoryItem) -> Unit,
     modifier: Modifier = Modifier,
+    onNavigateToSearch: () -> Unit = {},
     viewModel: StarredViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -88,12 +99,13 @@ fun StarredScreen(
         onRepositoryClick = onRepositoryClick,
         onUnstar = viewModel::unstar,
         onClearAll = viewModel::clearAllStars,
+        onNavigateToSearch = onNavigateToSearch,
         modifier = modifier
     )
 }
 
 /**
- * Stateless content of the Starred repositories screen.
+ * Stateless content of the Starred repositories screen matching the design specification.
  */
 @Composable
 fun StarredContent(
@@ -101,39 +113,83 @@ fun StarredContent(
     onRepositoryClick: (RepositoryItem) -> Unit,
     onUnstar: (RepositoryItem) -> Unit,
     onClearAll: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToSearch: () -> Unit = {}
 ) {
     var showClearConfirmation by remember { mutableStateOf(false) }
 
     if (showClearConfirmation) {
         AlertDialog(
             onDismissRequest = { showClearConfirmation = false },
+            containerColor = AppWhite,
+            shape = RoundedCornerShape(16.dp),
+            icon = {
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFFFEE2E2)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = null,
+                        tint = Color(0xFFDC2626),
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            },
             title = {
                 Text(
                     text = stringResource(R.string.starred_clear_confirm_title),
-                    fontWeight = FontWeight.Bold
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Slate900,
+                    textAlign = TextAlign.Center
                 )
             },
             text = {
-                Text(text = stringResource(R.string.starred_clear_confirm_message))
+                Text(
+                    text = stringResource(R.string.starred_clear_confirm_message),
+                    fontSize = 14.sp,
+                    lineHeight = 20.sp,
+                    color = Slate600,
+                    textAlign = TextAlign.Center
+                )
             },
             confirmButton = {
-                TextButton(
+                Button(
                     onClick = {
                         showClearConfirmation = false
                         onClearAll()
-                    }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFDC2626),
+                        contentColor = AppWhite
+                    ),
+                    shape = RoundedCornerShape(8.dp)
                 ) {
                     Text(
                         text = stringResource(R.string.starred_clear),
-                        color = Color.Red,
-                        fontWeight = FontWeight.Bold
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showClearConfirmation = false }) {
-                    Text(text = stringResource(R.string.starred_cancel))
+                OutlinedButton(
+                    onClick = { showClearConfirmation = false },
+                    border = BorderStroke(1.dp, Slate300),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = Slate700
+                    )
+                ) {
+                    Text(
+                        text = stringResource(R.string.starred_cancel),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
             }
         )
@@ -174,7 +230,7 @@ fun StarredContent(
                         ) {
                             Text(
                                 text = stringResource(R.string.starred_clear_all),
-                                color = AppWhite.copy(alpha = 0.85f),
+                                color = AppWhite.copy(alpha = 0.9f),
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Medium
                             )
@@ -183,14 +239,14 @@ fun StarredContent(
                 }
             }
 
-            // Body
+            // Body Area
             when (uiState) {
                 is StarredUiState.Loading -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        // Neutral loading state
+                        // Clean neutral loading state
                     }
                 }
 
@@ -205,28 +261,60 @@ fun StarredContent(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-                            Icon(
-                                imageVector = Icons.Outlined.StarBorder,
-                                contentDescription = null,
-                                modifier = Modifier.size(64.dp),
-                                tint = Slate400
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
+                            // Circular amber badge matching mockup
+                            Box(
+                                modifier = Modifier
+                                    .size(80.dp)
+                                    .clip(CircleShape)
+                                    .background(Color(0xFFFEF3C7)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.StarBorder,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(36.dp),
+                                    tint = Color(0xFFD97706)
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(20.dp))
+
                             Text(
                                 text = stringResource(R.string.starred_empty_title),
                                 fontSize = 18.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = Slate800,
+                                fontWeight = FontWeight.Bold,
+                                color = Slate900,
                                 textAlign = TextAlign.Center
                             )
+
                             Spacer(modifier = Modifier.height(8.dp))
+
                             Text(
                                 text = stringResource(R.string.starred_empty_subtitle),
                                 fontSize = 14.sp,
                                 color = Slate500,
                                 textAlign = TextAlign.Center,
-                                lineHeight = 20.sp
+                                lineHeight = 20.sp,
+                                modifier = Modifier.padding(horizontal = 8.dp)
                             )
+
+                            Spacer(modifier = Modifier.height(24.dp))
+
+                            Button(
+                                onClick = onNavigateToSearch,
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = AppBlue,
+                                    contentColor = AppWhite
+                                ),
+                                shape = RoundedCornerShape(8.dp),
+                                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.starred_search_repositories),
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
                         }
                     }
                 }
@@ -235,15 +323,21 @@ fun StarredContent(
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         item {
+                            val countText = if (uiState.repositories.size == 1) {
+                                stringResource(R.string.starred_count_singular)
+                            } else {
+                                stringResource(R.string.starred_count_plural, uiState.repositories.size)
+                            }
                             Text(
-                                text = stringResource(R.string.starred_count, uiState.repositories.size),
-                                fontSize = 13.sp,
-                                fontWeight = FontWeight.SemiBold,
+                                text = countText,
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 0.05.em,
                                 color = Slate500,
-                                modifier = Modifier.padding(bottom = 4.dp)
+                                modifier = Modifier.padding(bottom = 2.dp)
                             )
                         }
                         items(
@@ -339,7 +433,7 @@ private fun StarredCard(
                         text = item.description.orEmpty(),
                         fontSize = 13.sp,
                         lineHeight = 18.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = Slate600,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -366,7 +460,7 @@ private fun StarredCard(
                             Text(
                                 text = item.language.orEmpty(),
                                 fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = Slate500
                             )
                         }
                     }
@@ -397,7 +491,7 @@ private fun StarredCard(
                 }
             }
 
-            // Unstar Button
+            // Filled gold star action button (tapping unstars)
             IconButton(
                 onClick = onUnstarClick,
                 modifier = Modifier.size(36.dp)

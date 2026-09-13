@@ -61,7 +61,8 @@ fun MainScreen(
                 MainTab.STARRED -> {
                     StarredScreen(
                         viewModel = starredViewModel,
-                        onRepositoryClick = onRepositoryClick
+                        onRepositoryClick = onRepositoryClick,
+                        onNavigateToSearch = { selectedTab = MainTab.SEARCH }
                     )
                 }
                 MainTab.SETTINGS -> {

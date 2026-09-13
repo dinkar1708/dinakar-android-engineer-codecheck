@@ -51,7 +51,16 @@ Searches for repositories on GitHub matching a given query string with optional 
       "stargazers_count": 43500,
       "watchers_count": 43500,
       "forks_count": 11800,
-      "open_issues_count": 85
+      "open_issues_count": 85,
+      "default_branch": "main",
+      "pushed_at": "2026-09-02T14:32:00Z",
+      "license": {
+        "key": "apache-2.0",
+        "name": "Apache License 2.0",
+        "spdx_id": "Apache-2.0",
+        "url": "https://api.github.com/licenses/apache-2.0"
+      },
+      "size": 4300
     }
   ]
 }
@@ -86,6 +95,13 @@ Searches for repositories on GitHub matching a given query string with optional 
 | `watchers_count` | `integer` | No | Total number of watchers (subscribers). |
 | `forks_count` | `integer` | No | Total number of forks. Note: historically corrected from legacy `forks_conut` bug. |
 | `open_issues_count` | `integer` | No | Number of open issues and pull requests. |
+| `default_branch` | `string` | Yes | Default Git branch of the repository (e.g., `main`). Rendered in monospace font on Detail Screen. |
+| `pushed_at` | `string` | Yes | ISO-8601 timestamp of the most recent push (e.g., `2026-09-02T14:32:00Z`). Formatted to `YYYY-MM-DD`. |
+| `license` | `object` | Yes | License object containing SPDX ID and license name. |
+| `license.key` | `string` | Yes | Machine-readable license key (e.g., `apache-2.0`, `mit`). |
+| `license.name` | `string` | Yes | Human-readable license name (e.g., `Apache License 2.0`, `MIT License`). |
+| `license.spdx_id` | `string` | Yes | SPDX identifier (e.g., `Apache-2.0`, `MIT`). |
+| `size` | `integer` | No | Repository disk size in kilobytes (KB). Formatted to KB, MB, or GB in UI. |
 
 ---
 

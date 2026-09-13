@@ -1,0 +1,14 @@
+<resources>
+    <string name="bookmarks_title">ブックマーク</string>
+    <string name="bookmarks_empty_title">ブックマークしたリポジトリはありません</string>
+    <string name="bookmarks_empty_subtitle">検索結果や詳細画面からリポジトリをブックマークすると、オフラインでも閲覧できます。</string>
+    <string name="bookmarks_remove_content_description">%s をブックマークから削除</string>
+    <string name="bookmarks_clear_all">すべて削除</string>
+    <string name="bookmarks_clear_confirm_title">すべてのブックマークを削除しますか？</string>
+    <string name="bookmarks_clear_confirm_message">オフラインに保存されたすべてのリポジトリが削除されます。</string>
+    <string name="bookmarks_cancel">キャンセル</string>
+    <string name="bookmarks_clear">削除</string>
+    <string name="bookmarks_count">%d 件</string>
+    <string name="bookmarks_forks_suffix">%s フォーク</string>
+    <string name="bookmarks_avatar_content_description">%s のアバター</string>
+</resources>

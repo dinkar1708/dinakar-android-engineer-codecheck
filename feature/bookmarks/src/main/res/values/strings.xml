@@ -1,0 +1,14 @@
+<resources>
+    <string name="bookmarks_title">Saved Repositories</string>
+    <string name="bookmarks_empty_title">No saved repositories</string>
+    <string name="bookmarks_empty_subtitle">Bookmark repositories from search results or details to browse them offline.</string>
+    <string name="bookmarks_remove_content_description">Remove %s from bookmarks</string>
+    <string name="bookmarks_clear_all">Clear All</string>
+    <string name="bookmarks_clear_confirm_title">Clear all bookmarks?</string>
+    <string name="bookmarks_clear_confirm_message">This will remove all repositories from your offline bookmarks.</string>
+    <string name="bookmarks_cancel">Cancel</string>
+    <string name="bookmarks_clear">Clear</string>
+    <string name="bookmarks_count">%d items</string>
+    <string name="bookmarks_forks_suffix">%s forks</string>
+    <string name="bookmarks_avatar_content_description">Avatar for %s</string>
+</resources>

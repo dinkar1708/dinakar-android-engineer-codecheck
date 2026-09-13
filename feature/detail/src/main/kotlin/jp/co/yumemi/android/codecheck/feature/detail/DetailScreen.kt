@@ -1,5 +1,11 @@
 package jp.co.yumemi.android.codecheck.feature.detail
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +25,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -38,11 +45,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import jp.co.yumemi.android.codecheck.feature.detail.R
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -65,6 +74,8 @@ import jp.co.yumemi.android.codecheck.core.ui.component.ErrorView
 import jp.co.yumemi.android.codecheck.core.ui.component.LoadingView
 import jp.co.yumemi.android.codecheck.core.ui.util.formatDecimalNumber
 import jp.co.yumemi.android.codecheck.core.ui.util.getMonogramInitials
+import jp.co.yumemi.android.codecheck.feature.detail.R
+import jp.co.yumemi.android.codecheck.feature.detail.component.MetaRow
 
 /**
  * Repository detail screen composable strictly adhering to the design specification:
@@ -80,13 +91,17 @@ fun DetailScreen(
     onOpenBrowser: ((String) -> Unit)? = null,
     viewModel: DetailViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+    val effectiveOpenBrowser = onOpenBrowser ?: remember(context) {
+        { url: String -> launchChromeCustomTab(context, url) }
+    }
     val uiState by viewModel.uiState.collectAsState()
     DetailScreen(
         uiState = uiState,
         onBackClick = onBackClick,
         onRetry = viewModel::retry,
         modifier = modifier,
-        onOpenBrowser = onOpenBrowser
+        onOpenBrowser = effectiveOpenBrowser
     )
 }
 
@@ -330,25 +345,79 @@ internal fun DetailContent(
                 }
             }
 
-            // Action Button: View on GitHub
+            // 4 Extra Meta Rows (Default branch, Last push, License, Size)
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                MetaRow(
+                    label = stringResource(R.string.detail_meta_default_branch),
+                    value = repository.defaultBranch?.takeIf { it.isNotBlank() }
+                        ?: stringResource(R.string.detail_meta_not_available),
+                    fontFamily = FontFamily.Monospace
+                )
+                MetaRow(
+                    label = stringResource(R.string.detail_meta_last_push),
+                    value = DetailFormatters.formatPushDate(repository.pushedAt)
+                )
+                MetaRow(
+                    label = stringResource(R.string.detail_meta_license),
+                    value = repository.license?.takeIf { it.isNotBlank() }
+                        ?: stringResource(R.string.detail_meta_none)
+                )
+                MetaRow(
+                    label = stringResource(R.string.detail_meta_size),
+                    value = DetailFormatters.formatSize(repository.size)
+                )
+            }
+
+            // Action Buttons: View on GitHub + Companion Download
             if (!repository.htmlUrl.isNullOrBlank() && onOpenBrowser != null) {
-                Button(
-                    onClick = { onOpenBrowser(repository.htmlUrl.orEmpty()) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
-                    shape = RoundedCornerShape(8.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = AppBlue,
-                        contentColor = AppWhite
-                    ),
-                    contentPadding = PaddingValues(vertical = 12.dp)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = stringResource(R.string.detail_view_on_github),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
-                    )
+                    Button(
+                        onClick = { onOpenBrowser(repository.htmlUrl.orEmpty()) },
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(48.dp),
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = AppBlue,
+                            contentColor = AppWhite
+                        ),
+                        contentPadding = PaddingValues(vertical = 12.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.detail_view_on_github),
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+
+                    val downloadUrl = remember(repository.htmlUrl, repository.defaultBranch) {
+                        val branch = repository.defaultBranch?.takeIf { it.isNotBlank() } ?: "main"
+                        "${repository.htmlUrl}/archive/refs/heads/$branch.zip"
+                    }
+
+                    Surface(
+                        onClick = { onOpenBrowser(downloadUrl) },
+                        modifier = Modifier.size(48.dp),
+                        shape = RoundedCornerShape(8.dp),
+                        color = AppWhite,
+                        border = BorderStroke(1.dp, Slate300)
+                    ) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Download,
+                                contentDescription = stringResource(R.string.detail_download),
+                                tint = Slate900,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -399,6 +468,38 @@ fun StatCard(
                 fontWeight = FontWeight.Bold,
                 color = valueColor
             )
+        }
+    }
+}
+
+/**
+ * Opens the given web [url] inside a Chrome Custom Tab styled with Brand Navy header (#2D3545),
+ * falling back to the standard system browser if Custom Tabs cannot be opened.
+ */
+internal fun launchChromeCustomTab(context: Context, url: String) {
+    if (url.isBlank()) return
+    try {
+        val customTabsIntent = CustomTabsIntent.Builder()
+            .setShowTitle(true)
+            .setDefaultColorSchemeParams(
+                CustomTabColorSchemeParams.Builder()
+                    .setToolbarColor(AppNavy.toArgb())
+                    .build()
+            )
+            .build()
+        if (context !is Activity) {
+            customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        customTabsIntent.launchUrl(context, Uri.parse(url))
+    } catch (_: Exception) {
+        try {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            if (context !is Activity) {
+                browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(browserIntent)
+        } catch (_: Exception) {
+            // Silently ignore if no browser application can handle the intent
         }
     }
 }

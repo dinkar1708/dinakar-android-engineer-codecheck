@@ -83,4 +83,5 @@ To eliminate ambiguity and establish clear expectations, reviewers must prefix i
 - [Definition of Done](./05_definition_of_done.md)
 - [Engineering Guardrails & Repository Policies](./06_engineering_guardrails.md)
 - [Collaborative Code Review Culture](./09_collaborative_review_culture.md)
+- [Code Commenting & Documentation Standards](./12_code_commenting_and_documentation_standards.md)
 - [Developer Workflow & Ticket Guide](./08_developer_workflow.md)

@@ -27,6 +27,7 @@ flowchart LR
 | **[02_how_to_proceed_and_issue_mapping.md](./02_how_to_proceed_and_issue_mapping.md)** | Bidirectional traceability matrix: 9 code check challenge issues → Agile tickets → Story points |
 | **[03_issues_summary.md](./03_issues_summary.md)** | ⭐ **Master issue list** - Authoritative specification and acceptance criteria for all 9 issues |
 | **[04_platform_references.md](./04_platform_references.md)** | Technical deep-dives into Android platform pitfalls and best practices |
+| **[05_market_research_and_product_strategy.md](./05_market_research_and_product_strategy.md)** | 📊 Market research on GitHub client ecosystem, user pain points & architectural archetypes |
 
 ---
 

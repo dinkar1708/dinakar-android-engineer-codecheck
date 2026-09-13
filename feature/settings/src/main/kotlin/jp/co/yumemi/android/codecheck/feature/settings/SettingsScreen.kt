@@ -1,6 +1,5 @@
 package jp.co.yumemi.android.codecheck.feature.settings
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -38,14 +37,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppNavy
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate100
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate200
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate50
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate900
 import jp.co.yumemi.android.codecheck.feature.settings.component.SettingsInfoTile
 import jp.co.yumemi.android.codecheck.feature.settings.component.SettingsOptionTile
 

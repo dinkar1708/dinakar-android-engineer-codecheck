@@ -124,6 +124,7 @@ We have organized our testing architecture into 3 clear, focused specifications:
 | **[Guide 2: Compose View Testing](./02_compose_ui_testing.md)** | Screen UI States (5 states), Component Layouts, Click Actions | Robolectric, AndroidX Compose Test Rule | `feature/*/src/test/`<br/>`core/ui/src/test/` |
 | **[Guide 3: Integration & E2E Testing](./03_integration_and_e2e_testing.md)** | Live Emulator User Journey & Ktor MockEngine HTTP Tests | `createAndroidComposeRule`, Ktor `MockEngine` | `app/src/androidTest/`<br/>`core/*/src/commonTest/` |
 | **[Traceability Matrix](./04_test_cases_matrix.md)** | Full bidirectional mapping from requirements to 81 tests | Markdown Matrix | All test folders |
+| **[Performance & Profiling Guide](./05_performance_profiling_and_benchmarks.md)** | CPU, Memory, Network & Recomposition Telemetry | Android Studio Profiler, Layout Inspector | `docs/02_project_architecture/testing/` |
 
 ---
 

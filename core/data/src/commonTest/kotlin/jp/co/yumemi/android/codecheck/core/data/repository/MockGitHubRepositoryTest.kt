@@ -85,7 +85,7 @@ class MockGitHubRepositoryTest {
 
     @Test
     fun searchRepositories_withErrorKeyword_throwsSimulatedException() = runTest {
-        assertFailsWith<NetworkException.UnknownNetworkException> {
+        assertFailsWith<NetworkException.NoConnectivityException> {
             repository.searchRepositories("error")
         }
     }

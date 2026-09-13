@@ -64,3 +64,10 @@ Typography conforms to the official Material 3 scale:
 - `bodyLarge`: Primary reading text (16sp, Normal)
 - `bodyMedium`: Secondary metric text (14sp, Normal)
 - `labelMedium`: Language chip text (12sp, Medium)
+
+---
+
+## 5. Related Design Documentation
+- [UI/UX Design Specification & Architecture](../design/ui_ux_design_specification.md)
+- [Interactive HTML Design Prototypes (`design/html/`)](../design/html/README.md)
+- [AI-Assisted Design-to-Code Workflow](../design/ai_assisted_design_workflow.md)

@@ -17,11 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate600
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate800
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 
 /**
  * An option row in a settings card with title, subtitle, and an active checkmark indicator.
@@ -66,3 +65,30 @@ fun SettingsOptionTile(
         }
     }
 }
+
+@Preview(name = "SettingsOptionTile - Selected Light", showBackground = true)
+@Composable
+private fun SettingsOptionTileSelectedLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        SettingsOptionTile(
+            title = "Dark Mode",
+            subtitle = "Always use dark theme",
+            selected = true,
+            onClick = {}
+        )
+    }
+}
+
+@Preview(name = "SettingsOptionTile - Unselected Dark", showBackground = true)
+@Composable
+private fun SettingsOptionTileUnselectedDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        SettingsOptionTile(
+            title = "Light Mode",
+            subtitle = "Always use light theme",
+            selected = false,
+            onClick = {}
+        )
+    }
+}
+

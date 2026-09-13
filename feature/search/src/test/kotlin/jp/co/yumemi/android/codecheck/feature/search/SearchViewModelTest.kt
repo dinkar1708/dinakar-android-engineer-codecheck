@@ -7,7 +7,6 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import jp.co.yumemi.android.codecheck.core.domain.model.Owner
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
-import jp.co.yumemi.android.codecheck.core.domain.model.SearchFilter
 import jp.co.yumemi.android.codecheck.core.domain.model.SearchResult
 import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
 import jp.co.yumemi.android.codecheck.core.domain.repository.SearchHistoryRepository

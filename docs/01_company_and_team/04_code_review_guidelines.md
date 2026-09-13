@@ -74,7 +74,7 @@ To eliminate ambiguity and establish clear expectations, reviewers must prefix i
 ## 6. Conflict Resolution & Escalation
 
 1. **Direct Collaborative Discussion:** When perspectives diverge, authors and reviewers discuss technical trade-offs directly in the PR thread with concrete examples.
-2. **Escalation to Lead:** If consensus is not reached after two review cycles, the PR is escalated to the Mobile Platform Engineering Lead for final architectural determination.
+2. **Escalation to Lead:** If consensus is not reached after two review cycles, the PR is escalated to the Tech Lead for final architectural determination.
 
 ---
 
@@ -82,5 +82,6 @@ To eliminate ambiguity and establish clear expectations, reviewers must prefix i
 
 - [Definition of Done](./05_definition_of_done.md)
 - [Engineering Guardrails & Repository Policies](./06_engineering_guardrails.md)
-- [Yumemi PR Review Culture](./09_yumemi_review_culture.md)
+- [Collaborative Code Review Culture](./09_collaborative_review_culture.md)
+- [Code Commenting & Documentation Standards](./12_code_commenting_and_documentation_standards.md)
 - [Developer Workflow & Ticket Guide](./08_developer_workflow.md)

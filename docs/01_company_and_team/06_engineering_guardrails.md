@@ -11,7 +11,7 @@ flowchart LR
     L1["1. Local Hygiene<br/>(Git & Secret Checks)"] --> L2["2. Static & Dynamic<br/>(Detekt & Turbine)"]
     L2 --> L3["3. CI Quality Gate<br/>(GitHub Actions)"]
     L3 --> L4["4. Automated Bots<br/>(Copilot Review)"]
-    L4 --> L5["5. Peer Review<br/>(Yumemi Badges)"]
+    L4 --> L5["5. Peer Review<br/>(Review Badges)"]
     L5 --> L6["6. Protected Merge<br/>(main)"]
 ```
 
@@ -90,7 +90,7 @@ Every pull request must adhere to the standard corporate Pull Request template:
 1. **Issue Traceability**: Explicitly link the closed issue (e.g., `close #4`).
 2. **Summary**: Concise explanation of the problem solved and approach taken.
 3. **Screenshots & Media**: Side-by-side Before/After screenshots or video for any UI modifications.
-4. **Review Level Checkbox**: Author specifies expected reviewer rigor (Yumemi standard).
+4. **Review Level Checkbox**: Author specifies expected reviewer rigor (see [Collaborative Review Culture](./09_collaborative_review_culture.md)).
 
 ---
 
@@ -144,7 +144,7 @@ flowchart TD
     S1["Tier 1: Developer Self-Review<br/>(Inspect git diff locally)"] --> S2["Tier 2: IDE & Copilot Code Review<br/>(AI inline suggestions & sanity check)"]
     S2 --> S3["Tier 3: CI Automated Checks<br/>(Detekt, Lint, Unit Tests)"]
     S3 --> S4["Tier 4: Automated PR Bot Review<br/>(Copilot / PR Commenter Bots)"]
-    S4 --> S5["Tier 5: Human Peer Review<br/>(Yumemi Badge Categorization)"]
+    S4 --> S5["Tier 5: Human Peer Review<br/>(Badge Categorization)"]
 ```
 
 ### Review Tier Responsibilities
@@ -152,7 +152,7 @@ flowchart TD
 2. **Tier 2 (IDE & Copilot Review)**: Run local AI code review in the IDE to catch edge cases, missing null checks, and naming improvements.
 3. **Tier 3 (Automated CI Gates)**: GitHub Actions executes lint, Detekt, and unit tests. If CI is red, review is automatically paused.
 4. **Tier 4 (Automated PR Bots)**: GitHub Copilot and automated bot checkers leave initial feedback and diff summaries on the PR.
-5. **Tier 5 (Human Peer Review)**: Reviewers apply Yumemi feedback badges (`must`, `nits`, `memo`, `imo`) focusing on business logic, UX, and architectural elegance.
+5. **Tier 5 (Human Peer Review)**: Reviewers apply standardized feedback badges (`must`, `nits`, `memo`, `imo`) focusing on business logic, UX, and architectural elegance (see [Collaborative Review Culture](./09_collaborative_review_culture.md)).
 
 ---
 

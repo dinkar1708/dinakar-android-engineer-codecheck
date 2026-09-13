@@ -12,11 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 
 
 /**
@@ -65,3 +66,28 @@ fun MetaRow(
         }
     }
 }
+
+@Preview(name = "MetaRow - Light", showBackground = true)
+@Composable
+private fun MetaRowLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        MetaRow(
+            label = "Default branch",
+            value = "main",
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+@Preview(name = "MetaRow - Dark", showBackground = true)
+@Composable
+private fun MetaRowDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        MetaRow(
+            label = "License",
+            value = "Apache-2.0",
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+

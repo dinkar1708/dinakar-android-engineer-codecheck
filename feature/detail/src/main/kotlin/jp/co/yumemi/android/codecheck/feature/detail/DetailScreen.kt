@@ -59,21 +59,24 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppAmber
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppNavy
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.LocalAppDimensions
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate300
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate400
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate600
+import jp.co.yumemi.android.codecheck.core.domain.model.Owner
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.core.ui.component.ErrorView
 import jp.co.yumemi.android.codecheck.core.ui.component.LoadingView
 import jp.co.yumemi.android.codecheck.core.ui.util.formatDecimalNumber
 import jp.co.yumemi.android.codecheck.core.ui.util.getMonogramInitials
-import jp.co.yumemi.android.codecheck.feature.detail.R
 import jp.co.yumemi.android.codecheck.feature.detail.component.MetaRow
 
 /**
@@ -196,6 +199,7 @@ internal fun DetailContent(
     onOpenBrowser: ((String) -> Unit)?,
     modifier: Modifier = Modifier
 ) {
+    val dimensions = LocalAppDimensions.current
     val scrollState = rememberScrollState()
 
     Column(
@@ -203,238 +207,272 @@ internal fun DetailContent(
             .fillMaxSize()
             .verticalScroll(scrollState)
     ) {
-        // Hero Header Section (Navy Background matching 01-05 Core Screens.dc.html)
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(AppNavy)
-                .padding(start = 20.dp, end = 20.dp, top = 4.dp, bottom = 24.dp)
-        ) {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                // Owner + Repo Name row with Avatar
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(14.dp)
-                ) {
-                    val ownerLogin = repository.owner.login.takeIf { it.isNotBlank() }
-                        ?: if (repository.name.contains("/")) repository.name.substringBefore("/") else null
-                    val displayName = if (repository.name.contains("/")) repository.name.substringAfter("/") else repository.name
+        DetailHeroHeader(repository = repository)
 
-                    val initials = remember(displayName, ownerLogin) {
-                        val source = ownerLogin ?: displayName
-                        getMonogramInitials(source)
-                    }
-
-                    SubcomposeAsyncImage(
-                        model = repository.ownerIconUrl,
-                        contentDescription = stringResource(R.string.detail_avatar_content_description, displayName),
-                        modifier = Modifier
-                            .size(56.dp)
-                            .clip(CircleShape),
-                        contentScale = ContentScale.Crop,
-                        loading = {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(Slate600),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = initials,
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = AppWhite
-                                )
-                            }
-                        },
-                        error = {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(Slate600),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = initials,
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = AppWhite
-                                )
-                            }
-                        }
-                    )
-
-                    Column(modifier = Modifier.weight(1f)) {
-                        if (ownerLogin != null) {
-                            Text(
-                                text = ownerLogin,
-                                fontSize = 13.sp,
-                                color = Slate400,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                        Text(
-                            text = displayName,
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = AppWhite,
-                            lineHeight = 28.sp,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                }
-
-                // Description (if present)
-                val description = repository.description
-                if (!description.isNullOrBlank()) {
-                    Spacer(modifier = Modifier.height(14.dp))
-                    Text(
-                        text = description,
-                        fontSize = 13.sp,
-                        lineHeight = 20.sp,
-                        color = Slate300
-                    )
-                }
-
-                // Language Chip (if present)
-                val language = repository.language
-                if (!language.isNullOrBlank()) {
-                    Spacer(modifier = Modifier.height(14.dp))
-                    Surface(
-                        shape = RoundedCornerShape(20.dp),
-                        color = Slate600,
-                        contentColor = Slate300
-                    ) {
-                        Text(
-                            text = language,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier.padding(horizontal = 11.dp, vertical = 5.dp)
-                        )
-                    }
-                }
-            }
-        }
-
-        // Body Content: 2x2 Stat Cards and Action Button
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+                .padding(dimensions.spaceExtraLarge),
+            verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraLarge)
         ) {
-            // 2x2 StatCard Grid
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    StatCard(
-                        label = stringResource(R.string.detail_stat_stars),
-                        value = formatDecimalNumber(repository.stargazersCount),
-                        modifier = Modifier.weight(1f)
-                    )
-                    StatCard(
-                        label = stringResource(R.string.detail_stat_forks),
-                        value = formatDecimalNumber(repository.forksCount),
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    StatCard(
-                        label = stringResource(R.string.detail_stat_watchers),
-                        value = formatDecimalNumber(repository.watchersCount),
-                        modifier = Modifier.weight(1f)
-                    )
-                    StatCard(
-                        label = stringResource(R.string.detail_stat_open_issues),
-                        value = formatDecimalNumber(repository.openIssuesCount),
-                        valueColor = MaterialTheme.colorScheme.tertiary,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-            }
-
-            // 4 Extra Meta Rows (Default branch, Last push, License, Size)
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                MetaRow(
-                    label = stringResource(R.string.detail_meta_default_branch),
-                    value = repository.defaultBranch?.takeIf { it.isNotBlank() }
-                        ?: stringResource(R.string.detail_meta_not_available),
-                    fontFamily = FontFamily.Monospace
-                )
-                MetaRow(
-                    label = stringResource(R.string.detail_meta_last_push),
-                    value = DetailFormatters.formatPushDate(repository.pushedAt)
-                )
-                MetaRow(
-                    label = stringResource(R.string.detail_meta_license),
-                    value = repository.license?.takeIf { it.isNotBlank() }
-                        ?: stringResource(R.string.detail_meta_none)
-                )
-                MetaRow(
-                    label = stringResource(R.string.detail_meta_size),
-                    value = DetailFormatters.formatSize(repository.size)
-                )
-            }
-
-            // Action Buttons: View on GitHub + Companion Download
+            DetailStatsSection(repository = repository)
+            DetailMetaSection(repository = repository)
             if (!repository.htmlUrl.isNullOrBlank() && onOpenBrowser != null) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Button(
-                        onClick = { onOpenBrowser(repository.htmlUrl.orEmpty()) },
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(48.dp),
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = AppBlue,
-                            contentColor = AppWhite
-                        ),
-                        contentPadding = PaddingValues(vertical = 12.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.detail_view_on_github),
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
+                DetailActionSection(
+                    repository = repository,
+                    onOpenBrowser = onOpenBrowser
+                )
+            }
+        }
+    }
+}
 
-                    val downloadUrl = remember(repository.htmlUrl, repository.defaultBranch) {
-                        val branch = repository.defaultBranch?.takeIf { it.isNotBlank() } ?: "main"
-                        "${repository.htmlUrl}/archive/refs/heads/$branch.zip"
-                    }
+@Composable
+private fun DetailHeroHeader(
+    repository: RepositoryItem,
+    modifier: Modifier = Modifier
+) {
+    val dimensions = LocalAppDimensions.current
 
-                    Surface(
-                        onClick = { onOpenBrowser(downloadUrl) },
-                        modifier = Modifier.size(48.dp),
-                        shape = RoundedCornerShape(8.dp),
-                        color = MaterialTheme.colorScheme.surface,
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
-                    ) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(AppNavy)
+            .padding(
+                start = dimensions.screenPaddingHorizontal,
+                end = dimensions.screenPaddingHorizontal,
+                top = dimensions.spaceExtraSmall,
+                bottom = dimensions.screenPaddingVertical
+            )
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(dimensions.itemSpacing)
+            ) {
+                val ownerLogin = repository.owner.login.takeIf { it.isNotBlank() }
+                    ?: if (repository.name.contains("/")) repository.name.substringBefore("/") else null
+                val displayName = if (repository.name.contains("/")) repository.name.substringAfter("/") else repository.name
+
+                val initials = remember(displayName, ownerLogin) {
+                    val source = ownerLogin ?: displayName
+                    getMonogramInitials(source)
+                }
+
+                SubcomposeAsyncImage(
+                    model = repository.ownerIconUrl,
+                    contentDescription = stringResource(R.string.detail_avatar_content_description, displayName),
+                    modifier = Modifier
+                        .size(dimensions.avatarMedium)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop,
+                    loading = {
                         Box(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Slate600),
                             contentAlignment = Alignment.Center
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.Download,
-                                contentDescription = stringResource(R.string.detail_download),
-                                tint = MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier.size(20.dp)
+                            Text(
+                                text = initials,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = AppWhite
+                            )
+                        }
+                    },
+                    error = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Slate600),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = initials,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = AppWhite
                             )
                         }
                     }
+                )
+
+                Column(modifier = Modifier.weight(1f)) {
+                    if (ownerLogin != null) {
+                        Text(
+                            text = ownerLogin,
+                            fontSize = dimensions.captionSize,
+                            color = Slate400,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                    Text(
+                        text = displayName,
+                        fontSize = dimensions.detailTitleSize,
+                        fontWeight = FontWeight.Bold,
+                        color = AppWhite,
+                        lineHeight = dimensions.detailTitleLineHeight,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
+            }
+
+            val description = repository.description
+            if (!description.isNullOrBlank()) {
+                Spacer(modifier = Modifier.height(dimensions.itemSpacing))
+                Text(
+                    text = description,
+                    fontSize = dimensions.captionSize,
+                    lineHeight = dimensions.captionLineHeight,
+                    color = Slate300
+                )
+            }
+
+            val language = repository.language
+            if (!language.isNullOrBlank()) {
+                Spacer(modifier = Modifier.height(dimensions.itemSpacing))
+                Surface(
+                    shape = RoundedCornerShape(20.dp),
+                    color = Slate600,
+                    contentColor = Slate300
+                ) {
+                    Text(
+                        text = language,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.padding(
+                            horizontal = 11.dp,
+                            vertical = dimensions.spaceExtraSmall
+                        )
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DetailStatsSection(
+    repository: RepositoryItem,
+    modifier: Modifier = Modifier
+) {
+    val dimensions = LocalAppDimensions.current
+    val stats = listOf(
+        Triple(stringResource(R.string.detail_stat_stars), formatDecimalNumber(repository.stargazersCount), null),
+        Triple(stringResource(R.string.detail_stat_forks), formatDecimalNumber(repository.forksCount), null),
+        Triple(stringResource(R.string.detail_stat_watchers), formatDecimalNumber(repository.watchersCount), null),
+        Triple(stringResource(R.string.detail_stat_open_issues), formatDecimalNumber(repository.openIssuesCount), MaterialTheme.colorScheme.tertiary)
+    )
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(dimensions.itemSpacing)
+    ) {
+        stats.chunked(dimensions.statGridColumns).forEach { rowStats ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(dimensions.itemSpacing)
+            ) {
+                rowStats.forEach { (label, value, valueColor) ->
+                    StatCard(
+                        label = label,
+                        value = value,
+                        valueColor = valueColor,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DetailMetaSection(
+    repository: RepositoryItem,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        MetaRow(
+            label = stringResource(R.string.detail_meta_default_branch),
+            value = repository.defaultBranch?.takeIf { it.isNotBlank() }
+                ?: stringResource(R.string.detail_meta_not_available),
+            fontFamily = FontFamily.Monospace
+        )
+        MetaRow(
+            label = stringResource(R.string.detail_meta_last_push),
+            value = DetailFormatters.formatPushDate(repository.pushedAt)
+        )
+        MetaRow(
+            label = stringResource(R.string.detail_meta_license),
+            value = repository.license?.takeIf { it.isNotBlank() }
+                ?: stringResource(R.string.detail_meta_none)
+        )
+        MetaRow(
+            label = stringResource(R.string.detail_meta_size),
+            value = DetailFormatters.formatSize(repository.size)
+        )
+    }
+}
+
+@Composable
+private fun DetailActionSection(
+    repository: RepositoryItem,
+    onOpenBrowser: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Button(
+            onClick = { onOpenBrowser(repository.htmlUrl.orEmpty()) },
+            modifier = Modifier
+                .weight(1f)
+                .height(48.dp),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = AppBlue,
+                contentColor = AppWhite
+            ),
+            contentPadding = PaddingValues(vertical = 12.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.detail_view_on_github),
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            )
+        }
+
+        val downloadUrl = remember(repository.htmlUrl, repository.defaultBranch) {
+            val branch = repository.defaultBranch?.takeIf { it.isNotBlank() } ?: "main"
+            "${repository.htmlUrl}/archive/refs/heads/$branch.zip"
+        }
+
+        Surface(
+            onClick = { onOpenBrowser(downloadUrl) },
+            modifier = Modifier.size(48.dp),
+            shape = RoundedCornerShape(8.dp),
+            color = MaterialTheme.colorScheme.surface,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Download,
+                    contentDescription = stringResource(R.string.detail_download),
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.size(20.dp)
+                )
             }
         }
     }
@@ -453,6 +491,7 @@ fun StatCard(
     modifier: Modifier = Modifier,
     valueColor: Color? = null
 ) {
+    val dimensions = LocalAppDimensions.current
     val containerColor = MaterialTheme.colorScheme.surface
     val borderColor = MaterialTheme.colorScheme.outline
     val labelColor = MaterialTheme.colorScheme.onSurfaceVariant
@@ -473,21 +512,23 @@ fun StatCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(dimensions.statCardPadding)
         ) {
             Text(
                 text = label.uppercase(),
-                fontSize = 11.sp,
+                fontSize = dimensions.statLabelSize,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 0.05.em,
                 color = labelColor
             )
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(dimensions.statSpacerHeight))
             Text(
                 text = value,
-                fontSize = 24.sp,
+                fontSize = dimensions.statValueSize,
                 fontWeight = FontWeight.Bold,
-                color = actualValueColor
+                color = actualValueColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -524,3 +565,81 @@ internal fun launchChromeCustomTab(context: Context, url: String) {
         }
     }
 }
+
+@Preview(name = "Detail - Success Light", showBackground = true)
+@Composable
+private fun DetailScreenSuccessLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        DetailScreen(
+            uiState = DetailUiState.Success(previewDetailRepository),
+            isStarred = false,
+            onBackClick = {},
+            onToggleStar = {},
+            onRetry = {},
+            onOpenBrowser = {}
+        )
+    }
+}
+
+@Preview(name = "Detail - Success Dark (Starred)", showBackground = true)
+@Composable
+private fun DetailScreenSuccessDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        DetailScreen(
+            uiState = DetailUiState.Success(previewDetailRepository),
+            isStarred = true,
+            onBackClick = {},
+            onToggleStar = {},
+            onRetry = {},
+            onOpenBrowser = {}
+        )
+    }
+}
+
+@Preview(name = "Detail - Loading", showBackground = true)
+@Composable
+private fun DetailScreenLoadingPreview() {
+    CodeCheckTheme {
+        DetailScreen(
+            uiState = DetailUiState.Loading,
+            isStarred = false,
+            onBackClick = {},
+            onToggleStar = {},
+            onRetry = {},
+            onOpenBrowser = {}
+        )
+    }
+}
+
+@Preview(name = "Detail - Error", showBackground = true)
+@Composable
+private fun DetailScreenErrorPreview() {
+    CodeCheckTheme {
+        DetailScreen(
+            uiState = DetailUiState.Error("Failed to fetch repository details. Please try again."),
+            isStarred = false,
+            onBackClick = {},
+            onToggleStar = {},
+            onRetry = {},
+            onOpenBrowser = {}
+        )
+    }
+}
+
+private val previewDetailRepository = RepositoryItem(
+    name = "jetbrains/kotlin",
+    owner = Owner(login = "jetbrains", avatarUrl = "https://avatars.githubusercontent.com/u/262714"),
+    language = "Kotlin",
+    stargazersCount = 47200,
+    watchersCount = 47200,
+    forksCount = 5700,
+    openIssuesCount = 180,
+    description = "The Kotlin Programming Language. Official repository for Kotlin.",
+    htmlUrl = "https://github.com/jetbrains/kotlin",
+    updatedAt = "2024-03-01T12:00:00Z",
+    defaultBranch = "master",
+    pushedAt = "2024-03-01T11:45:00Z",
+    license = "Apache-2.0",
+    size = 184520
+)
+

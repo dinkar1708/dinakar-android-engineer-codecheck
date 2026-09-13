@@ -45,19 +45,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.tooling.preview.Preview
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppNavy
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate200
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate400
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate900
+import jp.co.yumemi.android.codecheck.core.domain.model.Owner
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.core.ui.component.EmptyView
 import jp.co.yumemi.android.codecheck.core.ui.component.ErrorView
 import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
 import androidx.compose.ui.res.stringResource
-import jp.co.yumemi.android.codecheck.feature.search.R
 import jp.co.yumemi.android.codecheck.feature.search.component.LoadMoreButton
 import jp.co.yumemi.android.codecheck.feature.search.component.RecentSearchesSection
 import jp.co.yumemi.android.codecheck.feature.search.component.RepositoryCard
@@ -147,6 +146,8 @@ internal fun SearchScreen(
     val focusManager = LocalFocusManager.current
     var showFilterSheet by rememberSaveable { mutableStateOf(false) }
 
+    val dimensions = jp.co.yumemi.android.codecheck.core.designsystem.theme.LocalAppDimensions.current
+
     val isDarkTheme = MaterialTheme.colorScheme.surface != AppWhite
     val headerBgColor = AppNavy
     val searchBoxBgColor = if (isDarkTheme) Color(0xFF242C3C) else AppWhite
@@ -173,7 +174,10 @@ internal fun SearchScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(headerBgColor)
-                    .padding(horizontal = 16.dp, vertical = 14.dp)
+                    .padding(
+                        horizontal = 16.dp,
+                        vertical = dimensions.spaceSmall
+                    )
             ) {
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
@@ -184,7 +188,10 @@ internal fun SearchScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 14.dp, vertical = 12.dp),
+                            .padding(
+                                horizontal = 14.dp,
+                                vertical = dimensions.spaceSmall
+                            ),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
@@ -295,7 +302,7 @@ internal fun SearchScreen(
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                             verticalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            items(4) {
+                            items(6) {
                                 RepositoryCardSkeleton()
                             }
                         }
@@ -323,7 +330,12 @@ internal fun SearchScreen(
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(start = 20.dp, end = 20.dp, top = 14.dp, bottom = 10.dp),
+                                    .padding(
+                                        start = 20.dp,
+                                        end = 20.dp,
+                                        top = dimensions.spaceSmall,
+                                        bottom = dimensions.spaceSmall
+                                    ),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
@@ -387,4 +399,135 @@ internal fun SearchScreen(
         )
     }
 }
+
+@Preview(name = "Search - Success Light", showBackground = true)
+@Composable
+private fun SearchScreenSuccessLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        SearchScreen(
+            uiState = SearchUiState.Success(
+                repositories = previewSampleRepositories,
+                totalCount = 1250,
+                hasNextPage = true
+            ),
+            query = "kotlin",
+            searchHistory = listOf("kotlin", "compose", "android"),
+            onQueryChanged = {},
+            onSearch = {},
+            onClearQuery = {},
+            onRetry = {},
+            onRepositoryClick = {}
+        )
+    }
+}
+
+@Preview(name = "Search - Success Dark", showBackground = true)
+@Composable
+private fun SearchScreenSuccessDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        SearchScreen(
+            uiState = SearchUiState.Success(
+                repositories = previewSampleRepositories,
+                totalCount = 1250,
+                hasNextPage = true
+            ),
+            query = "kotlin",
+            searchHistory = listOf("kotlin", "compose", "android"),
+            onQueryChanged = {},
+            onSearch = {},
+            onClearQuery = {},
+            onRetry = {},
+            onRepositoryClick = {}
+        )
+    }
+}
+
+@Preview(name = "Search - Idle with History", showBackground = true)
+@Composable
+private fun SearchScreenIdlePreview() {
+    CodeCheckTheme {
+        SearchScreen(
+            uiState = SearchUiState.Idle,
+            query = "",
+            searchHistory = listOf("kotlin", "compose", "android architecture"),
+            onQueryChanged = {},
+            onSearch = {},
+            onClearQuery = {},
+            onRetry = {},
+            onRepositoryClick = {}
+        )
+    }
+}
+
+@Preview(name = "Search - Loading", showBackground = true)
+@Composable
+private fun SearchScreenLoadingPreview() {
+    CodeCheckTheme {
+        SearchScreen(
+            uiState = SearchUiState.Loading,
+            query = "kotlin",
+            onQueryChanged = {},
+            onSearch = {},
+            onClearQuery = {},
+            onRetry = {},
+            onRepositoryClick = {}
+        )
+    }
+}
+
+@Preview(name = "Search - Empty", showBackground = true)
+@Composable
+private fun SearchScreenEmptyPreview() {
+    CodeCheckTheme {
+        SearchScreen(
+            uiState = SearchUiState.Empty,
+            query = "nonexistent_query_12345",
+            onQueryChanged = {},
+            onSearch = {},
+            onClearQuery = {},
+            onRetry = {},
+            onRepositoryClick = {}
+        )
+    }
+}
+
+@Preview(name = "Search - Error", showBackground = true)
+@Composable
+private fun SearchScreenErrorPreview() {
+    CodeCheckTheme {
+        SearchScreen(
+            uiState = SearchUiState.Error("Unable to connect to GitHub. Please check your network connection."),
+            query = "kotlin",
+            onQueryChanged = {},
+            onSearch = {},
+            onClearQuery = {},
+            onRetry = {},
+            onRepositoryClick = {}
+        )
+    }
+}
+
+private val previewSampleRepositories = listOf(
+    RepositoryItem(
+        name = "jetbrains/kotlin",
+        owner = Owner(login = "jetbrains", avatarUrl = "https://avatars.githubusercontent.com/u/262714"),
+        language = "Kotlin",
+        stargazersCount = 47200,
+        watchersCount = 47200,
+        forksCount = 5700,
+        openIssuesCount = 180,
+        description = "The Kotlin Programming Language. Official repository for Kotlin."
+    ),
+    RepositoryItem(
+        name = "android/architecture-samples",
+        owner = Owner(login = "android", avatarUrl = "https://avatars.githubusercontent.com/u/32689599"),
+        language = "Kotlin",
+        stargazersCount = 44100,
+        watchersCount = 44100,
+        forksCount = 11800,
+        openIssuesCount = 95,
+        description = "A collection of samples to discuss and showcase different architectural approaches to developing Android apps."
+    )
+)
+
 

@@ -15,7 +15,7 @@ close #
 
 ## テスト (Testing)
 - [ ] 全体単体テスト成功 (`./gradlew testDebugUnitTest`)
-- [ ] 静的解析パス (`./gradlew lintDebug`)
+- [ ] 静的解析パス (`./gradlew lintDebug` & `./gradlew detektAll`)
 - [ ] デバッグビルド成功 (`./gradlew clean assembleDebug`)
 - [ ] 実機 / エミュレータ E2E テスト成功 (`./gradlew :app:connectedAndroidTest` ※該当時)
 - [ ] コードカバレッジ確認 (`./gradlew koverHtmlReportDebug` ※目標80%以上維持)
@@ -37,6 +37,7 @@ close #
 - [ ] テストディレクトリ配置・命名規則（上記 3 ガイド）に 100% 厳格に従っているか
 - [ ] 考慮漏れなどないか (エッジケース、Null安全性、ライフサイクル、例外処理)
 - [ ] テストおよびビルドが正常に通過しているか (`./gradlew testDebugUnitTest`)
+- [ ] 静的解析（Detekt / Lint）が 0 件で通過しているか (`./gradlew detektAll`)
 - [ ] 新しい設計・アーキテクチャ・命名規則・パターンを追加した場合、AIスキルおよび関連ドキュメントを更新したか
 
 ## 参考 (Reference)

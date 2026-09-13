@@ -12,6 +12,7 @@ buildscript {
         classpath "com.google.dagger:hilt-android-gradle-plugin:2.50"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3"
         classpath "org.jetbrains.kotlinx:kover-gradle-plugin:0.7.6"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.6"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -19,9 +20,23 @@ buildscript {
 }
 
 apply plugin: 'org.jetbrains.kotlinx.kover'
+apply plugin: 'io.gitlab.arturbosch.detekt'
+
+detekt {
+    buildUponDefaultConfig = true
+    allRules = false
+    config.setFrom(files("${projectDir}/config/detekt/detekt.yml"))
+}
 
 subprojects {
     apply plugin: 'org.jetbrains.kotlinx.kover'
+    apply plugin: 'io.gitlab.arturbosch.detekt'
+
+    detekt {
+        buildUponDefaultConfig = true
+        allRules = false
+        config.setFrom(files("${rootProject.projectDir}/config/detekt/detekt.yml"))
+    }
 
     plugins.withId('com.android.application') {
         koverReport {
@@ -104,4 +119,25 @@ dependencies {
 
 tasks.register('clean', Delete) {
     delete rootProject.buildDir
+}
+
+tasks.register('detektAll', io.gitlab.arturbosch.detekt.Detekt) {
+    description = "Runs unified Detekt static analysis across all project sources"
+    group = "verification"
+    buildUponDefaultConfig = true
+    parallel = true
+    setSource(files(projectDir))
+    config.setFrom(files("${projectDir}/config/detekt/detekt.yml"))
+    include("**/*.kt")
+    include("**/*.kts")
+    exclude("**/resources/**")
+    exclude("**/build/**")
+    exclude("build-logic/**")
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+        txt.required.set(false)
+        sarif.required.set(true)
+        html.outputLocation.set(file("${buildDir}/reports/detekt/detekt.html"))
+    }
 }

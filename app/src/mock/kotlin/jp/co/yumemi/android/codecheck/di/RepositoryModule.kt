@@ -22,6 +22,6 @@ object RepositoryModule {
     fun provideGitHubRepository(
         @Suppress("UNUSED_PARAMETER") apiService: GitHubApiService
     ): GitHubRepository {
-        return DataModule.provideMockGitHubRepository(simulatedDelayMs = 300L)
+        return DataModule.provideMockGitHubRepository(simulatedDelayMs = 2500L)
     }
 }

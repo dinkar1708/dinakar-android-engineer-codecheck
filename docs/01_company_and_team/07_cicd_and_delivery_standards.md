@@ -36,7 +36,54 @@ flowchart LR
 
 ---
 
-## 2. Multi-Environment Promotion Rules
+## 2. Git Branching Strategy: GitFlow Alignment (nvie Model)
+
+Our mobile engineering workflow aligns with Vincent Driessen's authoritative [A Successful Git Branching Model](https://nvie.com/posts/a-successful-git-branching-model/) (GitFlow), adapted for modern mobile continuous delivery with a dedicated QA staging gate:
+
+### 2.1 Branch Taxonomy & GitFlow Mapping
+
+| Branch Concept | GitFlow (nvie.com) | Our Mobile Strategy | Lifecycle & Policy |
+|:---|:---|:---|:---|
+| **Production Branch** | `master` | **`main`** | **Protected & Infinite.** Production-ready code only. Every merge is tagged (`vX.Y.Z`). No direct commits permitted. |
+| **Integration Branch** | `develop` | **`dev`** | **Protected & Infinite.** Active sprint integration branch. All feature and topic PRs target `dev`. |
+| **Feature Branches** | `feature/*` | **`feature/*`** (also `fix/*`, `refactor/*`, `chore/*`) | **Ephemeral.** Branches off from `dev`, merges back into `dev` via peer-reviewed Pull Request (<300 LOC). |
+| **Release Branches** | `release/*` | **`release/*` / `stg`** | **Ephemeral / Staging Gate.** Cuts from `dev` when sprint scope freezes. Deploys to Firebase App Distribution for QA validation. Bumps version codes. Once approved, merges to `main` (with tag) **AND back-merges into `dev`**. |
+| **Hotfix Branches** | `hotfix/*` | **`hotfix/*`** | **Emergency Ephemeral.** Branches directly off from `main` to address critical production defects. Merges to `main` (tagged `vX.Y.Z+1`) **AND back-merges into `dev`** (and `stg`). |
+
+### 2.2 Hotfix & Release Back-Merge Protocol
+To prevent regressions across sprint cycles:
+1. **Release Branch Dual-Merge:** When QA signs off on `release/vX.Y.Z`:
+   ```bash
+   # 1. Merge into main and tag
+   git checkout main
+   git merge --no-ff release/v1.0.0
+   git tag -a v1.0.0 -m "Release version 1.0.0"
+
+   # 2. Back-merge into dev to capture any stabilization fixes
+   git checkout dev
+   git merge --no-ff release/v1.0.0
+   git branch -d release/v1.0.0
+   ```
+2. **Emergency Hotfix Dual-Merge:** When an incident triggers a hotfix from `main`:
+   ```bash
+   # Cut hotfix from production
+   git checkout -b hotfix/v1.0.1 main
+   # ... implement fix, run unit tests ...
+
+   # 1. Merge into main and tag
+   git checkout main
+   git merge --no-ff hotfix/v1.0.1
+   git tag -a v1.0.1 -m "Hotfix version 1.0.1"
+
+   # 2. Back-merge into dev (and stg) to prevent regression
+   git checkout dev
+   git merge --no-ff hotfix/v1.0.1
+   git branch -d hotfix/v1.0.1
+   ```
+
+---
+
+## 3. Multi-Environment Promotion Rules
 
 All mobile projects across the company must enforce the **3-Tier Promotion Gate**:
 

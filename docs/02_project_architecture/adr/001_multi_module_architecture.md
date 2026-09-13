@@ -126,7 +126,7 @@ android-engineer-codecheck/
 - Doesn't scale for team growth
 - Build times continue to degrade
 - Fails to meet modern industry standards for scalable Android architecture
-- Fails to demonstrate architectural thinking for Lead/EM role
+- Fails to demonstrate advanced architectural scalability and isolation
 
 ### Alternative 2: Package-by-Feature (Without Modules)
 **Example:**

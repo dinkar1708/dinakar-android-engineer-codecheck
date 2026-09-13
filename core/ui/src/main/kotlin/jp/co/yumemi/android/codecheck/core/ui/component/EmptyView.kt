@@ -26,7 +26,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 
 
 /**
@@ -119,3 +121,30 @@ fun EmptyView(
         }
     }
 }
+
+@Preview(name = "EmptyView - Light", showBackground = true)
+@Composable
+private fun EmptyViewLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        EmptyView(
+            title = "No repositories found",
+            description = "Try searching with different keywords or clearing active filters.",
+            actionLabel = "Clear search",
+            onActionClick = {}
+        )
+    }
+}
+
+@Preview(name = "EmptyView - Dark", showBackground = true)
+@Composable
+private fun EmptyViewDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        EmptyView(
+            title = "No Starred Repositories",
+            description = "Star repositories during search to quickly access them offline.",
+            actionLabel = "Explore repositories",
+            onActionClick = {}
+        )
+    }
+}
+

@@ -49,8 +49,8 @@ jobs:
       - name: Grant Execute Permission for Gradlew
         run: chmod +x gradlew
 
-      - name: Run Static Analysis (Android Lint)
-        run: ./gradlew lintDebug
+      - name: Run Static Analysis (Android Lint & Detekt)
+        run: ./gradlew lintDebug detekt
 
       - name: Run Unit Tests & Code Coverage
         run: |
@@ -124,6 +124,14 @@ jobs:
         with:
           name: code-coverage-report
           path: build/reports/kover/html/
+          retention-days: 14
+
+      - name: Upload Detekt Static Analysis Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: detekt-report
+          path: "**/build/reports/detekt/*"
           retention-days: 14
 
       - name: Assemble Debug APK

@@ -2,7 +2,6 @@
 
 **Project**: Android Engineer Code Check Solution  
 **Author**: Dinakar Prasad Maurya  
-**Leadership Role**: Mobile Engineering Manager / Platform Director  
 **Strategy**: Strangler Fig progressive modernization governed by enterprise standards  
 
 ---
@@ -23,8 +22,9 @@ flowchart TD
         T1_6["06. Engineering Guardrails & Security"]
         T1_7["07. CI/CD & Multi-Env Promotion"]
         T1_8["08. Contract-First Dev Workflow"]
-        T1_9["09. Blameless Engineering Culture"]
+        T1_9["09. Collaborative Review Culture"]
         T1_10["10. AI Agent Skills Framework"]
+        T1_11["12. Code Commenting Standards"]
     end
 
     subgraph Tier2["📱 Tier 2: Project Architecture & Blueprints (docs/02_project_architecture/)"]
@@ -55,9 +55,9 @@ flowchart TD
 
 | Documentation Tier | Scope & Focus | Key Portals & Direct Links | Portability & Corporate Usage |
 |:---|:---|:---|:---:|
-| **🏢 Tier 1: Company & Team Governance**<br/>`docs/01_company_and_team/` | Universal engineering operating model: DORA metrics, 30-60-90 day onboarding, review SLAs, Definition of Done, AI coding policies, and branch hygiene. | • [Operating Model Portal](./01_company_and_team/readme.md)<br/>• [Engineering Leadership Strategy](./01_company_and_team/01_engineering_leadership.md)<br/>• [AI Agent Skills Framework](./01_company_and_team/10_ai_agent_skills_guide.md)<br/>• [Team Onboarding Playbook](./01_company_and_team/03_team_onboarding.md)<br/>• [CI/CD & Delivery Policy](./01_company_and_team/07_cicd_and_delivery_standards.md) | **100% Turnkey Portable**<br/>*(Ready for direct export to **Company Confluence / Notion** to govern all mobile squads)* |
+| **🏢 Tier 1: Company & Team Governance**<br/>`docs/01_company_and_team/` | Universal engineering operating model: DORA metrics, 30-60-90 day onboarding, review SLAs, Definition of Done, AI coding policies, and branch hygiene. | • [Operating Model Portal](./01_company_and_team/readme.md)<br/>• [Engineering Leadership Strategy](./01_company_and_team/01_engineering_leadership.md)<br/>• [Code Commenting Standards](./01_company_and_team/12_code_commenting_and_documentation_standards.md)<br/>• [AI Agent Skills Framework](./01_company_and_team/10_ai_agent_skills_guide.md)<br/>• [Team Onboarding Playbook](./01_company_and_team/03_team_onboarding.md)<br/>• [CI/CD & Delivery Policy](./01_company_and_team/07_cicd_and_delivery_standards.md) | **100% Turnkey Portable**<br/>*(Ready for direct export to **Company Confluence / Notion** to govern all mobile squads)* |
 | **📱 Tier 2: Project Architecture**<br/>`docs/02_project_architecture/` | Technical blueprints: Multi-module Clean Architecture, KMP headless core, 4 product flavors (`dev`, `mock`, `stg`, `prod`), ADRs 001–006, and API specifications. | • [Architecture Index](./02_project_architecture/readme.md)<br/>• [Clean Architecture & UDF](./02_project_architecture/architecture/01_clean_architecture_and_udf.md)<br/>• [ADR Decision Records](./02_project_architecture/adr/readme.md)<br/>• [API Specifications](./02_project_architecture/api_spec/readme.md) | **Project-Specific**<br/>*(Concrete technical blueprints implementing Tier 1 standards for this app)* |
-| **🎯 Tier 3: Sprint Execution**<br/>`docs/03_sprint_execution/` | End-to-end agile delivery tracking mapping all 9 Yumemi code check issues across 4 structured sprints with Fibonacci story points (63 SP). | • [Sprint Delivery Portal](./03_sprint_execution/readme.md)<br/>• [Execution Roadmap](./03_sprint_execution/01_execution_roadmap.md)<br/>• [Issue-to-Ticket Mapping](./03_sprint_execution/02_how_to_proceed_and_issue_mapping.md)<br/>• [Authoritative Issues Summary](./03_sprint_execution/03_issues_summary.md) | **Assessment-Specific**<br/>*(Agile sprint delivery & acceptance tracking)* |
+| **🎯 Tier 3: Sprint Execution**<br/>`docs/03_sprint_execution/` | End-to-end agile delivery tracking mapping all 9 code check challenge issues across 4 structured sprints with Fibonacci story points (63 SP). | • [Sprint Delivery Portal](./03_sprint_execution/readme.md)<br/>• [Execution Roadmap](./03_sprint_execution/01_execution_roadmap.md)<br/>• [Issue-to-Ticket Mapping](./03_sprint_execution/02_how_to_proceed_and_issue_mapping.md)<br/>• [Authoritative Issues Summary](./03_sprint_execution/03_issues_summary.md)<br/>• [Market Research & Strategy](./03_sprint_execution/05_market_research_and_product_strategy.md) | **Assessment-Specific**<br/>*(Agile sprint delivery & acceptance tracking)* |
 
 ---
 
@@ -66,7 +66,7 @@ flowchart TD
 **GitHub Project Board:** [Mobile Platform Engineering - Issue Tracker](https://github.com/users/dinkar1708/projects/1/views/1)
 
 The centralized project board serves as the **single source of truth** for:
-- All 9 Yumemi challenge issues (mapped to GitHub Issues #3–#11)
+- All 9 code challenge issues (mapped to GitHub Issues #3–#11, see [Technical References](./references.md#7-github-api--assessment-standards))
 - Sprint planning and milestone tracking
 - Implementation status and progress visualization
 - Cross-functional task dependencies and blockers
@@ -88,9 +88,12 @@ This documentation structure is designed to be **platform-agnostic** and can be 
 
 ## ⚡ Quick Navigation Links
 
-- **New to this repository?** Start here: **[00_START_HERE.md](./00_START_HERE.md)**
+- **Executive Presentation Deck (EM Walkthrough):** See: **[presentation/README.md](./presentation/README.md)** 📊
+- **New to this repository?** Start here: **[00_START_HERE.md](./00_START_HERE.md)** ⭐
 - **How to build & test locally?** See: **[GETTING_STARTED.md](./GETTING_STARTED.md)**
 - **System design & data flow:** See: **[ARCHITECTURE_OVERVIEW.md](./ARCHITECTURE_OVERVIEW.md)**
+- **Screenshots & Media Assets:** See: **[screenshots/README.md](./screenshots/README.md)** 📸
+- **Market Research & Product Strategy:** See: **[03_sprint_execution/05_market_research_and_product_strategy.md](./03_sprint_execution/05_market_research_and_product_strategy.md)** 📊
 - **Contributing & Git branching:** See: **[CONTRIBUTING.md](./CONTRIBUTING.md)**
 - **Comprehensive technical references:** See: **[03_sprint_execution/04_platform_references.md](./03_sprint_execution/04_platform_references.md)**
 - **Project Board (Issues & Milestones):** [GitHub Projects](https://github.com/users/dinkar1708/projects/1/views/1)

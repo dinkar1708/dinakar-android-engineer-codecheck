@@ -6,15 +6,24 @@ This document explains what screenshots to capture and where to store them for p
 
 ```
 docs/screenshots/
-├── app/                    # Application UI screenshots
-│   ├── light/              # Light theme screenshots
-│   ├── dark/               # Dark theme screenshots
-│   ├── landscape/          # Landscape orientation
-│   └── portrait/           # Portrait orientation
-├── coverage/               # Test coverage reports
-│   └── code-coverage.png
-└── ci/                     # CI/CD pipeline screenshots
-    └── github-actions.png
+├── app/                        # Production Android App UI screenshots
+│   ├── light/                  # Light theme screens (Search, Detail, Starred, Settings)
+│   ├── dark/                   # Dark theme screens
+│   ├── landscape/              # Phone landscape orientation (Search, Detail, Starred, Settings)
+│   └── tablet/                 # Pixel Tablet landscape orientation (2560x1600)
+├── claude-design/              # 🎨 Claude Design / AI prototyping concept mockups
+│   ├── screens/                # Full screen concept exports
+│   └── components/             # Atomic component previews (RepoCard, StatCard, Palette)
+├── comparisons/                # 🔄 Side-by-Side Visual Fidelity (Claude Design vs Compose)
+├── compose_preview/            # ⚡ Compose @Preview fast development captures
+├── tools/                      # 🛠️ Android Studio Performance & Profiler telemetry captures
+├── ios/                        # 🍏 Native iOS SwiftUI Companion App Screenshots
+│   ├── ios-app-demo-using-kmp.png # Live SwiftUI app on iPhone 17 Pro simulator
+│   └── ios-app-using-kmp.png      # Xcode project tree and shared_core integration
+├── demos/                      # 🎥 Walkthrough videos (MP4/MOV) and animated GIFs (e.g. app.gif)
+├── github-project/             # 📋 GitHub Project Delivery Kanban Board captures
+├── coverage/                   # 📊 Test coverage reports (Kotlinx Kover / Jacoco)
+└── ci/                         # 🚀 GitHub Actions CI pipeline execution proofs
 ```
 
 ## Required Screenshots for Documentation
@@ -92,8 +101,28 @@ Capture test coverage report to demonstrate testing quality:
 **Files to capture:**
 - `app/light/11-dev-flavor.png` - Settings showing DEV environment
 - `app/light/12-mock-flavor.png` - Settings showing MOCK environment
-- `app/light/12b-stg-flavor.png` - Settings showing STG environment
-- `app/light/13-prod-flavor.png` - Settings showing PROD environment
+
+### 5. Compose Previews: Fast Inner-Loop Development
+
+Jetpack Compose `@Preview` annotations dramatically accelerate mobile engineering velocity:
+- **Sub-Second Iteration:** Renders UI instantly inside Android Studio without assembling APKs, launching emulators, or deploying to devices.
+- **Simultaneous Multi-State Validation:** Visualizes all states (`Success Light`, `Success Dark`, `Loading`, `Empty`, `Error`) side-by-side in real time.
+- **Zero API Dependency:** Powered by deterministic preview models, decoupling UI construction from backend availability.
+
+**Files to capture in `compose_preview/`:**
+- `compose_preview/01-search-states-preview.png` - SearchScreen previews in Android Studio split view
+- `compose_preview/02-detail-states-preview.png` - DetailScreen previews (Light, Dark, Loading, Error)
+- `compose_preview/03-components-preview.png` - Atomic component previews (RepositoryCard, Chips, EmptyView)
+
+### 6. Android Studio Profiler & Performance Telemetry
+
+Capture empirical telemetry proving performance and responsiveness (see [Performance Profiling Guide](../02_project_architecture/testing/05_performance_profiling_and_benchmarks.md)):
+
+**Files captured in `tools/`:**
+- `tools/profiler_overview.png` & `tools/profile_home.png` - Android Studio complete profiling dashboard and process initialization
+- `tools/cpu-zero_leaks.png` - System Trace proving 0 main-thread blocks (<16ms)
+- `tools/network.png` & `tools/network_thread_view.png` - Network Inspector showing 300ms debounce, background coroutine worker threads, and 0ms in-memory cache hits
+- `tools/memory_heap_dump.png` & `tools/memory.png` - Java Heap Dump & allocation tracking proving 0 memory leaks across 10+ screen transitions
 
 ## How to Capture Screenshots
 
@@ -199,37 +228,43 @@ For executive stakeholder reviews and design presentations, create a slide deck 
 Use this checklist when preparing documentation:
 
 ### Application Screens
-- [ ] Splash screen
-- [ ] Search screen (empty state)
-- [ ] Search screen (loading state)
-- [ ] Search screen (results)
-- [ ] Search screen (error state)
-- [ ] Detail screen
-- [ ] Settings screen
-- [ ] Settings (language selection)
-- [ ] Settings (theme selection)
+- [x] Splash screen (`00-splash.png`)
+- [x] Search screen (empty state) (`01-search-empty.png`)
+- [x] Search screen (loading state) (`02-search-loading.png`)
+- [x] Search screen (results) (`03-search-results.png`)
+- [x] Search screen (error state) (`04-search-error.png`)
+- [x] Detail screen (`05-detail-screen.png`)
+- [x] Settings screen (`06-settings-screen.png`)
+- [x] Settings (language selection) (`07-settings-language.png`)
+- [x] Settings (theme selection) (`08-settings-theme.png`)
+- [x] Starred screen (`14-starred-screen.png`)
 
 ### Theme Coverage
-- [ ] All screens in light theme
-- [ ] All screens in dark theme
+- [x] All screens in light theme (`app/light/`)
+- [x] All screens in dark theme (`app/dark/`)
 
 ### Orientation Coverage
-- [ ] Key screens in portrait
-- [ ] Key screens in landscape
+- [x] Key screens in portrait (`app/light/`, `app/dark/`)
+- [x] Key screens in phone landscape (`app/landscape/`)
+- [x] Key screens in tablet landscape (`app/tablet/`)
 
 ### Localization Coverage
-- [ ] App in English
-- [ ] App in Japanese
+- [x] App in English (`09-english.png`)
+- [x] App in Japanese (`10-japanese.png`)
 
 ### Build Flavors
-- [ ] DEV flavor indicator
-- [ ] MOCK flavor indicator
-- [ ] PROD flavor indicator
+- [x] DEV flavor indicator (`11-dev-flavor.png`)
+- [x] MOCK flavor indicator (`12-mock-flavor.png`)
+- [x] PROD / Build variant selector (`dev/build_variants.png`)
 
-### Quality Metrics
-- [ ] Code coverage report
-- [ ] CI pipeline success
-- [ ] Test execution results
+### Quality & Tooling Metrics
+- [x] Code coverage report (`coverage/ci_coverage.png` — 81.2% line coverage)
+- [x] CI pipeline success (`ci/ci_pipeline.png` — GitHub Actions build/test/detekt)
+- [x] Android Studio Profiler Telemetry (`tools/` — CPU 0 ANRs, Memory 0 Leaks, Network 300ms debounce)
+- [x] Fast Inner-Loop Compose Previews (`compose_preview/preview.png`)
+- [x] Native iOS Companion App (`ios/ios-app-demo-using-kmp.png`, `ios-app-using-kmp.png`)
+- [x] GitHub Agile Project Delivery Board (`github-project/project-board.png`)
+- [x] Claude AI Design Prototype Specs & Video (`claude-design/`)
 
 ## Screenshot Maintenance
 
@@ -302,17 +337,26 @@ docs/screenshots/
 │   │   ├── 10-japanese.png
 │   │   ├── 11-dev-flavor.png
 │   │   ├── 12-mock-flavor.png
-│   │   └── 13-prod-flavor.png
+│   │   └── 14-starred-screen.png
 │   ├── dark/
 │   │   ├── 01-search-empty.png
 │   │   ├── 02-search-loading.png
 │   │   ├── 03-search-results.png
 │   │   ├── 04-search-error.png
 │   │   ├── 05-detail-screen.png
-│   │   └── 06-settings-screen.png
-│   └── landscape/
-│       ├── 01-search-results-landscape.png
-│       └── 02-detail-landscape.png
+│   │   ├── 06-settings-screen.png
+│   │   └── 14-starred-screen.png
+│   ├── landscape/
+│   │   ├── 01-search-results-landscape.png
+│   │   ├── 02-detail-landscape.png
+│   │   ├── 03-starred-landscape.png
+│   │   └── 04-settings-landscape.png
+│   └── tablet/
+│       ├── 01-search-empty-tablet.png
+│       ├── 02-search-results-tablet.png
+│       ├── 03-detail-tablet.png
+│       ├── 04-starred-tablet.png
+│       └── 05-settings-tablet.png
 ├── coverage/
 │   ├── code-coverage.png
 │   ├── viewmodel-coverage.png

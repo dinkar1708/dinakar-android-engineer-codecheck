@@ -20,9 +20,10 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.material3.MaterialTheme
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
 import androidx.compose.ui.res.stringResource
 import jp.co.yumemi.android.codecheck.feature.search.R
@@ -40,8 +41,10 @@ import androidx.compose.foundation.layout.width
 fun SortTabs(
     selectedSort: SearchSort,
     onSortSelected: (SearchSort) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier.fillMaxWidth()
 ) {
+    val dimensions = jp.co.yumemi.android.codecheck.core.designsystem.theme.LocalAppDimensions.current
+
     val barBg = MaterialTheme.colorScheme.surface
     val barBorder = MaterialTheme.colorScheme.outline
     val activeColor = MaterialTheme.colorScheme.primary
@@ -70,8 +73,8 @@ fun SortTabs(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(24.dp)
+                .padding(horizontal = dimensions.screenPaddingHorizontal),
+            horizontalArrangement = Arrangement.spacedBy(dimensions.itemSpacing)
         ) {
             tabs.forEach { (sort, title) ->
                 val isSelected = selectedSort == sort
@@ -92,9 +95,12 @@ fun SortTabs(
                     Text(
                         text = title,
                         color = if (isSelected) activeColor else inactiveColor,
-                        fontSize = 14.sp,
+                        fontSize = dimensions.bodySize,
                         fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
-                        modifier = Modifier.padding(top = 14.dp, bottom = 12.dp)
+                        modifier = Modifier.padding(
+                            top = dimensions.spaceMedium,
+                            bottom = dimensions.spaceSmall
+                        )
                     )
 
                     // Active 2dp line indicator
@@ -109,3 +115,26 @@ fun SortTabs(
         }
     }
 }
+
+@Preview(name = "SortTabs - Best Match Light", showBackground = true)
+@Composable
+private fun SortTabsBestMatchLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        SortTabs(
+            selectedSort = SearchSort.BEST_MATCH,
+            onSortSelected = {}
+        )
+    }
+}
+
+@Preview(name = "SortTabs - Most Stars Dark", showBackground = true)
+@Composable
+private fun SortTabsMostStarsDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        SortTabs(
+            selectedSort = SearchSort.STARS,
+            onSortSelected = {}
+        )
+    }
+}
+

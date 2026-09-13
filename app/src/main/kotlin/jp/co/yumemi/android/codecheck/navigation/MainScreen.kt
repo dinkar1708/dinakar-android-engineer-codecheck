@@ -4,14 +4,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import jp.co.yumemi.android.codecheck.core.designsystem.component.AppBottomBar
 import jp.co.yumemi.android.codecheck.core.designsystem.component.MainTab
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.feature.search.SearchScreen
 import jp.co.yumemi.android.codecheck.feature.search.SearchViewModel
@@ -37,11 +41,46 @@ fun MainScreen(
 ) {
     var selectedTab by rememberSaveable { mutableStateOf(initialTab) }
 
+    MainScreenContent(
+        selectedTab = selectedTab,
+        onTabSelected = { selectedTab = it },
+        modifier = modifier
+    ) { tab ->
+        when (tab) {
+            MainTab.SEARCH -> {
+                SearchScreen(
+                    viewModel = searchViewModel,
+                    onRepositoryClick = onRepositoryClick
+                )
+            }
+            MainTab.STARRED -> {
+                StarredScreen(
+                    viewModel = starredViewModel,
+                    onRepositoryClick = onRepositoryClick,
+                    onNavigateToSearch = { selectedTab = MainTab.SEARCH }
+                )
+            }
+            MainTab.SETTINGS -> {
+                SettingsScreen(
+                    viewModel = settingsViewModel
+                )
+            }
+        }
+    }
+}
+
+@Composable
+internal fun MainScreenContent(
+    selectedTab: MainTab,
+    onTabSelected: (MainTab) -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable (MainTab) -> Unit
+) {
     Scaffold(
         bottomBar = {
             AppBottomBar(
                 currentTab = selectedTab,
-                onTabSelected = { selectedTab = it }
+                onTabSelected = onTabSelected
             )
         },
         modifier = modifier
@@ -51,26 +90,62 @@ fun MainScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            when (selectedTab) {
-                MainTab.SEARCH -> {
-                    SearchScreen(
-                        viewModel = searchViewModel,
-                        onRepositoryClick = onRepositoryClick
-                    )
-                }
-                MainTab.STARRED -> {
-                    StarredScreen(
-                        viewModel = starredViewModel,
-                        onRepositoryClick = onRepositoryClick,
-                        onNavigateToSearch = { selectedTab = MainTab.SEARCH }
-                    )
-                }
-                MainTab.SETTINGS -> {
-                    SettingsScreen(
-                        viewModel = settingsViewModel
-                    )
-                }
+            content(selectedTab)
+        }
+    }
+}
+
+@Preview(name = "Main Screen - Search Tab", showBackground = true)
+@Composable
+private fun MainScreenSearchTabPreview() {
+    CodeCheckTheme {
+        MainScreenContent(
+            selectedTab = MainTab.SEARCH,
+            onTabSelected = {}
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = "Search Screen Content")
             }
         }
     }
 }
+
+@Preview(name = "Main Screen - Starred Tab Dark", showBackground = true)
+@Composable
+private fun MainScreenStarredTabDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        MainScreenContent(
+            selectedTab = MainTab.STARRED,
+            onTabSelected = {}
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = "Starred Screen Content")
+            }
+        }
+    }
+}
+
+@Preview(name = "Main Screen - Settings Tab", showBackground = true)
+@Composable
+private fun MainScreenSettingsTabPreview() {
+    CodeCheckTheme {
+        MainScreenContent(
+            selectedTab = MainTab.SETTINGS,
+            onTabSelected = {}
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = "Settings Screen Content")
+            }
+        }
+    }
+}
+

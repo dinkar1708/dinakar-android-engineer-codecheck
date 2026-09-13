@@ -176,10 +176,10 @@ Every reference included below has been verified for availability (HTTP 200 OK) 
   *Application in Project:* Detailed schema for query syntax, repository items, fork counts, star metrics, and pagination.
 - **GitHub API Rate Limiting Specifications**: [https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api)  
   *Application in Project:* Rationale for handling HTTP 403 rate limits gracefully and notifying the user with friendly actionable UI states.
-- **Yumemi Coding Test Evaluation Criteria (Qiita)**: [https://qiita.com/blendthink/items/aa70b8b3106fb4e3555f](https://qiita.com/blendthink/items/aa70b8b3106fb4e3555f)  
-  *Application in Project:* Baseline evaluation standard created by Yumemi's lead reviewer detailing readability, null-safety, architecture, testing, and lifecycle hygiene.
-- **Yumemi Code Check Base Repository**: [https://github.com/yumemi-inc/android-engineer-codecheck](https://github.com/yumemi-inc/android-engineer-codecheck)  
-  *Application in Project:* The initial problem specification that was systematically refactored, modernized, and stabilized in this repository.
+- **Upstream Code Check Base Repository (Yumemi Inc.)**: [https://github.com/yumemi-inc/android-engineer-codecheck](https://github.com/yumemi-inc/android-engineer-codecheck)  
+  *Application in Project:* The authoritative problem specification and starter codebase modernized, stabilized, and modularized across this project.
+- **Coding Test Evaluation Criteria (Qiita Reference by lead reviewer blendthink)**: [https://qiita.com/blendthink/items/aa70b8b3106fb4e3555f](https://qiita.com/blendthink/items/aa70b8b3106fb4e3555f)  
+  *Application in Project:* Authoritative evaluation benchmark detailing code readability, null-safety, architectural boundaries, automated testing, and Android lifecycle hygiene. All documentation and architectural guidelines throughout this repository align with these benchmark standards.
 
 ---
 

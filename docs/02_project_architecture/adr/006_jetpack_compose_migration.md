@@ -8,7 +8,7 @@
 
 ## Context
 
-The legacy Yumemi starter codebase used traditional Android View hierarchies:
+The legacy starter codebase used traditional Android View hierarchies:
 1. **XML Layouts & ViewBinding:** `activity_top.xml`, `fragment_one.xml`, `fragment_two.xml`.
 2. **Fat Fragment Architecture:** UI rendering, lifecycle observers, navigation callbacks, and network requests were coupled inside `OneFragment.kt` (400+ lines).
 3. **Imparative State Mutations:** Manual view visibility toggles (`view.visibility = View.VISIBLE`), text setting, and RecyclerView adapter diffing introduced state inconsistency and potential NullPointerExceptions.

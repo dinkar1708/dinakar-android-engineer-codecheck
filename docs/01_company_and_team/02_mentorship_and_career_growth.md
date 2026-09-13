@@ -1,8 +1,7 @@
 # Technical Leadership, Team Governance & Architectural Strategy
 
 **Author:** Dinakar Prasad Maurya  
-**Role:** Mobile Platform Engineering Lead & Manager  
-**Context:** Enterprise Mobile Platform Architecture & Engineering Operations (Yumemi Code Check Benchmark)
+**Context:** Enterprise Mobile Platform Architecture & Engineering Operations (see [Technical References](../references.md#7-github-api--assessment-standards))
 
 ---
 
@@ -10,7 +9,7 @@
 
 > **"Architecture is not merely code structure; it is the organizational operating system that enables cross-functional engineering teams to ship high-quality products faster, safer, and with zero friction."**
 
-As an Engineering Lead and Product Engineering Manager, technical excellence must be coupled with organizational leverage. True senior leadership is reflected in building scalable systems—designing decoupled architectures that eliminate merge bottlenecks, establishing automated quality gates, setting clear team SLAs, and building mentorship frameworks that accelerate junior and mid-level developers into high-impact contributors.
+In scalable engineering organizations, technical excellence must be coupled with organizational leverage. True senior leadership is reflected in building scalable systems—designing decoupled architectures that eliminate merge bottlenecks, establishing automated quality gates, setting clear team SLAs, and building mentorship frameworks that accelerate junior and mid-level developers into high-impact contributors.
 
 ---
 
@@ -19,7 +18,7 @@ As an Engineering Lead and Product Engineering Manager, technical excellence mus
 This management playbook builds upon the engineering foundations established across our technical specifications:
 - **Platform Architecture & Decisions:** See [Engineering Leadership Strategy](./01_engineering_leadership.md) and [Operating Model Overview](./readme.md).
 - **Contract-First Parallel Delivery:** Detailed in [Engineering Leadership Strategy](./01_engineering_leadership.md#3-team-scalability--parallel-delivery-model).
-- **Code Review Standards & SLAs:** Detailed in [Code Review Guidelines](./04_code_review_guidelines.md) and [Yumemi Review Culture](./09_yumemi_review_culture.md).
+- **Code Review Standards & SLAs:** Detailed in [Code Review Guidelines](./04_code_review_guidelines.md) and [Collaborative Review Culture](./09_collaborative_review_culture.md).
 - **Quality Gates & Definition of Done:** Detailed in [Definition of Done](./05_definition_of_done.md) and [Engineering Guardrails](./06_engineering_guardrails.md).
 
 With technical guardrails automated via CI, engineering leadership focuses on **people enablement, operational efficiency, structured mentorship, and data-driven management**.
@@ -81,7 +80,7 @@ A strong engineering culture shares knowledge externally, elevating the organiza
 
 ## 4. Engineering Metrics & Operational KPIs
 
-As an Engineering Lead and Manager, decisions are guided by data-driven operational metrics:
+Decisions are guided by data-driven operational metrics:
 
 ### Velocity & Efficiency KPIs
 | Metric | Target | Rationale & Remediation |
@@ -137,7 +136,7 @@ As an Engineering Lead and Manager, decisions are guided by data-driven operatio
 
 ## 6. Summary: Strategic Leadership Impact
 
-Engineering leadership at the Lead/Manager level is about multiplying team impact:
+Engineering leadership is about multiplying team impact:
 1. **Architectural Foresight:** Choosing headless KMP and Clean Architecture ensures the platform scales seamlessly from 1 platform to 2, and from 1 engineer to 10.
 2. **Delivery Predictability:** Contract-first parallel development and strict branch/PR standards eliminate integration bottlenecks.
 3. **Sustainable Quality:** Automated CI quality gates, static analysis, and 80%+ test coverage safeguard production stability.

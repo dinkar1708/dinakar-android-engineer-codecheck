@@ -6,9 +6,8 @@ description: Use this skill when authoring, structuring, or updating technical d
 # Documentation Standards
 
 ## 📱 Current Codebase Context
-- **Current Stack:** ViewBinding + LiveData + Manual DI + Single-module
-- **Target Stack:** Jetpack Compose + StateFlow + Hilt + Multi-module (aspirational)
-- When documenting, be clear about what is **current** vs. **planned**
+- **Current Stack:** 100% Jetpack Compose + Material 3 + StateFlow UDF + Hilt DI + Multi-Module Clean Architecture + KMP Core (`:core:domain`, `:core:network`, `:core:data`, `:shared-core`, `:core:designsystem`, `:core:ui`, `:feature:splash`, `:feature:search`, `:feature:detail`, `:feature:settings`, `:feature:starred`, `:app`) + Detekt 1.23.6
+- All code check challenge tasks (Issues #3–#11) are fully implemented. When documenting, reflect the active multi-module architecture and design tokens.
 
 ## Core Principles
 1. **Single Source of Truth**: Issues documented in `03_issues_summary.md` only.
@@ -52,6 +51,8 @@ description: Use this skill when authoring, structuring, or updating technical d
 ## 📂 Related Relative Paths
 - **Documentation Root**: `docs/readme.md`
 - **Company Handbook**: `docs/01_company_and_team/readme.md`
+- **Code Commenting & Documentation Standards**: `docs/01_company_and_team/12_code_commenting_and_documentation_standards.md`
+- **Contributing Guide**: `docs/CONTRIBUTING.md`
 - **AI Agent Skills Guide**: `docs/01_company_and_team/10_ai_agent_skills_guide.md`
 - **Architecture Blueprints**: `docs/02_project_architecture/readme.md`
 - **Sprint Execution & Issues**: `docs/03_sprint_execution/03_issues_summary.md`

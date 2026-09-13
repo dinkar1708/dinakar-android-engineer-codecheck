@@ -1,7 +1,6 @@
 # Project Retrospective & Lessons Learned
 
 **Maintainer:** Dinakar Prasad Maurya  
-**Target Role:** モバイルリードエンジニア / Mobile Platform Engineering Lead  
 **Scope:** Phase 6 (Retirement & Evolution) of Agile SDLC  
 **Format:** Google Blameless Post-Mortem + Japanese Engineering KPT (Keep, Problem, Try)  
 
@@ -9,7 +8,7 @@
 
 ## 1. Executive Summary
 
-This retrospective captures the engineering journey of transforming the legacy single-module Yumemi code challenge into an enterprise-ready, cross-platform Android + iOS solution.
+This retrospective captures the engineering journey of transforming the legacy single-module starter code challenge (see [Technical References](../references.md#7-github-api--assessment-standards)) into an enterprise-ready, cross-platform Android + iOS solution.
 
 By applying Engineering Leadership principles and competitive benchmarking against open-source reference implementations and enterprise standards, we achieved:
 - **100% Declarative UI** (Jetpack Compose Material 3 on Android, SwiftUI on iOS).
@@ -21,7 +20,7 @@ By applying Engineering Leadership principles and competitive benchmarking again
 
 ## 2. KPT Framework (振り返り: Keep, Problem, Try)
 
-The KPT format is the industry standard for agile engineering retrospectives in Japanese tech organizations (Mercari, Cookpad, Yumemi, CyberAgent):
+The KPT format is the industry standard for agile engineering retrospectives in Japanese tech organizations (Mercari, Cookpad, CyberAgent, LINE):
 
 ```mermaid
 quadrantChart
@@ -80,11 +79,11 @@ quadrantChart
 
 ## 4. Conclusion & Next-Gen Roadmap
 
-The refactored architecture provides a scalable foundation ready for enterprise growth. The engineering practices demonstrated here—document-driven development, modularity, automated static analysis, cross-platform code reuse, and operational maturity—reflect the expectations for a **Mobile Platform Lead / Engineering Manager** at tier-1 technology organizations.
+The refactored architecture provides a scalable foundation ready for enterprise growth. The engineering practices demonstrated here—document-driven development, modularity, automated static analysis, cross-platform code reuse, and operational maturity—reflect modern platform engineering excellence and architectural best practices at tier-1 technology organizations.
 
 ---
 
 ## References
 - [Google SRE: Postmortem Culture](https://sre.google/sre-book/postmortem-culture/)
 - [Mercari Engineering Blog: Retrospective Practices](https://engineering.mercari.com/)
-- [Yumemi PR Review Analysis](../02_inception/team/yumemi_pr_review_culture.md)
+- [Collaborative Code Review Culture](../01_company_and_team/09_collaborative_review_culture.md)

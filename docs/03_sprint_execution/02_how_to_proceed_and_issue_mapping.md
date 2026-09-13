@@ -1,14 +1,13 @@
 # How to Proceed with the Challenge & Issue-to-PR Mapping
 
 **Maintainer:** Dinakar Prasad Maurya  
-**Target Role:** モバイルリードエンジニア / Mobile Platform Engineering Lead & Manager  
 **SDLC Phase:** Phase 2 (Inception / Team Governance)  
 
 ---
 
-## 1. Yumemi Challenge Specification: "How to Proceed" (`課題取り組み方法`)
+## 1. Upstream Challenge Specification: "How to Proceed" (`課題取り組み方法`)
 
-The official Yumemi challenge instructions specify the exact expectations under `## 課題取り組み方法` (How to Proceed with the Challenge) in the original project repository:
+The official upstream challenge instructions specify the exact expectations under `## 課題取り組み方法` (How to Proceed with the Challenge) in the original project repository (see [Technical References](../references.md#7-github-api--assessment-standards)):
 
 ```text
 1. Duplicate Repository:
@@ -29,9 +28,9 @@ The official Yumemi challenge instructions specify the exact expectations under 
 
 ## 2. Sync Verification: How Our Project Follows the Instructions
 
-Our repository and documentation suite strictly comply with 100% of Yumemi's instructions:
+Our repository and documentation suite strictly comply with 100% of the challenge instructions:
 
-| Instruction Element | Yumemi Specification | Our Solution Implementation | Sync Status |
+| Instruction Element | Upstream Specification | Our Solution Implementation | Sync Status |
 |:---|:---|:---|:---:|
 | **Repository Setup** | Duplicate repository without direct fork | Clean standalone repository structure with full git commit history intact | **100% Synced** |
 | **初級 (Beginner) Issues** | Issues #1, #2, #3 (Mandatory) | Completed, tested, and verified in Sprint 1 | **100% Synced** |
@@ -45,10 +44,10 @@ Our repository and documentation suite strictly comply with 100% of Yumemi's ins
 ## 3. The Core Concept: "Issues Are The Work, PRs Are The Delivery"
 
 A critical question often asked in mobile engineering leadership is:
-> **"Does Yumemi mandate how many Pull Requests we must make? Are Issues our actual work?"**
+> **"Does the specification mandate how many Pull Requests we must make? Are Issues our actual work?"**
 
-### 3.1 Yumemi Defines the Issues (The Work / WHAT & WHY)
-- **Yumemi's specification mentions 0 rules about PR count.** Yumemi only defines the **9 Challenge Issues**.
+### 3.1 Challenge Specifications Define the Issues (The Work / WHAT & WHY)
+- **The upstream specification mentions 0 rules about PR count.** It defines the **9 Challenge Issues**.
 - The **Issues represent the contractual requirements**:
   - The problem statement (e.g. `runBlocking` ANR freeze, monolithic Fragment, missing tests).
   - The business and user impact (app crashes, memory leaks, high latency).
@@ -57,7 +56,7 @@ A critical question often asked in mobile engineering leadership is:
 
 ### 3.2 Pull Requests Define the Execution (The Delivery / HOW)
 - While the **Issues define WHAT to do**, **Pull Requests define HOW we deliver it safely**.
-- As a **Mobile Platform Engineering Lead**, dumping an entire multi-module refactor or an entire issue into a massive 2,500-line Pull Request is an anti-pattern:
+- In modern mobile platform engineering, dumping an entire multi-module refactor or an entire issue into a massive 2,500-line Pull Request is an anti-pattern:
   - Large PRs overwhelm reviewers, hide subtle bugs, and lead to superficial approvals.
   - Large PRs create merge conflicts and block other team members.
 - Therefore, our engineering strategy decomposes the 9 challenge issues into **15 Atomic Pull Requests** across **4 Sprints**:
@@ -65,9 +64,9 @@ A critical question often asked in mobile engineering leadership is:
   - Review time per PR is kept under **15 minutes**.
   - Risky changes (e.g. local null checks vs. `SavedStateHandle` process-death persistence) are isolated and merged incrementally.
 
-### 3.3 The Engineering Lead Mindset: Planning First & Decomposing for Scale
+### 3.3 The Engineering Architecture Mindset: Planning First & Decomposing for Scale
 
-When evaluators review this repository, this document demonstrates a core **Mobile Platform Lead & Engineering Manager** competency:
+When evaluators review this repository, this document demonstrates core platform engineering architecture and delivery competency:
 
 ```mermaid
 flowchart LR
@@ -98,11 +97,11 @@ flowchart LR
 
 > [!NOTE]
 > **Issue Number Mapping & Offset Rationale (+2):**  
-> This repository was initially configured as private. Due to GitHub Actions CI execution and billing limits on private repositories, PR #1 (build fixes) and PR #2 (foundational documentation) were created and merged before running the automated issue copying action (`copy-issues.yml`). Because GitHub allocates a single shared sequential counter for both PRs and Issues, Yumemi Challenge Issues #1 through #9 are tracked as **GitHub Issues #3 through #11**.
+> This repository was initially configured as private. Due to GitHub Actions CI execution and billing limits on private repositories, PR #1 (build fixes) and PR #2 (foundational documentation) were created and merged before running the automated issue copying action (`copy-issues.yml`). Because GitHub allocates a single shared sequential counter for both PRs and Issues, Challenge Issues #1 through #9 are tracked as **GitHub Issues #3 through #11**.
 
-The following matrix provides complete bidirectional traceability from Yumemi's 9 Challenge Issues to our GitHub Issues, Agile Tickets, and atomic Pull Requests:
+The following matrix provides complete bidirectional traceability from the 9 Challenge Issues to our GitHub Issues, Agile Tickets, and atomic Pull Requests:
 
-| Level | Yumemi Issue | GitHub Ticket / PR | Issue Title (Japanese & English) | Target Scope & Workstreams | Sprint | Story Points (SP) |
+| Level | Challenge Issue | GitHub Ticket / PR | Issue Title (Japanese & English) | Target Scope & Workstreams | Sprint | Story Points (SP) |
 |:---:|:---:|:---:|:---|:---|:---:|:---:|
 | **Infra** | **Setup** | [**PR #12**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/pull/12) | CI Pipeline & Quality Gates | Automated CI & Gradle Verification | Sprint 1 | **3 SP** |
 | **初級** | **#1** | [**#3**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/3) | ソースコードの可読性の向上<br/>*(Improve Code Readability)* | Naming Conventions (2 SP)<br/>Code Style & EditorConfig (1 SP) | Sprint 1 | **3 SP** |
@@ -121,7 +120,7 @@ The following matrix provides complete bidirectional traceability from Yumemi's 
 
 ## 5. Summary & Key Takeaway
 
-- **Yumemi's "How to Proceed" (`課題取り組み方法`) is 100% satisfied:** All 9 issues across 初級, 中級, and ボーナス are planned, bounded, and tracked.
+- **The "How to Proceed" (`課題取り組み方法`) is 100% satisfied:** All 9 issues across 初級, 中級, and ボーナス are planned, bounded, and tracked.
 - **Issues are the authoritative record of work:** Our `docs/03_sprint_execution/03_issues_summary.md` records the objective requirements and acceptance criteria.
 - **PRs are our professional delivery methodology:** Breaking the 9 issues into small, well-bounded PRs demonstrates engineering maturity, effective risk isolation, and clean code review practices.
 
@@ -137,7 +136,7 @@ The following matrix provides complete bidirectional traceability from Yumemi's 
 
 ---
 
-## 6. Pull Request Description Template (Yumemi Code Check)
+## 6. Pull Request Description Template
 
 Copy and paste this template when opening Pull Requests:
 

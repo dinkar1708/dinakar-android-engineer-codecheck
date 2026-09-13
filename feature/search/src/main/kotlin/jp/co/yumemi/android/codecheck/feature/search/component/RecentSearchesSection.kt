@@ -23,10 +23,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.MaterialTheme
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 import jp.co.yumemi.android.codecheck.feature.search.R
 
 /**
@@ -109,3 +111,28 @@ fun RecentSearchesSection(
         }
     }
 }
+
+@Preview(name = "Recent Searches - Light", showBackground = true)
+@Composable
+private fun RecentSearchesSectionLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        RecentSearchesSection(
+            history = listOf("kotlin", "compose", "retrofit", "ktor client"),
+            onQueryClick = {},
+            onRemoveQuery = {}
+        )
+    }
+}
+
+@Preview(name = "Recent Searches - Dark", showBackground = true)
+@Composable
+private fun RecentSearchesSectionDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        RecentSearchesSection(
+            history = listOf("kotlin", "compose", "retrofit", "ktor client"),
+            onQueryClick = {},
+            onRemoveQuery = {}
+        )
+    }
+}
+

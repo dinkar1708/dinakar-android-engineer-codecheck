@@ -197,4 +197,47 @@ class DetailContentTest {
         composeTestRule.onNodeWithText("ravidsrk").assertIsDisplayed()
         composeTestRule.onNodeWithText("kotlinextensions.com").assertIsDisplayed()
     }
+
+    @Test
+    fun detailContent_withCompactLandscapeDimensions_rendersAllMetricsInSingleRow() {
+        composeTestRule.setContent {
+            androidx.compose.runtime.CompositionLocalProvider(
+                jp.co.yumemi.android.codecheck.core.designsystem.theme.LocalAppDimensions provides
+                    jp.co.yumemi.android.codecheck.core.designsystem.theme.CompactLandscapeDimensions
+            ) {
+                DetailContent(
+                    repository = fakeItem,
+                    onOpenBrowser = null
+                )
+            }
+        }
+
+        composeTestRule.onNodeWithText("STARS").assertIsDisplayed()
+        composeTestRule.onNodeWithText("14,200").assertIsDisplayed()
+        composeTestRule.onNodeWithText("FORKS").assertIsDisplayed()
+        composeTestRule.onNodeWithText("3,500").assertIsDisplayed()
+        composeTestRule.onNodeWithText("WATCHERS").assertIsDisplayed()
+        composeTestRule.onNodeWithText("12,500").assertIsDisplayed()
+        composeTestRule.onNodeWithText("OPEN ISSUES").assertIsDisplayed()
+        composeTestRule.onNodeWithText("42").assertIsDisplayed()
+    }
+
+    @Test
+    fun detailContent_withTabletDimensions_rendersMetricsAndAdaptsLayout() {
+        composeTestRule.setContent {
+            androidx.compose.runtime.CompositionLocalProvider(
+                jp.co.yumemi.android.codecheck.core.designsystem.theme.LocalAppDimensions provides
+                    jp.co.yumemi.android.codecheck.core.designsystem.theme.TabletDimensions
+            ) {
+                DetailContent(
+                    repository = fakeItem,
+                    onOpenBrowser = null
+                )
+            }
+        }
+
+        composeTestRule.onNodeWithText("compose-samples").assertIsDisplayed()
+        composeTestRule.onNodeWithText("STARS").assertIsDisplayed()
+        composeTestRule.onNodeWithText("14,200").assertIsDisplayed()
+    }
 }

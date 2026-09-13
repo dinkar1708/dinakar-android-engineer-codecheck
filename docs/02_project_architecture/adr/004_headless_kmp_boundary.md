@@ -78,7 +78,7 @@ flowchart TB
 2. **Flutter:**
    - *Rejected:* Requires rewriting the entire application in Dart, abandoning existing Android Jetpack ecosystem investments.
 3. **Android-Only Single Codebase:**
-   - *Rejected:* Misses the opportunity to demonstrate mobile engineering lead / platform architect capability across both mobile operating systems.
+   - *Rejected:* Misses the opportunity to share business logic and network mapping across both mobile operating systems while preserving native UI.
 
 ---
 

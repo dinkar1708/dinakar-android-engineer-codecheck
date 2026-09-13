@@ -29,8 +29,10 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 import jp.co.yumemi.android.codecheck.feature.search.R
 import jp.co.yumemi.android.codecheck.core.domain.model.SearchFilter
 
@@ -47,8 +49,10 @@ fun FilterBar(
     onRemoveLanguage: () -> Unit,
     onRemoveMinStars: () -> Unit,
     onRemoveUpdatedPeriod: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier.fillMaxWidth()
 ) {
+    val dimensions = jp.co.yumemi.android.codecheck.core.designsystem.theme.LocalAppDimensions.current
+
     val barBgColor = MaterialTheme.colorScheme.surface
     val barBorderColor = MaterialTheme.colorScheme.outline
 
@@ -74,7 +78,10 @@ fun FilterBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .horizontalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp, vertical = 12.dp),
+                .padding(
+                    horizontal = dimensions.screenPaddingHorizontal,
+                    vertical = dimensions.spaceSmall
+                ),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -89,18 +96,21 @@ fun FilterBar(
                 border = BorderStroke(1.dp, filterBtnBorder)
             ) {
                 Row(
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
+                    modifier = Modifier.padding(
+                        horizontal = dimensions.spaceMedium,
+                        vertical = dimensions.spaceSmall
+                    ),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(7.dp)
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     SlidersHorizontalIcon(
-                        modifier = Modifier.size(14.dp),
+                        modifier = Modifier.size(dimensions.iconSmall),
                         tint = filterBtnContentColor,
                         handleBackground = filterBtnBg
                     )
                     Text(
                         text = stringResource(R.string.search_filter_button),
-                        fontSize = 13.sp,
+                        fontSize = dimensions.captionSize,
                         fontWeight = FontWeight.SemiBold,
                         color = filterBtnContentColor
                     )
@@ -217,3 +227,52 @@ fun SlidersHorizontalIcon(
         drawCircle(tint, radius = 2.5.dp.toPx(), center = Offset(w * 0.45f, y3), style = androidx.compose.ui.graphics.drawscope.Stroke(width = stroke))
     }
 }
+
+@Preview(name = "FilterBar - Default", showBackground = true)
+@Composable
+private fun FilterBarDefaultPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        FilterBar(
+            filter = SearchFilter(),
+            onOpenFilterSheet = {},
+            onRemoveLanguage = {},
+            onRemoveMinStars = {},
+            onRemoveUpdatedPeriod = {}
+        )
+    }
+}
+
+@Preview(name = "FilterBar - Active Filters Light", showBackground = true)
+@Composable
+private fun FilterBarActiveLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        FilterBar(
+            filter = SearchFilter(
+                language = "Kotlin",
+                minStars = 1000
+            ),
+            onOpenFilterSheet = {},
+            onRemoveLanguage = {},
+            onRemoveMinStars = {},
+            onRemoveUpdatedPeriod = {}
+        )
+    }
+}
+
+@Preview(name = "FilterBar - Active Filters Dark", showBackground = true)
+@Composable
+private fun FilterBarActiveDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        FilterBar(
+            filter = SearchFilter(
+                language = "Kotlin",
+                minStars = 1000
+            ),
+            onOpenFilterSheet = {},
+            onRemoveLanguage = {},
+            onRemoveMinStars = {},
+            onRemoveUpdatedPeriod = {}
+        )
+    }
+}
+

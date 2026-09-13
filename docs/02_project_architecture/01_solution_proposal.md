@@ -1,9 +1,8 @@
 # Solution Proposal & Implementation Strategy
 
 **Author:** Dinakar Prasad Maurya  
-**Target Role:** モバイルリードエンジニア (Mobile Platform Engineering Lead & Manager)  
 **Target Evaluation:** Enterprise Mobile Platform Solution & Architecture Proposal  
-**Specification Benchmark:** Android Engineer Code Check Specification (jp.co.yumemi)  
+**Specification Benchmark:** Android Engineer Code Check Specification (see [Technical References](../references.md#7-github-api--assessment-standards))  
 
 ---
 
@@ -21,9 +20,9 @@
 
 ## 1. Problem Statement
 
-### Original Requirements (from Yumemi)
+### Original Assessment Requirements
 
-Yumemi provided a baseline Android repository search application with known issues across 9 categories covering code readability, safety, bugs, architecture, testing, UI polish, and bonus features.
+The upstream starter codebase provided a baseline Android repository search application with known issues across 9 categories covering code readability, safety, bugs, architecture, testing, UI polish, and bonus features (see [Technical References](../references.md#7-github-api--assessment-standards)).
 
 **Evaluation Criteria:**
 - New/experienced candidates: First 3 issues (required)
@@ -195,7 +194,7 @@ From analyzing failures in competitive submissions and documentation:
 
 ### Qualitative Goals
 
-- All 9 Yumemi issues closed
+- All 9 challenge issues closed
 - Zero Detekt violations
 - KMP validated with iOS sample
 - Comprehensive ADRs (6+ documents)

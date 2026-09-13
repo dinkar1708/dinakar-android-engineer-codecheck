@@ -2,13 +2,18 @@ package jp.co.yumemi.android.codecheck.core.ui.util
 
 import java.util.Locale
 
+private const val ONE_MILLION = 1_000_000L
+private const val ONE_MILLION_DOUBLE = 1_000_000.0
+private const val ONE_THOUSAND = 1_000L
+private const val ONE_THOUSAND_DOUBLE = 1_000.0
+
 /**
  * Formats large numeric counts into human-readable compact representations (e.g. 1.2K, 3.5M).
  */
 fun formatCount(count: Long): String {
     return when {
-        count >= 1_000_000 -> String.format(Locale.US, "%.1fM", count / 1_000_000.0)
-        count >= 1_000 -> String.format(Locale.US, "%.1fK", count / 1_000.0)
+        count >= ONE_MILLION -> String.format(Locale.US, "%.1fM", count / ONE_MILLION_DOUBLE)
+        count >= ONE_THOUSAND -> String.format(Locale.US, "%.1fK", count / ONE_THOUSAND_DOUBLE)
         else -> count.toString()
     }
 }

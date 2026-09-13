@@ -1,7 +1,6 @@
 # Legacy Decommissioning & Feature Retirement Strategy
 
 **Maintainer:** Dinakar Prasad Maurya  
-**Target Role:** モバイルリードエンジニア / Mobile Platform Engineering Lead  
 **Scope:** Phase 6 (Retirement) of Agile SDLC  
 
 ---
@@ -10,7 +9,7 @@
 
 In software engineering, **decommissioning legacy code and phasing out obsolete architectures** is as critical as writing new features. Unchecked legacy code leads to dead code bloat, increased APK size, maintenance friction, and security vulnerabilities.
 
-When refactoring the Yumemi codebase, we identified multiple legacy technical assets that needed systematic decommissioning without disrupting system stability.
+When refactoring the legacy starter codebase (see [Technical References](../references.md#7-github-api--assessment-standards)), we identified multiple legacy technical assets that needed systematic decommissioning without disrupting system stability.
 
 ---
 

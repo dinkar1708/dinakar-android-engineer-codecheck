@@ -48,6 +48,7 @@ This project starts as a single-module application and will evolve through PRs:
 - **UI Framework**: 100% Jetpack Compose with Material 3 design tokens.
 - **Pattern**: Unidirectional Data Flow (UDF). ViewModels expose immutable `StateFlow<UiState>` and consume user actions (`UiIntent`).
 - **Lifecycle Resilience**: Uses `SavedStateHandle` to preserve search state across process recreation.
+- **Responsive & Multi-Device Design**: Engineered and tested on Phone and Tablet viewports across both Vertical (Portrait) and Horizontal (Landscape) screens, utilizing adaptive `FlowRow` content wrapping and bounded scroll containers.
 
 ### 2. Domain Layer (Pure Kotlin)
 - **Zero Framework Coupling**: Completely free from Android framework dependencies (`android.*`).
@@ -115,7 +116,7 @@ A companion **native SwiftUI iOS application** (`iosApp/CodeCheck-iOS.xcodeproj`
 
 **GitHub Project Board:** [Mobile Platform Engineering - Issue Tracker](https://github.com/users/dinkar1708/projects/1/views/1)
 
-The project board tracks all issues, milestones, and implementation progress across the complete SDLC lifecycle. All 9 Yumemi challenge issues plus bonus features are managed through this centralized board.
+The project board tracks all issues, milestones, and implementation progress across the complete SDLC lifecycle. All 9 code challenge issues plus bonus features are managed through this centralized board (see [Technical References](./references.md#7-github-api--assessment-standards)).
 
 ---
 

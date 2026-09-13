@@ -47,19 +47,24 @@ val SelectedBlueBg = AppBlue.copy(alpha = 0.09f) // Selected/active state backgr
 val ScrimOverlay = AppNavy.copy(alpha = 0.60f) // Bottom sheet scrim (60%)
 
 // ═══════════════════════════════════════════════════════════════════
-// DARK THEME SPECIFICATION
-// Custom dark theme palette adhering to dark mode standards
+// DARK THEME SPECIFICATION (Common_Palette.dc.html)
 // ═══════════════════════════════════════════════════════════════════
-val DarkAppBackground = Slate900
-val DarkCardSurface = Color(0xFF1E293B)   // Slate800
-val DarkBorder = Color(0xFF334155)        // Slate700
-val DarkActionBlue = Color(0xFF6366F1)    // Accessible action indigo/blue
+val DarkAppBackground = Color(0xFF12161F)  // Dark page background (#12161f)
+val DarkCardSurface = Color(0xFF1F2634)    // Card surface (#1f2634)
+val DarkBorder = Color(0xFF333C4E)         // Border (#333c4e)
+val DarkDivider = Color(0xFF2B3344)        // Divider between rows (#2b3344)
+val DarkActionBlue = Color(0xFF8F9DF5)     // Active icons and text (#8f9df5)
+val DarkActionBorder = Color(0xFF6B7CF0)   // Active border and chip accent (#6b7cf0)
+val DarkIconTileBg = Color(0xFF2A3350)     // Section icon tile and monogram tint (#2a3350)
+val DarkAmberBg = Color(0xFF2E2716)        // Amber badge background in dark mode (#2e2716)
+val DarkAmberIcon = Color(0xFFFBBF24)      // Amber icon and stars in dark mode (#fbbf24)
 val DarkGreen = AppGreen                  // Positive, match
-val DarkAmber = AppAmber                  // Stars, review
+val DarkAmber = DarkAmberIcon             // Stars, review
 
 // Text tokens for dark mode
-val TextPrimaryDark = Slate50
-val TextSecondaryDark = Slate300
+val TextPrimaryDark = Color(0xFFF1F5F9)    // Primary text / values (#f1f5f9)
+val TextSecondaryDark = Color(0xFF8C99AB)  // Secondary text / subtitles (#8c99ab)
+val TextBodyDark = Color(0xFFA9B4C4)       // Description / body text (#a9b4c4)
 
 // ═══════════════════════════════════════════════════════════════════
 // SEMANTIC CONVENIENCE TOKENS

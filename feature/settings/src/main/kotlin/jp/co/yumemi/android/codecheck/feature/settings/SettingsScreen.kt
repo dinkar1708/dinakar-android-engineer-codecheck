@@ -221,14 +221,14 @@ private fun SettingsSectionHeader(
         Box(
             modifier = Modifier
                 .size(28.dp)
-                .background(SelectedBlueBg, shape = RoundedCornerShape(6.dp)),
+                .background(MaterialTheme.colorScheme.primaryContainer, shape = RoundedCornerShape(6.dp)),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 modifier = Modifier.size(16.dp),
-                tint = AppBlue
+                tint = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }
         Spacer(modifier = Modifier.width(10.dp))
@@ -247,6 +247,22 @@ private fun SettingsScreenPreview() {
     CodeCheckTheme {
         SettingsContent(
             uiState = SettingsUiState(),
+            onLanguageSelected = {},
+            onThemeSelected = {}
+        )
+    }
+}
+
+@Preview(name = "Settings - Dark", showBackground = true)
+@Composable
+private fun SettingsScreenDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        SettingsContent(
+            uiState = SettingsUiState(
+                themeMode = AppThemeMode.DARK,
+                appVersion = "1.0-dev (Build 1)",
+                environment = "DEVELOPMENT"
+            ),
             onLanguageSelected = {},
             onThemeSelected = {}
         )

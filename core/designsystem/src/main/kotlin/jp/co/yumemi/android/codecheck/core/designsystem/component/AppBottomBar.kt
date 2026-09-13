@@ -129,7 +129,7 @@ private fun AppBottomBarItem(
         Box(
             modifier = Modifier
                 .background(
-                    color = if (isSelected) SelectedBlueBg else Color.Transparent,
+                    color = if (isSelected) androidx.compose.material3.MaterialTheme.colorScheme.primary.copy(alpha = 0.12f) else Color.Transparent,
                     shape = RoundedCornerShape(20.dp)
                 )
                 .padding(horizontal = 20.dp, vertical = 5.dp),

@@ -11,12 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-// Unified ColorScheme using the definitive 6-color palette
-// (Light and dark theme use the same color palette for now; distinct dark mode will be activated later)
+// Unified ColorScheme using the definitive 6-color palette (Common_Palette.dc.html)
 private val AppColorScheme = lightColorScheme(
     primary = AppBlue,
     onPrimary = AppWhite,
-    primaryContainer = MonogramBlueBg,
+    primaryContainer = Color(0xFFEEF1FD),
     onPrimaryContainer = AppBlue,
     secondary = AppGreen,
     onSecondary = AppWhite,
@@ -24,41 +23,41 @@ private val AppColorScheme = lightColorScheme(
     onSecondaryContainer = AppGreen,
     tertiary = AppAmber,
     onTertiary = AppWhite,
-    tertiaryContainer = AppAmber.copy(alpha = 0.12f),
-    onTertiaryContainer = Slate900,
+    tertiaryContainer = Color(0xFFFFFBEB),
+    onTertiaryContainer = Color(0xFFB45309),
     background = Slate50,
     onBackground = Slate900,
     surface = AppWhite,
     onSurface = Slate900,
     surfaceVariant = Slate100,
-    onSurfaceVariant = Slate600,
+    onSurfaceVariant = Color(0xFF5B6879),
     outline = Slate200,
-    outlineVariant = Slate300,
+    outlineVariant = Slate100,
     error = Color(0xFFDC2626),
     onError = AppWhite
 )
 
 private val DarkAppColorScheme = darkColorScheme(
-    primary = Color(0xFF6366F1), // Bright accessible indigo in dark mode
-    onPrimary = AppWhite,
-    primaryContainer = Color(0xFF1E293B),
-    onPrimaryContainer = Color(0xFF93C5FD),
+    primary = Color(0xFF8F9DF5),
+    onPrimary = Color(0xFF1F2634),
+    primaryContainer = Color(0xFF2A3350),
+    onPrimaryContainer = Color(0xFF8F9DF5),
     secondary = AppGreen,
     onSecondary = AppWhite,
     secondaryContainer = Color(0xFF064E3B),
     onSecondaryContainer = Color(0xFFA7F3D0),
-    tertiary = AppAmber,
-    onTertiary = AppWhite,
-    tertiaryContainer = Color(0xFF78350F),
-    onTertiaryContainer = Color(0xFFFDE68A),
-    background = Slate900,
-    onBackground = Slate50,
-    surface = Color(0xFF1E293B),
-    onSurface = Slate50,
-    surfaceVariant = Color(0xFF334155),
-    onSurfaceVariant = Slate300,
-    outline = Color(0xFF334155),
-    outlineVariant = Color(0xFF1E293B),
+    tertiary = Color(0xFFFBBF24),
+    onTertiary = Color(0xFF1F2634),
+    tertiaryContainer = Color(0xFF2E2716),
+    onTertiaryContainer = Color(0xFFFBBF24),
+    background = Color(0xFF12161F),
+    onBackground = Color(0xFFF1F5F9),
+    surface = Color(0xFF1F2634),
+    onSurface = Color(0xFFF1F5F9),
+    surfaceVariant = Color(0xFF2B3344),
+    onSurfaceVariant = Color(0xFF8C99AB),
+    outline = Color(0xFF333C4E),
+    outlineVariant = Color(0xFF2B3344),
     error = Color(0xFFEF4444),
     onError = AppWhite
 )

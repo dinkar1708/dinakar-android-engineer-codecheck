@@ -55,11 +55,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.SubcomposeAsyncImage
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppAmber
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppNavy
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramBlueBg
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramBlueText
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramGreenBg
@@ -118,23 +120,25 @@ fun StarredContent(
 ) {
     var showClearConfirmation by remember { mutableStateOf(false) }
 
+    val isDarkTheme = MaterialTheme.colorScheme.surface != AppWhite
+
     if (showClearConfirmation) {
         AlertDialog(
             onDismissRequest = { showClearConfirmation = false },
-            containerColor = AppWhite,
+            containerColor = MaterialTheme.colorScheme.surface,
             shape = RoundedCornerShape(16.dp),
             icon = {
                 Box(
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
-                        .background(Color(0xFFFEE2E2)),
+                        .background(if (isDarkTheme) Color(0xFF451A1A) else Color(0xFFFEE2E2)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = null,
-                        tint = Color(0xFFDC2626),
+                        tint = if (isDarkTheme) Color(0xFFF87171) else Color(0xFFDC2626),
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -144,7 +148,7 @@ fun StarredContent(
                     text = stringResource(R.string.starred_clear_confirm_title),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Slate900,
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center
                 )
             },
@@ -153,7 +157,7 @@ fun StarredContent(
                     text = stringResource(R.string.starred_clear_confirm_message),
                     fontSize = 14.sp,
                     lineHeight = 20.sp,
-                    color = Slate600,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
             },
@@ -179,10 +183,10 @@ fun StarredContent(
             dismissButton = {
                 OutlinedButton(
                     onClick = { showClearConfirmation = false },
-                    border = BorderStroke(1.dp, Slate300),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Slate700
+                        contentColor = MaterialTheme.colorScheme.onSurface
                     )
                 ) {
                     Text(
@@ -197,7 +201,7 @@ fun StarredContent(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = Slate50
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -230,7 +234,7 @@ fun StarredContent(
                         ) {
                             Text(
                                 text = stringResource(R.string.starred_clear_all),
-                                color = AppWhite.copy(alpha = 0.9f),
+                                color = Color(0xFFCBD5E1),
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Medium
                             )
@@ -264,26 +268,26 @@ fun StarredContent(
                             // Circular amber badge matching mockup
                             Box(
                                 modifier = Modifier
-                                    .size(80.dp)
+                                    .size(72.dp)
                                     .clip(CircleShape)
-                                    .background(Color(0xFFFEF3C7)),
+                                    .background(MaterialTheme.colorScheme.tertiaryContainer),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(
-                                    imageVector = Icons.Outlined.StarBorder,
+                                    imageVector = Icons.Default.Star,
                                     contentDescription = null,
-                                    modifier = Modifier.size(36.dp),
-                                    tint = Color(0xFFD97706)
+                                    modifier = Modifier.size(28.dp),
+                                    tint = MaterialTheme.colorScheme.onTertiaryContainer
                                 )
                             }
 
-                            Spacer(modifier = Modifier.height(20.dp))
+                            Spacer(modifier = Modifier.height(18.dp))
 
                             Text(
                                 text = stringResource(R.string.starred_empty_title),
-                                fontSize = 18.sp,
+                                fontSize = 17.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Slate900,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 textAlign = TextAlign.Center
                             )
 
@@ -291,14 +295,14 @@ fun StarredContent(
 
                             Text(
                                 text = stringResource(R.string.starred_empty_subtitle),
-                                fontSize = 14.sp,
-                                color = Slate500,
+                                fontSize = 13.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 textAlign = TextAlign.Center,
                                 lineHeight = 20.sp,
                                 modifier = Modifier.padding(horizontal = 8.dp)
                             )
 
-                            Spacer(modifier = Modifier.height(24.dp))
+                            Spacer(modifier = Modifier.height(20.dp))
 
                             Button(
                                 onClick = onNavigateToSearch,
@@ -306,13 +310,13 @@ fun StarredContent(
                                     containerColor = AppBlue,
                                     contentColor = AppWhite
                                 ),
-                                shape = RoundedCornerShape(8.dp),
-                                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
+                                shape = RoundedCornerShape(4.dp),
+                                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 11.dp)
                             ) {
                                 Text(
                                     text = stringResource(R.string.starred_search_repositories),
                                     fontSize = 14.sp,
-                                    fontWeight = FontWeight.SemiBold
+                                    fontWeight = FontWeight.Medium
                                 )
                             }
                         }
@@ -322,7 +326,7 @@ fun StarredContent(
                 is StarredUiState.Success -> {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(16.dp),
+                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp),
                         verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         item {
@@ -336,8 +340,8 @@ fun StarredContent(
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
                                 letterSpacing = 0.05.em,
-                                color = Slate500,
-                                modifier = Modifier.padding(bottom = 2.dp)
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
                             )
                         }
                         items(
@@ -364,6 +368,7 @@ private fun StarredCard(
     onUnstarClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isDarkTheme = MaterialTheme.colorScheme.surface != AppWhite
     val ownerLogin = item.owner.login.ifBlank {
         if (item.name.contains("/")) item.name.substringBefore("/") else "unknown"
     }
@@ -375,7 +380,7 @@ private fun StarredCard(
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(1.dp, Slate200),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
@@ -408,7 +413,7 @@ private fun StarredCard(
                     Text(
                         text = ownerLogin,
                         fontSize = 13.sp,
-                        color = Slate500,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -433,7 +438,7 @@ private fun StarredCard(
                         text = item.description.orEmpty(),
                         fontSize = 13.sp,
                         lineHeight = 18.sp,
-                        color = Slate600,
+                        color = if (isDarkTheme) Color(0xFFA9B4C4) else Color(0xFF475569),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -460,7 +465,7 @@ private fun StarredCard(
                             Text(
                                 text = item.language.orEmpty(),
                                 fontSize = 12.sp,
-                                color = Slate500
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
@@ -473,20 +478,20 @@ private fun StarredCard(
                             imageVector = Icons.Default.Star,
                             contentDescription = null,
                             modifier = Modifier.size(13.dp),
-                            tint = AppAmber
+                            tint = MaterialTheme.colorScheme.tertiary
                         )
                         Text(
                             text = formatStarCount(item.stargazersCount),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Slate800
+                            color = if (isDarkTheme) Color(0xFFE2E8F0) else Slate800
                         )
                     }
 
                     Text(
                         text = stringResource(R.string.starred_forks_suffix, formatForkCount(item.forksCount)),
                         fontSize = 12.sp,
-                        color = Slate500
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -499,7 +504,7 @@ private fun StarredCard(
                 Icon(
                     imageVector = Icons.Default.Star,
                     contentDescription = stringResource(R.string.starred_remove_content_description, displayName),
-                    tint = AppAmber,
+                    tint = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.size(22.dp)
                 )
             }
@@ -513,12 +518,21 @@ private fun StarredAvatar(
     ownerName: String,
     modifier: Modifier = Modifier
 ) {
+    val isDarkTheme = MaterialTheme.colorScheme.surface != AppWhite
     val initials = remember(ownerName) { getMonogramInitials(ownerName) }
     val hash = remember(ownerName) { abs(ownerName.hashCode()) }
-    val (bgColor, textColor) = when (hash % 3) {
-        0 -> Pair(MonogramBlueBg, MonogramBlueText)
-        1 -> Pair(MonogramGreenBg, MonogramGreenText)
-        else -> Pair(MonogramSlateBg, MonogramSlateText)
+    val (bgColor, textColor) = if (isDarkTheme) {
+        when (hash % 3) {
+            0 -> Pair(Color(0xFF2A3350), Color(0xFF8F9DF5))
+            1 -> Pair(Color(0xFF064E3B), Color(0xFFA7F3D0))
+            else -> Pair(Color(0xFF2B3344), Color(0xFFA9B4C4))
+        }
+    } else {
+        when (hash % 3) {
+            0 -> Pair(MonogramBlueBg, MonogramBlueText)
+            1 -> Pair(MonogramGreenBg, MonogramGreenText)
+            else -> Pair(MonogramSlateBg, MonogramSlateText)
+        }
     }
 
     SubcomposeAsyncImage(
@@ -552,6 +566,83 @@ private fun MonogramBox(
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
             color = textColor
+        )
+    }
+}
+
+@Preview(name = "Starred - Light", showBackground = true)
+@Composable
+private fun StarredScreenLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        StarredContent(
+            uiState = StarredUiState.Success(
+                listOf(
+                    RepositoryItem(
+                        name = "hussien89aa/KotlinUdemy",
+                        description = "Learn how to make online games, and apps for Android O, like Pokémon, twitter…",
+                        language = "Kotlin",
+                        stargazersCount = 2000,
+                        forksCount = 5000,
+                        owner = jp.co.yumemi.android.codecheck.core.domain.model.Owner(login = "hussien89aa")
+                    ),
+                    RepositoryItem(
+                        name = "JetBrains/kotlin",
+                        description = "The Kotlin Programming Language.",
+                        language = "Kotlin",
+                        stargazersCount = 53400,
+                        forksCount = 6400,
+                        owner = jp.co.yumemi.android.codecheck.core.domain.model.Owner(login = "JetBrains")
+                    )
+                )
+            ),
+            onRepositoryClick = {},
+            onUnstar = {},
+            onClearAll = {}
+        )
+    }
+}
+
+@Preview(name = "Starred - Dark", showBackground = true)
+@Composable
+private fun StarredScreenDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        StarredContent(
+            uiState = StarredUiState.Success(
+                listOf(
+                    RepositoryItem(
+                        name = "hussien89aa/KotlinUdemy",
+                        description = "Learn how to make online games, and apps for Android O, like Pokémon, twitter…",
+                        language = "Kotlin",
+                        stargazersCount = 2000,
+                        forksCount = 5000,
+                        owner = jp.co.yumemi.android.codecheck.core.domain.model.Owner(login = "hussien89aa")
+                    ),
+                    RepositoryItem(
+                        name = "JetBrains/kotlin",
+                        description = "The Kotlin Programming Language.",
+                        language = "Kotlin",
+                        stargazersCount = 53400,
+                        forksCount = 6400,
+                        owner = jp.co.yumemi.android.codecheck.core.domain.model.Owner(login = "JetBrains")
+                    )
+                )
+            ),
+            onRepositoryClick = {},
+            onUnstar = {},
+            onClearAll = {}
+        )
+    }
+}
+
+@Preview(name = "Starred Empty - Dark", showBackground = true)
+@Composable
+private fun StarredScreenEmptyDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        StarredContent(
+            uiState = StarredUiState.Empty,
+            onRepositoryClick = {},
+            onUnstar = {},
+            onClearAll = {}
         )
     }
 }

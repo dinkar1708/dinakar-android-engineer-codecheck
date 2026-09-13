@@ -1,6 +1,7 @@
 package jp.co.yumemi.android.codecheck.feature.settings
 
 import app.cash.turbine.test
+import jp.co.yumemi.android.codecheck.core.domain.model.AppBuildInfo
 import jp.co.yumemi.android.codecheck.core.domain.model.AppLanguagePreference
 import jp.co.yumemi.android.codecheck.core.domain.model.ThemeMode
 import jp.co.yumemi.android.codecheck.core.domain.repository.PreferencesRepository
@@ -47,7 +48,15 @@ class SettingsViewModelTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         fakePreferencesRepository = FakePreferencesRepository()
-        viewModel = SettingsViewModel(preferencesRepository = fakePreferencesRepository)
+        viewModel = SettingsViewModel(
+            preferencesRepository = fakePreferencesRepository,
+            appBuildInfo = AppBuildInfo(
+                versionName = "1.0-dev",
+                versionCode = 1,
+                flavor = "dev",
+                isDebug = true
+            )
+        )
     }
 
     @After
@@ -61,6 +70,9 @@ class SettingsViewModelTest {
             val state = awaitItem()
             assertEquals(ThemeMode.SYSTEM, state.themeMode)
             assertEquals(AppLanguagePreference.SYSTEM, state.language)
+            assertEquals("1.0-dev (Build 1)", state.appVersion)
+            assertEquals("DEVELOPMENT", state.environment)
+            assertEquals("GitHub REST API v3", state.apiSource)
         }
     }
 

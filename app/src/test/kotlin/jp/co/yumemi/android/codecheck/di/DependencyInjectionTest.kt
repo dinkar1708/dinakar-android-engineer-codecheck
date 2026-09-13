@@ -44,5 +44,13 @@ class DependencyInjectionTest {
         assertNotNull(starredRepo)
         assertNotNull(preferencesRepo)
     }
+
+    @Test
+    fun appModule_providesAppBuildInfo() {
+        val buildInfo = AppModule.provideAppBuildInfo()
+        assertNotNull(buildInfo)
+        assertNotNull(buildInfo.versionName)
+        assertNotNull(buildInfo.environmentLabel)
+    }
 }
 

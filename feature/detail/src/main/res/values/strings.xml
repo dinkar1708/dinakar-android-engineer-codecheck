@@ -10,4 +10,11 @@
     <string name="detail_stat_watchers">Watchers</string>
     <string name="detail_stat_open_issues">Open issues</string>
     <string name="detail_view_on_github">View on GitHub</string>
+    <string name="detail_meta_default_branch">Default branch</string>
+    <string name="detail_meta_last_push">Last push</string>
+    <string name="detail_meta_license">License</string>
+    <string name="detail_meta_size">Size</string>
+    <string name="detail_download">Download</string>
+    <string name="detail_meta_none">None</string>
+    <string name="detail_meta_not_available">N/A</string>
 </resources>

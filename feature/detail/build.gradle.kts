@@ -8,4 +8,6 @@ android {
 
 dependencies {
     implementation(libs.coil.compose)
+    implementation(libs.androidx.browser)
+    implementation(libs.androidx.compose.material.icons.extended)
 }

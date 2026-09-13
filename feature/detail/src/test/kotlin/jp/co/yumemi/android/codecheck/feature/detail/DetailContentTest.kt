@@ -2,6 +2,7 @@ package jp.co.yumemi.android.codecheck.feature.detail
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -98,6 +99,85 @@ class DetailContentTest {
 
         composeTestRule.onNodeWithText("minimal-repo").assertIsDisplayed()
         composeTestRule.onNodeWithText("View on GitHub").assertDoesNotExist()
+    }
+
+    @Test
+    fun detailContent_rendersMetadataRows() {
+        val detailedItem = fakeItem.copy(
+            defaultBranch = "main",
+            pushedAt = "2026-09-02T14:32:00Z",
+            license = "Apache-2.0",
+            size = 4300L
+        )
+
+        composeTestRule.setContent {
+            DetailContent(
+                repository = detailedItem,
+                onOpenBrowser = {}
+            )
+        }
+
+        composeTestRule.onNodeWithText("Default branch").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("main").performScrollTo().assertIsDisplayed()
+
+        composeTestRule.onNodeWithText("Last push").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("2026-09-02").performScrollTo().assertIsDisplayed()
+
+        composeTestRule.onNodeWithText("License").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("Apache-2.0").performScrollTo().assertIsDisplayed()
+
+        composeTestRule.onNodeWithText("Size").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("4.2 MB").performScrollTo().assertIsDisplayed()
+    }
+
+    @Test
+    fun detailContent_withDownloadButton_triggersZipDownloadCallback() {
+        var openedUrl: String? = null
+        val detailedItem = fakeItem.copy(
+            defaultBranch = "develop"
+        )
+
+        composeTestRule.setContent {
+            DetailContent(
+                repository = detailedItem,
+                onOpenBrowser = { openedUrl = it }
+            )
+        }
+
+        val downloadButton = composeTestRule.onNodeWithContentDescription("Download")
+        downloadButton.performScrollTo().assertIsDisplayed()
+        downloadButton.performClick()
+
+        assertEquals("https://github.com/android/compose-samples/archive/refs/heads/develop.zip", openedUrl)
+    }
+
+    @Test
+    fun detailContent_withNullMetadata_rendersFallbackValues() {
+        val itemWithFallbacks = fakeItem.copy(
+            defaultBranch = null,
+            pushedAt = null,
+            license = null,
+            size = 0L
+        )
+
+        composeTestRule.setContent {
+            DetailContent(
+                repository = itemWithFallbacks,
+                onOpenBrowser = {}
+            )
+        }
+
+        composeTestRule.onNodeWithText("Default branch").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("N/A").performScrollTo().assertIsDisplayed()
+
+        composeTestRule.onNodeWithText("Last push").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("—").performScrollTo().assertIsDisplayed()
+
+        composeTestRule.onNodeWithText("License").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("None").performScrollTo().assertIsDisplayed()
+
+        composeTestRule.onNodeWithText("Size").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("0 KB").performScrollTo().assertIsDisplayed()
     }
 
     @Test

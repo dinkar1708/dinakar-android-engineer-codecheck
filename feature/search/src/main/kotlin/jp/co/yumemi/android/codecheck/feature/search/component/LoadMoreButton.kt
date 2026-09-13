@@ -25,11 +25,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate300
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate800
+
 
 /**
  * Load More pagination button at the bottom of repository results matching mockup 03b:
@@ -43,6 +39,12 @@ fun LoadMoreButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val cardBg = androidx.compose.material3.MaterialTheme.colorScheme.surface
+    val cardBorder = androidx.compose.material3.MaterialTheme.colorScheme.outline
+    val textColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurface
+    val iconTint = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
+    val progressColor = androidx.compose.material3.MaterialTheme.colorScheme.primary
+
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -52,8 +54,8 @@ fun LoadMoreButton(
                 onClick = onClick
             ),
         shape = RoundedCornerShape(4.dp),
-        color = AppWhite,
-        border = BorderStroke(1.dp, Slate300)
+        color = cardBg,
+        border = BorderStroke(1.dp, cardBorder)
     ) {
         Row(
             modifier = Modifier
@@ -65,7 +67,7 @@ fun LoadMoreButton(
             if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(18.dp),
-                    color = AppBlue,
+                    color = progressColor,
                     strokeWidth = 2.dp
                 )
             } else {
@@ -73,14 +75,14 @@ fun LoadMoreButton(
                     text = stringResource(R.string.search_load_more),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Slate800
+                    color = textColor
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
                     contentDescription = null,
                     modifier = Modifier.size(16.dp),
-                    tint = Slate500
+                    tint = iconTint
                 )
             }
         }

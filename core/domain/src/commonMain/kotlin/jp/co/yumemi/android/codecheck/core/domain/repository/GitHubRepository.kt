@@ -35,4 +35,12 @@ interface GitHubRepository {
      * @return Detailed [RepositoryItem]
      */
     suspend fun getRepositoryDetails(owner: String, repo: String): RepositoryItem
+
+    /**
+     * Fetch detailed information for a specific repository by its database ID.
+     *
+     * @param id Numeric repository database ID
+     * @return Detailed [RepositoryItem]
+     */
+    suspend fun getRepositoryById(id: Long): RepositoryItem
 }

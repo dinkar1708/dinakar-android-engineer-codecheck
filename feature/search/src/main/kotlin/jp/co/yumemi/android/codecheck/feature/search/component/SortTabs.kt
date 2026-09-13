@@ -22,10 +22,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate200
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
+import androidx.compose.material3.MaterialTheme
 import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
 import androidx.compose.ui.res.stringResource
 import jp.co.yumemi.android.codecheck.feature.search.R
@@ -34,10 +31,10 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.width
 
 /**
- * Sort tabs sitting directly under the search bar adhering to mockup 03b:
- * - 3 orderings: "Best match", "Most stars", "Most forks"
- * - Active tab: 2dp solid #3b50df underline indicator with 14sp SemiBold text
- * - Inactive tab: Slate500 text with transparent underline
+ * Sort selector tabs matching mockup 03b:
+ * - Best match, Most stars, Most forks
+ * - Active tab: AppBlue text with 2dp line indicator (DarkActionBorder in dark mode)
+ * - Inactive tab: Slate500 text with transparent underline (TextSecondaryDark in dark mode)
  */
 @Composable
 fun SortTabs(
@@ -45,6 +42,11 @@ fun SortTabs(
     onSortSelected: (SearchSort) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val barBg = MaterialTheme.colorScheme.surface
+    val barBorder = MaterialTheme.colorScheme.outline
+    val activeColor = MaterialTheme.colorScheme.primary
+    val inactiveColor = MaterialTheme.colorScheme.onSurfaceVariant
+
     val tabs = listOf(
         SearchSort.BEST_MATCH to stringResource(R.string.search_sort_best_match),
         SearchSort.STARS to stringResource(R.string.search_sort_most_stars),
@@ -54,14 +56,14 @@ fun SortTabs(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(AppWhite)
+            .background(barBg)
     ) {
         // Bottom subtle border
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(1.dp)
-                .background(Slate200)
+                .background(barBorder)
                 .align(Alignment.BottomCenter)
         )
 
@@ -89,7 +91,7 @@ fun SortTabs(
                 ) {
                     Text(
                         text = title,
-                        color = if (isSelected) AppBlue else Slate500,
+                        color = if (isSelected) activeColor else inactiveColor,
                         fontSize = 14.sp,
                         fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
                         modifier = Modifier.padding(top = 14.dp, bottom = 12.dp)
@@ -100,7 +102,7 @@ fun SortTabs(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(2.dp)
-                            .background(if (isSelected) AppBlue else Color.Transparent)
+                            .background(if (isSelected) activeColor else Color.Transparent)
                     )
                 }
             }

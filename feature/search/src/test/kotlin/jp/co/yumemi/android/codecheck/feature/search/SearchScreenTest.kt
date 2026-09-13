@@ -56,6 +56,36 @@ class SearchScreenTest {
     }
 
     @Test
+    fun searchScreen_idleState_withHistory_displaysRecentSearches() {
+        var clickedQuery = ""
+        var removedQuery = ""
+        composeTestRule.setContent {
+            SearchScreen(
+                uiState = SearchUiState.Idle,
+                query = "",
+                searchHistory = listOf("kotlin", "compose"),
+                onQueryChanged = {},
+                onSearch = {},
+                onRecentQueryClick = { clickedQuery = it },
+                onRemoveRecentQuery = { removedQuery = it },
+                onClearQuery = {},
+                onRetry = {},
+                onRepositoryClick = {}
+            )
+        }
+
+        composeTestRule.onNodeWithText("RECENT").assertIsDisplayed()
+        composeTestRule.onNodeWithText("kotlin").assertIsDisplayed()
+        composeTestRule.onNodeWithText("compose").assertIsDisplayed()
+
+        composeTestRule.onNodeWithText("kotlin").performClick()
+        assertEquals("kotlin", clickedQuery)
+
+        composeTestRule.onNodeWithContentDescription("Remove kotlin from recent searches").performClick()
+        assertEquals("kotlin", removedQuery)
+    }
+
+    @Test
     fun searchScreen_loadingState_rendersWithoutCrash() {
         composeTestRule.setContent {
             SearchScreen(

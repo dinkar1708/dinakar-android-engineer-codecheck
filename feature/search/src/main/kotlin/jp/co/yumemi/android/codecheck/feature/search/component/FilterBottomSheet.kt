@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -34,12 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import jp.co.yumemi.android.codecheck.core.designsystem.component.CommonBottomSheet
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.SelectedBlueBg
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate200
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate800
 import jp.co.yumemi.android.codecheck.core.domain.model.SearchFilter
 import java.util.Locale
 
@@ -51,6 +46,7 @@ import java.util.Locale
  * - Minimum stars segment: Any, 100+, 500+, 1K+
  * - Last updated segment: Any time, This year, This month
  * - Bottom primary action: "Show X repositories"
+ * - Full light and dark theme support using design system palette tokens
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -62,6 +58,9 @@ fun FilterBottomSheet(
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 ) {
     var draftFilter by remember(initialFilter) { mutableStateOf(initialFilter) }
+
+    val sectionHeaderColor = MaterialTheme.colorScheme.onSurfaceVariant
+    val dividerColor = MaterialTheme.colorScheme.outlineVariant
 
     val languages = listOf("Rust", "Kotlin", "Python", "Go", "TypeScript", "C++")
     val starOptions = listOf(
@@ -103,7 +102,7 @@ fun FilterBottomSheet(
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.05.em,
-                        color = Slate500,
+                        color = sectionHeaderColor,
                         modifier = Modifier.padding(bottom = 10.dp)
                     )
 
@@ -134,7 +133,7 @@ fun FilterBottomSheet(
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.05.em,
-                        color = Slate500,
+                        color = sectionHeaderColor,
                         modifier = Modifier.padding(bottom = 10.dp)
                     )
 
@@ -163,7 +162,7 @@ fun FilterBottomSheet(
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.05.em,
-                        color = Slate500,
+                        color = sectionHeaderColor,
                         modifier = Modifier.padding(bottom = 10.dp)
                     )
 
@@ -198,7 +197,7 @@ fun FilterBottomSheet(
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                HorizontalDivider(thickness = 1.dp, color = Slate200)
+                HorizontalDivider(thickness = 1.dp, color = dividerColor)
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Surface(
@@ -207,7 +206,7 @@ fun FilterBottomSheet(
                         onDismiss()
                     },
                     shape = RoundedCornerShape(4.dp),
-                    color = AppBlue,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Box(
@@ -220,7 +219,7 @@ fun FilterBottomSheet(
                             text = stringResource(R.string.search_filter_show_results),
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium,
-                            color = AppWhite
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
@@ -238,11 +237,15 @@ private fun FilterPill(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val backgroundColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+    val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+    val textColor = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
+
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(20.dp),
-        color = if (isSelected) SelectedBlueBg else AppWhite,
-        border = BorderStroke(1.dp, if (isSelected) AppBlue else Slate200),
+        color = backgroundColor,
+        border = BorderStroke(1.dp, borderColor),
         modifier = modifier
     ) {
         Box(
@@ -253,7 +256,7 @@ private fun FilterPill(
                 text = label,
                 fontSize = 13.sp,
                 fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
-                color = if (isSelected) AppBlue else Slate800
+                color = textColor
             )
         }
     }
@@ -266,11 +269,15 @@ private fun SegmentButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val backgroundColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+    val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+    val textColor = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
+
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(4.dp),
-        color = if (isSelected) SelectedBlueBg else AppWhite,
-        border = BorderStroke(1.dp, if (isSelected) AppBlue else Slate200),
+        color = backgroundColor,
+        border = BorderStroke(1.dp, borderColor),
         modifier = modifier
     ) {
         Box(
@@ -283,7 +290,7 @@ private fun SegmentButton(
                 text = label,
                 fontSize = 13.sp,
                 fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
-                color = if (isSelected) AppBlue else Slate800
+                color = textColor
             )
         }
     }

@@ -10,6 +10,8 @@
     <string name="detail_stat_watchers">閲覧者数</string>
     <string name="detail_stat_open_issues">未解決の課題数</string>
     <string name="detail_view_on_github">GitHub で開く</string>
+    <string name="detail_star">スターを付ける</string>
+    <string name="detail_unstar">スターを解除</string>
     <string name="detail_meta_default_branch">デフォルトブランチ</string>
     <string name="detail_meta_last_push">最終更新</string>
     <string name="detail_meta_license">ライセンス</string>

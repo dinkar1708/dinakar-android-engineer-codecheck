@@ -5,6 +5,7 @@ package jp.co.yumemi.android.codecheck.core.domain.model
  * Zero Android framework dependencies (pure Kotlin / KMP).
  */
 data class RepositoryItem(
+    val id: Long = 0L,
     val name: String,
     val owner: Owner,
     val language: String? = null,

@@ -27,11 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppAmber
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate100
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
 import jp.co.yumemi.android.codecheck.core.ui.R
 
 /**
@@ -45,9 +40,11 @@ fun ErrorView(
     title: String = stringResource(R.string.common_error_title),
     retryLabel: String = stringResource(R.string.common_retry)
 ) {
-    val iconBgColor = Slate100
-    val buttonColor = AppBlue
-    val buttonTextColor = AppWhite
+    val iconBgColor = MaterialTheme.colorScheme.tertiaryContainer
+    val iconTintColor = MaterialTheme.colorScheme.onTertiaryContainer
+    val buttonColor = MaterialTheme.colorScheme.primary
+    val buttonTextColor = MaterialTheme.colorScheme.onPrimary
+    val messageColor = MaterialTheme.colorScheme.onSurfaceVariant
 
     Box(
         modifier = modifier
@@ -71,7 +68,7 @@ fun ErrorView(
                     imageVector = Icons.Default.Warning,
                     contentDescription = null,
                     modifier = Modifier.size(36.dp),
-                    tint = AppAmber
+                    tint = iconTintColor
                 )
             }
 
@@ -92,7 +89,7 @@ fun ErrorView(
                 text = message,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
-                color = Slate500,
+                color = messageColor,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
 

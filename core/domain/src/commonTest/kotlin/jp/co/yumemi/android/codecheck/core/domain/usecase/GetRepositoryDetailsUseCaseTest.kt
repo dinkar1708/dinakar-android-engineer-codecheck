@@ -31,7 +31,13 @@ class GetRepositoryDetailsUseCaseTest {
             shouldThrow?.let { throw it }
             return returnItem ?: throw NoSuchElementException("Not found")
         }
+
+        override suspend fun getRepositoryById(id: Long): RepositoryItem {
+            shouldThrow?.let { throw it }
+            return returnItem ?: throw NoSuchElementException("Not found")
+        }
     }
+
 
     @Test
     fun invoke_withBlankOwnerOrRepo_throwsIllegalArgumentException() = runTest {

@@ -26,6 +26,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -63,12 +65,9 @@ import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppAmber
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppNavy
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate200
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate300
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate400
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate600
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate900
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.core.ui.component.ErrorView
 import jp.co.yumemi.android.codecheck.core.ui.component.LoadingView
@@ -96,9 +95,12 @@ fun DetailScreen(
         { url: String -> launchChromeCustomTab(context, url) }
     }
     val uiState by viewModel.uiState.collectAsState()
+    val isStarred by viewModel.isStarred.collectAsState()
     DetailScreen(
         uiState = uiState,
+        isStarred = isStarred,
         onBackClick = onBackClick,
+        onToggleStar = viewModel::toggleStar,
         onRetry = viewModel::retry,
         modifier = modifier,
         onOpenBrowser = effectiveOpenBrowser
@@ -109,7 +111,9 @@ fun DetailScreen(
 @Composable
 internal fun DetailScreen(
     uiState: DetailUiState,
+    isStarred: Boolean = false,
     onBackClick: () -> Unit,
+    onToggleStar: () -> Unit = {},
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
     onOpenBrowser: ((String) -> Unit)? = null
@@ -135,6 +139,21 @@ internal fun DetailScreen(
                             contentDescription = stringResource(R.string.detail_navigate_back),
                             tint = AppWhite
                         )
+                    }
+                },
+                actions = {
+                    if (uiState is DetailUiState.Success) {
+                        IconButton(onClick = onToggleStar) {
+                            Icon(
+                                imageVector = if (isStarred) Icons.Default.Star else Icons.Default.StarBorder,
+                                contentDescription = if (isStarred) {
+                                    stringResource(R.string.detail_unstar)
+                                } else {
+                                    stringResource(R.string.detail_star)
+                                },
+                                tint = if (isStarred) AppAmber else AppWhite
+                            )
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -316,13 +335,11 @@ internal fun DetailContent(
                     StatCard(
                         label = stringResource(R.string.detail_stat_stars),
                         value = formatDecimalNumber(repository.stargazersCount),
-                        valueColor = Slate900,
                         modifier = Modifier.weight(1f)
                     )
                     StatCard(
                         label = stringResource(R.string.detail_stat_forks),
                         value = formatDecimalNumber(repository.forksCount),
-                        valueColor = Slate900,
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -333,13 +350,12 @@ internal fun DetailContent(
                     StatCard(
                         label = stringResource(R.string.detail_stat_watchers),
                         value = formatDecimalNumber(repository.watchersCount),
-                        valueColor = Slate900,
                         modifier = Modifier.weight(1f)
                     )
                     StatCard(
                         label = stringResource(R.string.detail_stat_open_issues),
                         value = formatDecimalNumber(repository.openIssuesCount),
-                        valueColor = AppAmber,
+                        valueColor = MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -403,8 +419,8 @@ internal fun DetailContent(
                         onClick = { onOpenBrowser(downloadUrl) },
                         modifier = Modifier.size(48.dp),
                         shape = RoundedCornerShape(8.dp),
-                        color = AppWhite,
-                        border = BorderStroke(1.dp, Slate300)
+                        color = MaterialTheme.colorScheme.surface,
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
                     ) {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -413,7 +429,7 @@ internal fun DetailContent(
                             Icon(
                                 imageVector = Icons.Default.Download,
                                 contentDescription = stringResource(R.string.detail_download),
-                                tint = Slate900,
+                                tint = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
@@ -426,8 +442,8 @@ internal fun DetailContent(
 
 /**
  * Metric StatCard component adhering to StatCard.dc.html specification:
- * - 8dp rounded card container with 1dp Slate200 border
- * - 11sp bold uppercase label in Slate500
+ * - 8dp rounded card container with 1dp border
+ * - 11sp bold uppercase label in muted neutral
  * - 24sp bold metric value with dynamic value color
  */
 @Composable
@@ -435,17 +451,22 @@ fun StatCard(
     label: String,
     value: String,
     modifier: Modifier = Modifier,
-    valueColor: Color = Slate900
+    valueColor: Color? = null
 ) {
+    val containerColor = MaterialTheme.colorScheme.surface
+    val borderColor = MaterialTheme.colorScheme.outline
+    val labelColor = MaterialTheme.colorScheme.onSurfaceVariant
+    val actualValueColor = valueColor ?: MaterialTheme.colorScheme.onSurface
+
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = AppWhite
+            containerColor = containerColor
         ),
         border = BorderStroke(
             width = 1.dp,
-            color = Slate200
+            color = borderColor
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -459,14 +480,14 @@ fun StatCard(
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 0.05.em,
-                color = Slate500
+                color = labelColor
             )
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = value,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = valueColor
+                color = actualValueColor
             )
         }
     }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
@@ -25,19 +26,14 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.ScrimOverlay
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate200
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate300
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate900
 
 /**
  * Common bottom sheet component with consistent styling across the app.
  * - Rounded top corners 16dp, drag handle 36x4dp
  * - Optional top header with title and action button
  * - Customizable content area
- * - Follows design system specifications from mockup 03c
+ * - Supports light and dark theme palettes matching design system specs
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,12 +48,23 @@ fun CommonBottomSheet(
     showHeaderDivider: Boolean = true,
     content: @Composable () -> Unit
 ) {
+    val containerColor = MaterialTheme.colorScheme.surface
+    val contentColor = MaterialTheme.colorScheme.onSurface
+    val dragHandleColor = MaterialTheme.colorScheme.outline
+    val dividerColor = MaterialTheme.colorScheme.outlineVariant
+    val titleColor = MaterialTheme.colorScheme.onSurface
+    val actionColor = if (actionEnabled) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+    }
+
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        containerColor = AppWhite,
-        contentColor = Slate900,
+        containerColor = containerColor,
+        contentColor = contentColor,
         tonalElevation = 0.dp,
         scrimColor = ScrimOverlay,
         dragHandle = {
@@ -65,7 +72,7 @@ fun CommonBottomSheet(
                 modifier = Modifier
                     .padding(top = 10.dp, bottom = 14.dp)
                     .size(width = 36.dp, height = 4.dp)
-                    .background(Slate300, RoundedCornerShape(2.dp))
+                    .background(dragHandleColor, RoundedCornerShape(2.dp))
             )
         },
         modifier = modifier
@@ -88,7 +95,7 @@ fun CommonBottomSheet(
                         text = title,
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Slate900
+                        color = titleColor
                     )
 
                     if (actionLabel != null && onActionClick != null) {
@@ -96,7 +103,7 @@ fun CommonBottomSheet(
                             text = actionLabel,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = if (actionEnabled) AppBlue else Slate300,
+                            color = actionColor,
                             modifier = Modifier
                                 .then(
                                     if (actionEnabled) {
@@ -112,7 +119,7 @@ fun CommonBottomSheet(
 
                 if (showHeaderDivider) {
                     Spacer(modifier = Modifier.height(16.dp))
-                    HorizontalDivider(thickness = 1.dp, color = Slate200)
+                    HorizontalDivider(thickness = 1.dp, color = dividerColor)
                 }
             }
 

@@ -39,6 +39,11 @@ This section contains detailed specifications for each feature implemented in th
    - Animated entrance
    - Loading states
 
+7. **[Starred Repositories & Tabs](./07_starred_repositories_and_tabs.md)**
+   - Star and unstar repositories from Detail screen
+   - Dedicated Starred tab for offline browsing
+   - In-memory session cache architecture
+
 ---
 
 ## Feature Development Process

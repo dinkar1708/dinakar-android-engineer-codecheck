@@ -33,4 +33,27 @@ class DependencyInjectionTest {
         assertNotNull(searchUseCase)
         assertNotNull(detailsUseCase)
     }
+
+    @Test
+    fun storageModule_providesStorageRepositories() {
+        val searchHistoryRepo = StorageModule.provideSearchHistoryRepository()
+        val starredRepo = StorageModule.provideStarredRepository()
+        val preferencesRepo = StorageModule.providePreferencesRepository()
+        val mockContext = mockk<android.content.Context>(relaxed = true)
+        val persistentPreferencesRepo = StorageModule.providePreferencesRepository(mockContext)
+
+        assertNotNull(searchHistoryRepo)
+        assertNotNull(starredRepo)
+        assertNotNull(preferencesRepo)
+        assertNotNull(persistentPreferencesRepo)
+    }
+
+    @Test
+    fun appModule_providesAppBuildInfo() {
+        val buildInfo = AppModule.provideAppBuildInfo()
+        assertNotNull(buildInfo)
+        assertNotNull(buildInfo.versionName)
+        assertNotNull(buildInfo.environmentLabel)
+    }
 }
+

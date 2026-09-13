@@ -24,6 +24,10 @@ import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 import kotlin.math.cos
 import kotlin.math.sin
 
+import androidx.compose.material3.MaterialTheme
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.DarkActionBorder
+
 /**
  * Procedural central geometric mark comprising:
  * 1. Expanding and fading pulse ring.
@@ -43,7 +47,8 @@ fun SplashLogoMark(
     pulseScale: Float,
     pulseAlpha: Float,
     orbitAngle: Float,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    accentColor: Color = if (MaterialTheme.colorScheme.surface != AppWhite) DarkActionBorder else AppBlue
 ) {
     Box(
         modifier = modifier.size(180.dp),
@@ -61,7 +66,7 @@ fun SplashLogoMark(
         ) {
             Canvas(modifier = Modifier.fillMaxSize()) {
                 drawCircle(
-                    color = AppBlue,
+                    color = accentColor,
                     style = Stroke(width = 2.dp.toPx())
                 )
             }
@@ -96,7 +101,7 @@ fun SplashLogoMark(
             // 1. Lens Ring (Magnifying Glass)
             rotate(degrees = ringRotation, pivot = lensCenter) {
                 drawCircle(
-                    color = AppBlue,
+                    color = accentColor,
                     radius = lensRadius * ringScale,
                     center = lensCenter,
                     style = Stroke(width = strokeWidth * ringScale)
@@ -109,7 +114,7 @@ fun SplashLogoMark(
                 val handlePivot = Offset(84.dp.toPx(), 84.dp.toPx() + (strokeWidth / 2f))
                 rotate(degrees = 45f, pivot = handlePivot) {
                     drawRoundRect(
-                        color = AppBlue,
+                        color = accentColor,
                         topLeft = handleOrigin,
                         size = Size(52.dp.toPx() * handleScale, strokeWidth),
                         cornerRadius = CornerRadius(6.dp.toPx(), 6.dp.toPx())

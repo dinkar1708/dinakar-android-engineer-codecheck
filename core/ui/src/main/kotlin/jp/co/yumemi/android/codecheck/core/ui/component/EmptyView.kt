@@ -27,10 +27,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramBlueBg
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate300
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
+
 
 /**
  * Empty state component matching the design system specifications.
@@ -46,9 +43,10 @@ fun EmptyView(
     actionLabel: String? = null,
     onActionClick: (() -> Unit)? = null
 ) {
-    val iconBgColor = MonogramBlueBg
-    val iconTintColor = AppBlue
-    val buttonBorderColor = Slate300
+    val iconBgColor = MaterialTheme.colorScheme.primaryContainer
+    val iconTintColor = MaterialTheme.colorScheme.onPrimaryContainer
+    val buttonBorderColor = MaterialTheme.colorScheme.outline
+    val descriptionColor = MaterialTheme.colorScheme.onSurfaceVariant
 
     Box(
         modifier = modifier
@@ -60,7 +58,7 @@ fun EmptyView(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Circular container with 7% blue tint
+            // Circular container with blue tint
             Box(
                 modifier = Modifier
                     .size(80.dp)
@@ -93,7 +91,7 @@ fun EmptyView(
                     text = description,
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
-                    color = Slate500,
+                    color = descriptionColor,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
             }

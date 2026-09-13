@@ -14,9 +14,15 @@ class ScreenRouteTest {
     }
 
     @Test
+    fun screenMain_routeIsConsistent() {
+        assertEquals("main", Screen.Main.route)
+    }
+
+    @Test
     fun screenSearch_routeIsConsistent() {
         assertEquals("search", Screen.Search.route)
     }
+
 
     @Test
     fun screenDetail_routePatternMatchesExpectedTemplate() {

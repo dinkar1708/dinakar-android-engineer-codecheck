@@ -34,6 +34,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.contentDescription
@@ -58,6 +59,7 @@ import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
 import androidx.compose.ui.res.stringResource
 import jp.co.yumemi.android.codecheck.feature.search.R
 import jp.co.yumemi.android.codecheck.feature.search.component.LoadMoreButton
+import jp.co.yumemi.android.codecheck.feature.search.component.RecentSearchesSection
 import jp.co.yumemi.android.codecheck.feature.search.component.RepositoryCard
 import jp.co.yumemi.android.codecheck.feature.search.component.RepositoryCardSkeleton
 import jp.co.yumemi.android.codecheck.feature.search.component.SortTabs
@@ -92,14 +94,21 @@ fun SearchScreen(
     val query by viewModel.query.collectAsState()
     val selectedSort by viewModel.selectedSort.collectAsState()
     val filter by viewModel.filter.collectAsState()
+    val searchHistory by viewModel.searchHistory.collectAsState()
 
     SearchScreen(
         uiState = uiState,
         query = query,
         selectedSort = selectedSort,
         filter = filter,
+        searchHistory = searchHistory,
         onQueryChanged = viewModel::onQueryChanged,
         onSearch = { viewModel.searchRepositories(query) },
+        onRecentQueryClick = { recentQuery ->
+            viewModel.onQueryChanged(recentQuery)
+            viewModel.searchRepositories(recentQuery)
+        },
+        onRemoveRecentQuery = viewModel::removeSearchHistory,
         onSortSelected = viewModel::onSortChanged,
         onFilterChanged = viewModel::onFilterChanged,
         onLoadNextPage = viewModel::loadNextPage,
@@ -121,8 +130,11 @@ internal fun SearchScreen(
     query: String,
     selectedSort: SearchSort = SearchSort.BEST_MATCH,
     filter: SearchFilter = SearchFilter(),
+    searchHistory: List<String> = emptyList(),
     onQueryChanged: (String) -> Unit,
     onSearch: () -> Unit,
+    onRecentQueryClick: (String) -> Unit = {},
+    onRemoveRecentQuery: (String) -> Unit = {},
     onSortSelected: (SearchSort) -> Unit = {},
     onFilterChanged: (SearchFilter) -> Unit = {},
     onLoadNextPage: () -> Unit = {},
@@ -135,11 +147,14 @@ internal fun SearchScreen(
     val focusManager = LocalFocusManager.current
     var showFilterSheet by rememberSaveable { mutableStateOf(false) }
 
+    val isDarkTheme = MaterialTheme.colorScheme.surface != AppWhite
     val headerBgColor = AppNavy
-    val searchBoxBgColor = AppWhite
-    val searchBoxBorderColor = Slate200
-    val searchIconColor = AppBlue
-    val searchTextColor = Slate900
+    val searchBoxBgColor = if (isDarkTheme) Color(0xFF242C3C) else AppWhite
+    val searchBoxBorderColor = MaterialTheme.colorScheme.outline
+    val searchIconColor = MaterialTheme.colorScheme.primary
+    val searchTextColor = MaterialTheme.colorScheme.onSurface
+    val searchPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant
+    val clearIconTint = MaterialTheme.colorScheme.onSurfaceVariant
     val screenTitle = stringResource(R.string.search_screen_title)
 
     Scaffold(
@@ -203,7 +218,7 @@ internal fun SearchScreen(
                                     onSearch()
                                 }
                             ),
-                            cursorBrush = SolidColor(AppBlue),
+                            cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
                             decorationBox = { innerTextField ->
                                 if (query.isEmpty()) {
                                     Text(
@@ -211,7 +226,7 @@ internal fun SearchScreen(
                                         style = MaterialTheme.typography.bodyLarge.copy(
                                             fontSize = 15.sp
                                         ),
-                                        color = Slate400
+                                        color = searchPlaceholderColor
                                     )
                                 }
                                 innerTextField()
@@ -227,7 +242,7 @@ internal fun SearchScreen(
                                     imageVector = Icons.Default.Clear,
                                     contentDescription = stringResource(R.string.search_clear_content_description),
                                     modifier = Modifier.size(18.dp),
-                                    tint = Slate500
+                                    tint = clearIconTint
                                 )
                             }
                         }
@@ -259,10 +274,18 @@ internal fun SearchScreen(
             ) {
                 when (val state = uiState) {
                     is SearchUiState.Idle -> {
-                        EmptyView(
-                            title = stringResource(R.string.search_idle_title),
-                            description = stringResource(R.string.search_idle_description)
-                        )
+                        if (searchHistory.isNotEmpty()) {
+                            RecentSearchesSection(
+                                history = searchHistory,
+                                onQueryClick = onRecentQueryClick,
+                                onRemoveQuery = onRemoveRecentQuery
+                            )
+                        } else {
+                            EmptyView(
+                                title = stringResource(R.string.search_idle_title),
+                                description = stringResource(R.string.search_idle_description)
+                            )
+                        }
                     }
 
                     is SearchUiState.Loading -> {

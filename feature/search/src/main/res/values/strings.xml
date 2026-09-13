@@ -9,6 +9,8 @@
     <!-- State Views -->
     <string name="search_idle_title">Search GitHub Repositories</string>
     <string name="search_idle_description">Type a search query above and press Enter.</string>
+    <string name="search_recent_title">RECENT</string>
+    <string name="search_remove_recent">Remove %1$s from recent searches</string>
     <string name="search_empty_title">No repositories found</string>
     <string name="search_empty_description">No results for “%1$s”. Check the spelling or search a shorter term.</string>
     <string name="search_clear_search">Clear search</string>

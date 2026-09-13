@@ -6,6 +6,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,9 +37,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
+import jp.co.yumemi.android.codecheck.core.domain.model.Owner
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.core.ui.util.formatForkCount
 import jp.co.yumemi.android.codecheck.core.ui.util.formatStarCount
@@ -52,6 +57,7 @@ import kotlin.math.abs
  * - Slate neutrals for structure
  * - Language dot and star count are the only colors carrying data
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RepositoryCard(
     item: RepositoryItem,
@@ -142,10 +148,10 @@ fun RepositoryCard(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // Data row: Language, Stars, Forks
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(14.dp)
+                // Data row: Language, Stars, Forks (wrapping gracefully for long metrics)
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(14.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     // Language with data color dot
                     if (!item.language.isNullOrBlank()) {
@@ -162,7 +168,9 @@ fun RepositoryCard(
                             Text(
                                 text = item.language.orEmpty(),
                                 fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
                             )
                         }
                     }
@@ -182,7 +190,8 @@ fun RepositoryCard(
                             text = formatStarCount(item.stargazersCount),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onSurface,
+                            maxLines = 1
                         )
                     }
 
@@ -190,7 +199,9 @@ fun RepositoryCard(
                     Text(
                         text = stringResource(R.string.search_forks_suffix, formatForkCount(item.forksCount)),
                         fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }
@@ -338,3 +349,62 @@ data class MonogramStyle(
     val backgroundColor: Color,
     val textColor: Color
 )
+
+@Preview(name = "RepositoryCard - Light", showBackground = true)
+@Composable
+private fun RepositoryCardLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        RepositoryCard(
+            item = RepositoryItem(
+                name = "jetbrains/kotlin",
+                owner = Owner(login = "jetbrains", avatarUrl = "https://avatars.githubusercontent.com/u/262714"),
+                language = "Kotlin",
+                stargazersCount = 47200,
+                watchersCount = 47200,
+                forksCount = 5700,
+                openIssuesCount = 180,
+                description = "The Kotlin Programming Language. Official repository for Kotlin."
+            ),
+            onClick = {},
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+@Preview(name = "RepositoryCard - Dark", showBackground = true)
+@Composable
+private fun RepositoryCardDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        RepositoryCard(
+            item = RepositoryItem(
+                name = "jetbrains/kotlin",
+                owner = Owner(login = "jetbrains", avatarUrl = "https://avatars.githubusercontent.com/u/262714"),
+                language = "Kotlin",
+                stargazersCount = 47200,
+                watchersCount = 47200,
+                forksCount = 5700,
+                openIssuesCount = 180,
+                description = "The Kotlin Programming Language. Official repository for Kotlin."
+            ),
+            onClick = {},
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+@Preview(name = "RepositoryCardSkeleton - Light", showBackground = true)
+@Composable
+private fun RepositoryCardSkeletonLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        RepositoryCardSkeleton(modifier = Modifier.padding(16.dp))
+    }
+}
+
+@Preview(name = "RepositoryCardSkeleton - Dark", showBackground = true)
+@Composable
+private fun RepositoryCardSkeletonDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        RepositoryCardSkeleton(modifier = Modifier.padding(16.dp))
+    }
+}
+

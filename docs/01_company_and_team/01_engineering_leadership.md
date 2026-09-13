@@ -1,7 +1,6 @@
 # Engineering Leadership & Management Strategy
 
 **Author:** Dinakar Prasad Maurya  
-**Target Role:** モバイルリードエンジニア / Mobile Platform Engineering Lead & Manager  
 **Scope:** Phase 1 (Concept) Strategic Engineering Governance  
 
 ---

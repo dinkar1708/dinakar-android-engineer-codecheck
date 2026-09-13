@@ -7,7 +7,7 @@ description: Use this skill when generating Pull Request descriptions following 
 
 ## Branch Naming
 Format: `type/brief-description`  
-Types: `docs`, `feat`, `fix`, `refactor`, `test`, `chore`, `ci`  
+Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `build`, `ci`, `perf`, `style`, `revert`  
 Example: `docs/add-api-versioning-adr`
 
 ## PR Title (English)
@@ -34,7 +34,7 @@ close #
 
 ## テスト (Testing)
 - [ ] 全体単体テスト成功 (`./gradlew testDebugUnitTest`)
-- [ ] 静的解析パス (`./gradlew lintDebug`)
+- [ ] 静的解析パス (`./gradlew lintDebug` & `./gradlew detektAll`)
 - [ ] デバッグビルド成功 (`./gradlew clean assembleDebug`)
 - [ ] 実機 / エミュレータ E2E テスト成功 (`./gradlew :app:connectedAndroidTest` ※該当時)
 - [ ] コードカバレッジ確認 (`./gradlew koverHtmlReportDebug` ※目標80%以上維持)
@@ -56,6 +56,7 @@ close #
 - [ ] テストディレクトリ配置・命名規則（上記 3 ガイド）に 100% 厳格に従っているか
 - [ ] 考慮漏れなどないか (エッジケース、Null安全性、ライフサイクル、例外処理)
 - [ ] テストおよびビルドが正常に通過しているか (`./gradlew testDebugUnitTest`)
+- [ ] 静的解析（Detekt / Lint）が 0 件で通過しているか (`./gradlew detektAll`)
 - [ ] 新しい設計・アーキテクチャ・命名規則・パターンを追加した場合、AIスキル（`.agents/skills/`、`.claude/skills/`）および関連ドキュメント（`docs/`）を更新したか
 
 ## 参考 (Reference)
@@ -75,7 +76,10 @@ close #
 - **Guide 1: Unit & ViewModel Testing**: `docs/02_project_architecture/testing/01_unit_testing.md`
 - **Guide 2: Compose View Testing**: `docs/02_project_architecture/testing/02_compose_ui_testing.md`
 - **Guide 3: Integration & E2E Testing**: `docs/02_project_architecture/testing/03_integration_and_e2e_testing.md`
+- **Detekt Configuration**: `config/detekt/detekt.yml`
 - **Code Review Guidelines**: `docs/01_company_and_team/04_code_review_guidelines.md`
+- **Code Commenting & Documentation Standards**: `docs/01_company_and_team/12_code_commenting_and_documentation_standards.md`
+- **Contributing Guide**: `docs/CONTRIBUTING.md`
 - **Yumemi Review Culture**: `docs/01_company_and_team/09_yumemi_review_culture.md`
 - **Definition of Done**: `docs/01_company_and_team/05_definition_of_done.md`
 - **AI Agent Skills Guide**: `docs/01_company_and_team/10_ai_agent_skills_guide.md`

@@ -1,7 +1,6 @@
 package jp.co.yumemi.android.codecheck.core.data.repository
 
 import jp.co.yumemi.android.codecheck.core.data.cache.InMemoryCache
-import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.core.network.GitHubApiService
 import jp.co.yumemi.android.codecheck.core.network.error.NetworkException
 import jp.co.yumemi.android.codecheck.core.network.model.OwnerDto

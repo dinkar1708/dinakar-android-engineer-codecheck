@@ -12,7 +12,7 @@ As software engineering evolves toward human-AI collaborative development, maint
 
 This project implements an **AI Agent Skills Framework** to achieve:
 1. **Zero Architecture Drift**: Guarantee that AI pairs adhere to Clean Architecture, Unidirectional Data Flow (UDF), and SOLID principles.
-2. **Automated Compliance with Yumemi Evaluation Standards**: Enforce Yumemi's Qiita review criteria, review badges (`[must]`, `[imo]`, `[nits]`, `[memo]`), and memory leak prevention.
+2. **Automated Compliance with Evaluation Standards**: Enforce authoritative review criteria (see [Technical References](../references.md#7-github-api--assessment-standards)), review badges (`[must]`, `[imo]`, `[nits]`, `[memo]`), and memory leak prevention.
 3. **Reproducible Excellence**: Provide deterministic instructions for drafting Architecture Decision Records (ADRs), Conventional Commits, and bilingual Pull Request descriptions.
 
 ---
@@ -26,7 +26,7 @@ The repository provides first-class, standardized skill configurations for:
 - **Core Guidelines**: Root [`GEMINI.md`](../../GEMINI.md).
 - **Active Skills**:
   - [`yumemi-issue-workflow`](../../.agents/skills/yumemi-issue-workflow/SKILL.md): End-to-end TDD implementation guide with atomic PR sizing (<300 lines).
-  - [`yumemi-code-review`](../../.agents/skills/yumemi-code-review/SKILL.md): Comprehensive review checklist against Yumemi Qiita evaluation criteria.
+  - [`yumemi-code-review`](../../.agents/skills/yumemi-code-review/SKILL.md): Comprehensive review checklist benchmarked against authoritative evaluation criteria.
 
 ### 2. Anthropic Claude Code (`.claude/skills/`)
 - **Format**: Official Claude Code Skill standard (`SKILL.md` with YAML frontmatter).
@@ -79,7 +79,13 @@ All AI skills reference concrete locations in the codebase. When referencing or 
 | **Data Layer (Caching & Impl)** | [`core/data/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/data/repository/GitHubRepositoryImpl.kt`](../../core/data/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/data/repository/GitHubRepositoryImpl.kt) | `review-code`, `yumemi-issue-workflow` |
 | **Search Feature (UI & ViewModel)** | [`feature/search/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/search/`](../../feature/search/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/search/) | `review-code`, `yumemi-issue-workflow` |
 | **Detail Feature (UI & ViewModel)** | [`feature/detail/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/detail/`](../../feature/detail/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/detail/) | `review-code`, `yumemi-issue-workflow` |
+| **Settings Feature (UI & ViewModel)**| [`feature/settings/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/settings/`](../../feature/settings/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/settings/) | `review-code`, `yumemi-issue-workflow` |
+| **Starred Feature (UI & ViewModel)** | [`feature/starred/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/starred/`](../../feature/starred/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/starred/) | `review-code`, `yumemi-issue-workflow` |
+| **Design System & Tokens** | [`core/designsystem/src/main/kotlin/jp/co/yumemi/android/codecheck/core/designsystem/`](../../core/designsystem/src/main/kotlin/jp/co/yumemi/android/codecheck/core/designsystem/) | `review-code`, `yumemi-code-review` |
 | **Design System & AI Workflow** | [`docs/02_project_architecture/design/ai_assisted_design_workflow.md`](../02_project_architecture/design/ai_assisted_design_workflow.md) | `review-code`, `yumemi-code-review` |
+| **Static Analysis (Detekt Config)**| [`config/detekt/detekt.yml`](../../config/detekt/detekt.yml) | `review-code`, `yumemi-code-review` |
+| **Commenting & KDoc Standards** | [`docs/01_company_and_team/12_code_commenting_and_documentation_standards.md`](./12_code_commenting_and_documentation_standards.md) | `review-code`, `write-commit` |
+| **Contributing Guide & Commits** | [`docs/CONTRIBUTING.md`](../CONTRIBUTING.md) | `write-commit`, `create-pr` |
 | **Application Shell & DI** | [`app/src/main/kotlin/jp/co/yumemi/android/codecheck/`](../../app/src/main/kotlin/jp/co/yumemi/android/codecheck/) | `create-pr`, `review-code` |
 | **ADR Storage** | [`docs/02_project_architecture/adr/`](../02_project_architecture/adr/) | `create-adr`, `create-documentation` |
 | **Sprint & Issue Roadmap**| [`docs/03_sprint_execution/`](../03_sprint_execution/) | `yumemi-issue-workflow`, `create-documentation` |
@@ -97,6 +103,6 @@ All AI skills reference concrete locations in the codebase. When referencing or 
 2. **When Writing an Architecture Decision**:
    Ask the AI assistant: *"Follow the `create-adr` skill to document our decision on [topic]."*
 3. **When Reviewing Code or Preparing a PR**:
-   Ask the AI assistant: *"Follow the `review-code` skill to perform a Yumemi code review on the latest git diff."*
+   Ask the AI assistant: *"Follow the `review-code` skill to perform a comprehensive code review on the latest git diff."*
 4. **When Drafting Commits & PRs**:
    Ask the AI assistant: *"Follow `write-commit` and `create-pr` to prepare the commit message and PR description."*

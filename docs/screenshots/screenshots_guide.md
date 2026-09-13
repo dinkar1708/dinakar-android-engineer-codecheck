@@ -6,15 +6,22 @@ This document explains what screenshots to capture and where to store them for p
 
 ```
 docs/screenshots/
-├── app/                    # Application UI screenshots
-│   ├── light/              # Light theme screenshots
-│   ├── dark/               # Dark theme screenshots
-│   ├── landscape/          # Landscape orientation
-│   └── portrait/           # Portrait orientation
-├── coverage/               # Test coverage reports
-│   └── code-coverage.png
-└── ci/                     # CI/CD pipeline screenshots
-    └── github-actions.png
+├── app/                        # Production Android App UI screenshots
+│   ├── light/                  # Light theme screens (Search, Detail, Starred, Settings)
+│   ├── dark/                   # Dark theme screens
+│   └── landscape/              # Multi-device & tablet landscape orientation
+├── claude-design/              # 🎨 Claude Design / AI prototyping concept mockups
+│   ├── screens/                # Full screen concept exports
+│   └── components/             # Atomic component previews (RepoCard, StatCard, Palette)
+├── comparisons/                # 🔄 Side-by-Side Visual Fidelity (Claude Design vs Compose)
+├── compose_preview/            # ⚡ Compose @Preview fast development captures
+├── tools/                      # 🛠️ Android Studio Performance & Profiler telemetry captures
+├── ios/                        # 🍏 Native iOS SwiftUI Companion App Screenshots
+│   ├── light/
+│   └── dark/
+├── demos/                      # 🎥 Walkthrough videos (MP4) and animated GIFs (e.g. app.gif)
+├── coverage/                   # 📊 Test coverage reports (Kotlinx Kover / Jacoco)
+└── ci/                         # 🚀 GitHub Actions CI pipeline execution proofs
 ```
 
 ## Required Screenshots for Documentation
@@ -92,8 +99,30 @@ Capture test coverage report to demonstrate testing quality:
 **Files to capture:**
 - `app/light/11-dev-flavor.png` - Settings showing DEV environment
 - `app/light/12-mock-flavor.png` - Settings showing MOCK environment
-- `app/light/12b-stg-flavor.png` - Settings showing STG environment
-- `app/light/13-prod-flavor.png` - Settings showing PROD environment
+
+### 5. Compose Previews: Fast Inner-Loop Development
+
+Jetpack Compose `@Preview` annotations dramatically accelerate mobile engineering velocity:
+- **Sub-Second Iteration:** Renders UI instantly inside Android Studio without assembling APKs, launching emulators, or deploying to devices.
+- **Simultaneous Multi-State Validation:** Visualizes all states (`Success Light`, `Success Dark`, `Loading`, `Empty`, `Error`) side-by-side in real time.
+- **Zero API Dependency:** Powered by deterministic preview models, decoupling UI construction from backend availability.
+
+**Files to capture in `compose_preview/`:**
+- `compose_preview/01-search-states-preview.png` - SearchScreen previews in Android Studio split view
+- `compose_preview/02-detail-states-preview.png` - DetailScreen previews (Light, Dark, Loading, Error)
+- `compose_preview/03-components-preview.png` - Atomic component previews (RepositoryCard, Chips, EmptyView)
+
+### 6. Android Studio Profiler & Performance Telemetry
+
+Capture empirical telemetry proving performance and responsiveness (see [Performance Profiling Guide](../02_project_architecture/testing/05_performance_profiling_and_benchmarks.md)):
+
+**Files to capture in `tools/`:**
+- `tools/01-cpu-profiler.png` - System Trace proving 0 main-thread blocks (<16ms)
+- `tools/02-network-inspector.png` - Network Inspector showing 300ms debounce and 0ms in-memory cache hits
+- `tools/03-memory-profiler.png` - Java Heap Dump proving 0 leaked activities across 10+ screen transitions
+- `tools/04-layout-inspector.png` - Compose Layout Inspector verifying recomposition skipping (`Skipped: N`)
+- `tools/05-energy-profiler.png` - Energy consumption dropping to 0mW in background
+- `tools/profiler_overview.png` - Android Studio complete profiling dashboard overview
 
 ## How to Capture Screenshots
 

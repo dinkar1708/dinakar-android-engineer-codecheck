@@ -69,7 +69,7 @@ Why it was rejected.
 |:----|:------|:-------|:--------------------|
 | [001](./001_multi_module_architecture.md) | Multi-Module Architecture | Proposed | Project Structure & Modularity |
 | [002](./002_gradle_convention_plugins.md) | Gradle Convention Plugins | Proposed | Build Infrastructure (`build-logic`) |
-| [003](./003_detekt_static_analysis.md) | Detekt Static Analysis | Proposed | Quality Gates & Linting |
+| [003](./003_detekt_static_analysis.md) | Detekt Static Analysis | Implemented | Quality Gates & Linting |
 | [004](./004_headless_kmp_boundary.md) | Headless KMP Boundary | Proposed | Cross-Platform Domain Logic |
 | [005](./005_product_flavors_strategy.md) | Product Flavors Strategy | Implemented | Multi-Environment Isolation |
 | [006](./006_jetpack_compose_migration.md) | Declarative Jetpack Compose Migration | Proposed | Presentation & UI Modernization |

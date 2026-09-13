@@ -70,8 +70,9 @@ final class SearchViewModel: ObservableObject {
         let startTime = Date()
 
         do {
-            // Invokes Kotlin Multiplatform shared engine via Swift async/await
-            let items = try await repository.searchRepositories(query: trimmed)
+            let filter = DomainSearchFilter(language: nil, minStars: nil, updatedPeriod: "all", updatedAfter: nil)
+            let result = try await repository.searchRepositories(query: trimmed, page: 1, sort: DomainSearchSort.bestMatch, filter: filter)
+            let items = result.items
             let duration = String(format: "%.1f", Date().timeIntervalSince(startTime) * 1000.0)
             self.repositories = items
             self.isLoading = false

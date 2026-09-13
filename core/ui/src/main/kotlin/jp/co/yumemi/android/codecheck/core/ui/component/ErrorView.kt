@@ -25,8 +25,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 import jp.co.yumemi.android.codecheck.core.ui.R
 
 /**
@@ -114,3 +116,26 @@ fun ErrorView(
         }
     }
 }
+
+@Preview(name = "ErrorView - Light", showBackground = true)
+@Composable
+private fun ErrorViewLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        ErrorView(
+            message = "Unable to connect to GitHub API. Please check your internet connection.",
+            onRetry = {}
+        )
+    }
+}
+
+@Preview(name = "ErrorView - Dark", showBackground = true)
+@Composable
+private fun ErrorViewDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        ErrorView(
+            message = "Rate limit exceeded. Please wait a few minutes before trying again.",
+            onRetry = {}
+        )
+    }
+}
+

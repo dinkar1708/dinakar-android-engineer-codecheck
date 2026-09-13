@@ -3,7 +3,7 @@
 **Document Type:** Technical Tooling Evaluation Catalog  
 **Date:** September 10, 2026  
 **Status:** 📋 Active Evaluation  
-**Target Project:** Yumemi Android Engineer Code Check (`dinakar-android-engineer-codecheck`)  
+**Target Project:** Android Engineer Code Check (`dinakar-android-engineer-codecheck`, see [Technical References](../references.md#7-github-api--assessment-standards))  
 
 ---
 
@@ -185,7 +185,7 @@ Every tool is evaluated strictly by its core value proposition:
 - It is currently the #1 AI code review tool on GitHub. It catches architectural drift, missing coroutine cancellations, unclosed streams, and memory leaks before human reviewers spend time reviewing.
 
 #### **Key Advantages**
-- **Automated Yumemi Review Badges:** Configurable via `.coderabbit.yaml` to categorize feedback with `[must]`, `[imo]`, `[nits]`, and `[memo]`.
+- **Automated Review Badges:** Configurable via `.coderabbit.yaml` to categorize feedback with `[must]`, `[imo]`, `[nits]`, and `[memo]` (see [Collaborative Review Culture](./09_collaborative_review_culture.md)).
 - **Architecture Sequence Diagrams:** Automatically generates Mermaid sequence diagrams for each PR showing how data flows through ViewModel, Repository, and API clients.
 - **Diff Guardrail Warning:** Alerts if a PR exceeds our target threshold of **~300 lines**.
 - **1-Click Installation:** Zero server infrastructure needed; installs as a standard GitHub App.
@@ -311,7 +311,7 @@ Every tool is evaluated strictly by its core value proposition:
 #### **Key Advantages**
 - **Auto-Sync Engine:** Automatically detects when a PR breaks documented code paths and suggests documentation updates.
 - **IDE + PR Integration:** Shows architectural context directly inside Android Studio and on GitHub PR checks.
-- **Yumemi Architecture Visibility:** Keeps Clean Architecture layer documentation in sync with ongoing refactoring.
+- **Clean Architecture Visibility:** Keeps Clean Architecture layer documentation in sync with ongoing refactoring.
 
 ---
 

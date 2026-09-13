@@ -56,48 +56,8 @@ class MockGitHubRepository(
             return SearchResult(emptyList(), 0, false)
         }
 
-        // 1. Text filter
-        var filtered = mockData.filter { item ->
-            item.name.contains(trimmed, ignoreCase = true) ||
-                item.owner.login.contains(trimmed, ignoreCase = true) ||
-                (item.description?.contains(trimmed, ignoreCase = true) == true) ||
-                (item.language?.contains(trimmed, ignoreCase = true) == true)
-        }
-
-        // 2. Language filter
-        if (!filter.language.isNullOrBlank()) {
-            filtered = filtered.filter { item ->
-                item.language?.equals(filter.language, ignoreCase = true) == true
-            }
-        }
-
-        // 3. Minimum stars filter
-        val minStars = filter.minStars
-        if (minStars != null && minStars > 0) {
-            filtered = filtered.filter { item ->
-                item.stargazersCount >= minStars
-            }
-        }
-
-        // 4. Recency filter
-        val updatedAfter = filter.updatedAfter ?: when (filter.updatedPeriod) {
-            "year" -> "2026-01-01"
-            "month" -> "2026-09-01"
-            else -> null
-        }
-        if (!updatedAfter.isNullOrBlank()) {
-            filtered = filtered.filter { item ->
-                (item.updatedAt ?: "") >= updatedAfter
-            }
-        }
-
-        // 5. Sorting
-        val sorted = when (sort) {
-            SearchSort.BEST_MATCH -> filtered
-            SearchSort.STARS -> filtered.sortedByDescending { it.stargazersCount }
-            SearchSort.FORKS -> filtered.sortedByDescending { it.forksCount }
-            SearchSort.UPDATED -> filtered.sortedByDescending { it.updatedAt ?: "" }
-        }
+        val filtered = applyFilters(mockData, trimmed, filter)
+        val sorted = applySort(filtered, sort)
 
         // 5. Pagination (10 items per page)
         val pageSize = 10
@@ -159,6 +119,57 @@ class MockGitHubRepository(
             description = "Mock repository for ID $id",
             htmlUrl = "https://github.com/mock/repo-$id"
         )
+    }
+
+    private fun applyFilters(
+        items: List<RepositoryItem>,
+        trimmed: String,
+        filter: SearchFilter
+    ): List<RepositoryItem> {
+        var filtered = items.filter { item ->
+            item.name.contains(trimmed, ignoreCase = true) ||
+                item.owner.login.contains(trimmed, ignoreCase = true) ||
+                item.description?.contains(trimmed, ignoreCase = true) == true ||
+                item.language?.contains(trimmed, ignoreCase = true) == true
+        }
+
+        if (!filter.language.isNullOrBlank()) {
+            filtered = filtered.filter { item ->
+                item.language?.equals(filter.language, ignoreCase = true) == true
+            }
+        }
+
+        val minStars = filter.minStars
+        if (minStars != null && minStars > 0) {
+            filtered = filtered.filter { item ->
+                item.stargazersCount >= minStars
+            }
+        }
+
+        val updatedAfter = filter.updatedAfter ?: when (filter.updatedPeriod) {
+            "year" -> "2026-01-01"
+            "month" -> "2026-09-01"
+            else -> null
+        }
+        if (!updatedAfter.isNullOrBlank()) {
+            filtered = filtered.filter { item ->
+                (item.updatedAt ?: "") >= updatedAfter
+            }
+        }
+
+        return filtered
+    }
+
+    private fun applySort(
+        items: List<RepositoryItem>,
+        sort: SearchSort
+    ): List<RepositoryItem> {
+        return when (sort) {
+            SearchSort.BEST_MATCH -> items
+            SearchSort.STARS -> items.sortedByDescending { it.stargazersCount }
+            SearchSort.FORKS -> items.sortedByDescending { it.forksCount }
+            SearchSort.UPDATED -> items.sortedByDescending { it.updatedAt ?: "" }
+        }
     }
 
     companion object {

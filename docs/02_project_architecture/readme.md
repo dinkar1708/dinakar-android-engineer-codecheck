@@ -8,7 +8,7 @@
 
 ## 🏗️ Architecture Overview
 
-This section contains the comprehensive technical blueprints for the modernization of the Yumemi code check repository into an enterprise-grade mobile application.
+This section contains the comprehensive technical blueprints for the modernization of the code check repository into an enterprise-grade mobile application (see [Technical References](../references.md#7-github-api--assessment-standards)).
 
 ```mermaid
 flowchart TD
@@ -61,10 +61,11 @@ flowchart TD
 ### 3. Contract Specifications & Setup
 - **[API Specification (`api_spec/`)](./api_spec/readme.md):** GitHub Search Repositories network contracts, error handling, and rate-limit mitigation.
 - **[UI/UX Design Specification (`design/`)](./design/ui_ux_design_specification.md):** Material Design 3 design system, typography tokens, dark mode, and accessibility.
+- **[Interactive HTML Design Previews (`design/html/`)](./design/html/README.md):** Complete UI/UX screen prototypes and component design specs in interactive HTML/CSS.
 - **[AI-Assisted Design-to-Code Workflow (`design/`)](./design/ai_assisted_design_workflow.md):** End-to-end methodology for AI prototyping (Claude Design), HTML/CSS token specs, and Jetpack Compose translation.
 - **[Project Setup & Toolchain (`setup/`)](./setup/01_project_setup.md):** Android Studio Iguana+, JDK 17, Gradle 8.5 build environment.
 - **[Offline Mock Mode (`setup/`)](./setup/03_mock_development_and_offline_mode.md):** Offline Ktor MockEngine development fixtures and zero-network testing.
-- **[Screenshots Guide (`screenshots/`)](./screenshots/screenshots_guide.md):** Guidelines for visual regression and presentation assets.
+- **[Screenshots & Media Guide (`docs/screenshots/`)](../screenshots/screenshots_guide.md):** Repository media catalog, screenshot guidelines, and video recordings.
 
 ---
 

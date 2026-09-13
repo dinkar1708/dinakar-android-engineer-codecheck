@@ -59,21 +59,23 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppAmber
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppNavy
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate300
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate400
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate600
+import jp.co.yumemi.android.codecheck.core.domain.model.Owner
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.core.ui.component.ErrorView
 import jp.co.yumemi.android.codecheck.core.ui.component.LoadingView
 import jp.co.yumemi.android.codecheck.core.ui.util.formatDecimalNumber
 import jp.co.yumemi.android.codecheck.core.ui.util.getMonogramInitials
-import jp.co.yumemi.android.codecheck.feature.detail.R
 import jp.co.yumemi.android.codecheck.feature.detail.component.MetaRow
 
 /**
@@ -524,3 +526,81 @@ internal fun launchChromeCustomTab(context: Context, url: String) {
         }
     }
 }
+
+@Preview(name = "Detail - Success Light", showBackground = true)
+@Composable
+private fun DetailScreenSuccessLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        DetailScreen(
+            uiState = DetailUiState.Success(previewDetailRepository),
+            isStarred = false,
+            onBackClick = {},
+            onToggleStar = {},
+            onRetry = {},
+            onOpenBrowser = {}
+        )
+    }
+}
+
+@Preview(name = "Detail - Success Dark (Starred)", showBackground = true)
+@Composable
+private fun DetailScreenSuccessDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        DetailScreen(
+            uiState = DetailUiState.Success(previewDetailRepository),
+            isStarred = true,
+            onBackClick = {},
+            onToggleStar = {},
+            onRetry = {},
+            onOpenBrowser = {}
+        )
+    }
+}
+
+@Preview(name = "Detail - Loading", showBackground = true)
+@Composable
+private fun DetailScreenLoadingPreview() {
+    CodeCheckTheme {
+        DetailScreen(
+            uiState = DetailUiState.Loading,
+            isStarred = false,
+            onBackClick = {},
+            onToggleStar = {},
+            onRetry = {},
+            onOpenBrowser = {}
+        )
+    }
+}
+
+@Preview(name = "Detail - Error", showBackground = true)
+@Composable
+private fun DetailScreenErrorPreview() {
+    CodeCheckTheme {
+        DetailScreen(
+            uiState = DetailUiState.Error("Failed to fetch repository details. Please try again."),
+            isStarred = false,
+            onBackClick = {},
+            onToggleStar = {},
+            onRetry = {},
+            onOpenBrowser = {}
+        )
+    }
+}
+
+private val previewDetailRepository = RepositoryItem(
+    name = "jetbrains/kotlin",
+    owner = Owner(login = "jetbrains", avatarUrl = "https://avatars.githubusercontent.com/u/262714"),
+    language = "Kotlin",
+    stargazersCount = 47200,
+    watchersCount = 47200,
+    forksCount = 5700,
+    openIssuesCount = 180,
+    description = "The Kotlin Programming Language. Official repository for Kotlin.",
+    htmlUrl = "https://github.com/jetbrains/kotlin",
+    updatedAt = "2024-03-01T12:00:00Z",
+    defaultBranch = "master",
+    pushedAt = "2024-03-01T11:45:00Z",
+    license = "Apache-2.0",
+    size = 184520
+)
+

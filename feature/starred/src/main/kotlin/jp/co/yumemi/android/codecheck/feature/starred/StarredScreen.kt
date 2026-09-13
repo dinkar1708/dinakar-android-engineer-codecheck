@@ -23,7 +23,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -57,7 +56,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.SubcomposeAsyncImage
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppAmber
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppNavy
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
@@ -628,3 +626,17 @@ private fun StarredScreenEmptyDarkPreview() {
         )
     }
 }
+
+@Preview(name = "Starred - Loading", showBackground = true)
+@Composable
+private fun StarredScreenLoadingPreview() {
+    CodeCheckTheme {
+        StarredContent(
+            uiState = StarredUiState.Loading,
+            onRepositoryClick = {},
+            onUnstar = {},
+            onClearAll = {}
+        )
+    }
+}
+

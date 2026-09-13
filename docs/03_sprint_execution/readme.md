@@ -1,7 +1,7 @@
 # 🎯 Sprint Execution & Challenge Delivery Roadmap
 
 **Classification:** Assessment Execution & Delivery Tracking  
-**Application:** Modernization of Yumemi Android Engineer Code Check  
+**Application:** Android Engineer Code Check Modernization (see [Technical References](../references.md#7-github-api--assessment-standards))  
 **Parent Standard:** Governed by Agile Delivery metrics in [`docs/01_company_and_team/`](../01_company_and_team/readme.md)  
 
 ---
@@ -24,9 +24,10 @@ flowchart LR
 | Document | Purpose & Core Content |
 |:---|:---|
 | **[01_execution_roadmap.md](./01_execution_roadmap.md)** | Master 4-Sprint execution sequence, sprint deliverables, quality gates, and final success criteria |
-| **[02_how_to_proceed_and_issue_mapping.md](./02_how_to_proceed_and_issue_mapping.md)** | Bidirectional traceability matrix: 9 Yumemi issues → Agile tickets → Story points |
+| **[02_how_to_proceed_and_issue_mapping.md](./02_how_to_proceed_and_issue_mapping.md)** | Bidirectional traceability matrix: 9 code check challenge issues → Agile tickets → Story points |
 | **[03_issues_summary.md](./03_issues_summary.md)** | ⭐ **Master issue list** - Authoritative specification and acceptance criteria for all 9 issues |
 | **[04_platform_references.md](./04_platform_references.md)** | Technical deep-dives into Android platform pitfalls and best practices |
+| **[05_market_research_and_product_strategy.md](./05_market_research_and_product_strategy.md)** | 📊 Market research on GitHub client ecosystem, user pain points & architectural archetypes |
 
 ---
 

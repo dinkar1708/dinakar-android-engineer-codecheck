@@ -1,7 +1,6 @@
 # Production Maintenance, Patch Governance & Hotfix Standards
 
 **Maintainer:** Dinakar Prasad Maurya  
-**Target Role:** モバイルリードエンジニア / Mobile Platform Engineering Lead  
 **Scope:** Phase 5 (Production & Maintenance) of Agile SDLC  
 
 ---

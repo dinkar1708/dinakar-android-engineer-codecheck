@@ -1,24 +1,46 @@
 package jp.co.yumemi.android.codecheck.feature.settings
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import jp.co.yumemi.android.codecheck.core.domain.model.AppLanguagePreference
+import jp.co.yumemi.android.codecheck.core.domain.model.ThemeMode
+import jp.co.yumemi.android.codecheck.core.domain.repository.PreferencesRepository
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor() : ViewModel() {
+class SettingsViewModel @Inject constructor(
+    private val preferencesRepository: PreferencesRepository
+) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(SettingsUiState())
-    val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<SettingsUiState> = combine(
+        preferencesRepository.getThemeMode(),
+        preferencesRepository.getLanguagePreference()
+    ) { themeMode, language ->
+        SettingsUiState(
+            themeMode = themeMode,
+            language = language
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000L),
+        initialValue = SettingsUiState()
+    )
 
-    fun setThemeMode(mode: AppThemeMode) {
-        _uiState.update { it.copy(themeMode = mode) }
+    fun setThemeMode(mode: ThemeMode) {
+        viewModelScope.launch {
+            preferencesRepository.setThemeMode(mode)
+        }
     }
 
-    fun setLanguage(language: AppLanguage) {
-        _uiState.update { it.copy(language = language) }
+    fun setLanguage(language: AppLanguagePreference) {
+        viewModelScope.launch {
+            preferencesRepository.setLanguagePreference(language)
+        }
     }
 }

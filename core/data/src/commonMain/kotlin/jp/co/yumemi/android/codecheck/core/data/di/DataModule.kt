@@ -46,4 +46,11 @@ object DataModule {
     fun provideStarredRepository(): jp.co.yumemi.android.codecheck.core.domain.repository.StarredRepository {
         return jp.co.yumemi.android.codecheck.core.data.repository.DefaultStarredRepository()
     }
+
+    /**
+     * Provide a singleton or instance of [jp.co.yumemi.android.codecheck.core.domain.repository.PreferencesRepository].
+     */
+    fun providePreferencesRepository(): jp.co.yumemi.android.codecheck.core.domain.repository.PreferencesRepository {
+        return jp.co.yumemi.android.codecheck.core.data.repository.DefaultPreferencesRepository()
+    }
 }

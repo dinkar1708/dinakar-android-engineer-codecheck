@@ -1,30 +1,18 @@
 package jp.co.yumemi.android.codecheck.feature.settings
 
-/**
- * Supported Theme appearance modes.
- */
-enum class AppThemeMode {
-    SYSTEM,
-    LIGHT,
-    DARK
-}
+import jp.co.yumemi.android.codecheck.core.domain.model.AppLanguagePreference
+import jp.co.yumemi.android.codecheck.core.domain.model.ThemeMode
 
-/**
- * Supported UI language preferences.
- */
-enum class AppLanguage {
-    SYSTEM,
-    EN,
-    JA
-}
+typealias AppThemeMode = ThemeMode
+typealias AppLanguage = AppLanguagePreference
 
 /**
  * Immutable UI State for Settings & Preferences Screen.
  */
 data class SettingsUiState(
-    val themeMode: AppThemeMode = AppThemeMode.SYSTEM,
-    val language: AppLanguage = AppLanguage.SYSTEM,
-    val appVersion: String = "1.0.0 (Build 1)",
-    val environment: String = "PRODUCTION",
+    val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    val language: AppLanguagePreference = AppLanguagePreference.SYSTEM,
+    val appVersion: String = "1.0",
+    val environment: String = "DEVELOPMENT",
     val apiSource: String = "GitHub REST API v3"
 )

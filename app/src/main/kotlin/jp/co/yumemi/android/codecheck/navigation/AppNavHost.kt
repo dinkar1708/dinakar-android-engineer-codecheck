@@ -37,6 +37,7 @@ fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String = Screen.Splash.route,
+    settingsViewModel: SettingsViewModel = hiltViewModel(),
     onOpenBrowser: ((String) -> Unit)? = null
 ) {
     NavHost(
@@ -57,7 +58,6 @@ fun AppNavHost(
         composable(Screen.Main.route) {
             val searchViewModel = hiltViewModel<SearchViewModel>()
             val starredViewModel = hiltViewModel<StarredViewModel>()
-            val settingsViewModel = hiltViewModel<SettingsViewModel>()
             MainScreen(
                 searchViewModel = searchViewModel,
                 starredViewModel = starredViewModel,

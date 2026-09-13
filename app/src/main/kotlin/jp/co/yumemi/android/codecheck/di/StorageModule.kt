@@ -27,4 +27,10 @@ object StorageModule {
     fun provideStarredRepository(): StarredRepository {
         return DataModule.provideStarredRepository()
     }
+
+    @Provides
+    @Singleton
+    fun providePreferencesRepository(): jp.co.yumemi.android.codecheck.core.domain.repository.PreferencesRepository {
+        return DataModule.providePreferencesRepository()
+    }
 }

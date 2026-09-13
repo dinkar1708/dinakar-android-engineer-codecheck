@@ -28,6 +28,8 @@ jobs:
     name: "Build, Lint & Test Verification"
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=1024m -Dfile.encoding=UTF-8"
 
     steps:
       - name: Checkout Source Code

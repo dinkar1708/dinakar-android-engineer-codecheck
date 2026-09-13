@@ -1,6 +1,6 @@
 # ADR-003: Detekt Static Analysis and Code Quality Automation
 
-**Status:** 📋 Proposed
+**Status:** ✅ Accepted & Implemented
 **Deciders:** Dinakar Prasad Maurya
 **Technical Story:** Quality Engineering & CI/CD  
 

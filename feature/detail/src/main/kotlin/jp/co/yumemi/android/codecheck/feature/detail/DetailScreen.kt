@@ -76,7 +76,6 @@ import jp.co.yumemi.android.codecheck.core.ui.component.ErrorView
 import jp.co.yumemi.android.codecheck.core.ui.component.LoadingView
 import jp.co.yumemi.android.codecheck.core.ui.util.formatDecimalNumber
 import jp.co.yumemi.android.codecheck.core.ui.util.getMonogramInitials
-import jp.co.yumemi.android.codecheck.feature.detail.R
 import jp.co.yumemi.android.codecheck.feature.detail.component.MetaRow
 
 /**

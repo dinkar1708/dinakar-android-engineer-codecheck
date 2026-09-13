@@ -111,7 +111,7 @@ fun SplashLogoMark(
             // 2. Handle (extends at 45° from (84dp, 84dp))
             if (handleScale > 0f) {
                 val handleOrigin = Offset(84.dp.toPx(), 84.dp.toPx())
-                val handlePivot = Offset(84.dp.toPx(), 84.dp.toPx() + (strokeWidth / 2f))
+                val handlePivot = Offset(84.dp.toPx(), 84.dp.toPx() + strokeWidth / 2f)
                 rotate(degrees = 45f, pivot = handlePivot) {
                     drawRoundRect(
                         color = accentColor,
@@ -126,7 +126,7 @@ fun SplashLogoMark(
             if (spineScale > 0f) {
                 // Vertical trunk from (52dp, 28dp) down to (52dp, 64dp)
                 val spineTop = Offset(52.dp.toPx(), 28.dp.toPx())
-                val spineBottomY = 28.dp.toPx() + (36.dp.toPx() * spineScale)
+                val spineBottomY = 28.dp.toPx() + 36.dp.toPx() * spineScale
                 drawLine(
                     color = Color.White,
                     start = spineTop,
@@ -136,7 +136,7 @@ fun SplashLogoMark(
                 )
 
                 // Horizontal branch spine from (26dp, 58dp) across to (52dp, 58dp)
-                val branchStartX = 52.dp.toPx() - (26.dp.toPx() * spineScale)
+                val branchStartX = 52.dp.toPx() - 26.dp.toPx() * spineScale
                 drawLine(
                     color = Color.White,
                     start = Offset(branchStartX, 58.dp.toPx()),

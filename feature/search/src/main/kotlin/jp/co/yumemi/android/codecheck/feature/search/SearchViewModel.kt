@@ -168,7 +168,7 @@ class SearchViewModel @Inject constructor(
             } catch (e: CancellationException) {
                 // Ignore cancellation - this is expected when user navigates away or changes query
                 throw e
-            } catch (throwable: Throwable) {
+            } catch (ignored: Throwable) {
                 _uiState.value = currentState.copy(isLoadingMore = false)
             }
         }

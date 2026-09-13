@@ -76,6 +76,7 @@ The application has completed migration to Multi-Module Clean Architecture with 
 
 ## 🧪 Verification & Build Commands
 - Run Lint: `./gradlew lintDebug`
+- Run Detekt: `./gradlew detektAll` (or `./gradlew detekt`)
 - Run Unit Tests: `./gradlew testDebugUnitTest` (or `./gradlew test`)
 - Clean & Assemble Debug APK: `./gradlew clean assembleDebug`
 

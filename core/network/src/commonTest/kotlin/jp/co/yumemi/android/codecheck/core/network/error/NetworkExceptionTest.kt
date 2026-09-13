@@ -1,7 +1,6 @@
 package jp.co.yumemi.android.codecheck.core.network.error
 
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Test
 import java.io.IOException
 

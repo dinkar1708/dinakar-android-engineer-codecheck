@@ -20,6 +20,7 @@ import jp.co.yumemi.android.codecheck.feature.settings.AppLanguage
 import jp.co.yumemi.android.codecheck.feature.settings.AppThemeMode
 import jp.co.yumemi.android.codecheck.feature.settings.SettingsViewModel
 import jp.co.yumemi.android.codecheck.navigation.AppNavHost
+import jp.co.yumemi.android.codecheck.util.LocalizedContext
 import java.util.Locale
 
 /**
@@ -47,17 +48,16 @@ class MainActivity : ComponentActivity() {
                 AppLanguage.JA -> Locale.JAPANESE
             }
 
-            val baseContext = LocalContext.current
             val currentConfig = LocalConfiguration.current
 
-            val localizedContext = remember(targetLocale, baseContext) {
+            val localizedContext = remember(targetLocale) {
                 if (targetLocale == null) {
-                    baseContext
+                    this@MainActivity
                 } else {
-                    val config = Configuration(baseContext.resources.configuration).apply {
+                    val config = Configuration(resources.configuration).apply {
                         setLocale(targetLocale)
                     }
-                    baseContext.createConfigurationContext(config)
+                    LocalizedContext(this@MainActivity, config)
                 }
             }
 

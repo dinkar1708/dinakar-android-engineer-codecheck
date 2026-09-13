@@ -38,6 +38,8 @@ The client network layer intercepts non-2xx statuses and translates them into us
 |:---------|:------------|
 | [01_search_repositories_api.md](./01_search_repositories_api.md) | GitHub Search API endpoint specification, request/response schemas |
 | [02_api_versioning_guide.md](./02_api_versioning_guide.md) | API versioning strategy, backward compatibility, version negotiation |
+| [03_starred_repositories_api.md](./03_starred_repositories_api.md) | GitHub Starred Repositories API specification (`/user/starred`), schemas, auth roadmap |
+
 
 ---
 

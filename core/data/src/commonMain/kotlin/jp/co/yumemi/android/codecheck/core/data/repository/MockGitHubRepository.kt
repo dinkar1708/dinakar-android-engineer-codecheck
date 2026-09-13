@@ -9,6 +9,8 @@ import jp.co.yumemi.android.codecheck.core.domain.repository.GitHubRepository
 import jp.co.yumemi.android.codecheck.core.network.error.NetworkException
 import kotlinx.coroutines.delay
 
+private const val MOCK_LONG_LOADING_DELAY_MS = 10_000L
+
 /**
  * 100% Offline Mock Repository providing realistic GitHub datasets,
  * layout stress-testing scenarios, and zero rate-limit development.
@@ -53,7 +55,7 @@ class MockGitHubRepository(
         }
 
         if (trimmed.equals("loading", ignoreCase = true) || trimmed.equals("load", ignoreCase = true)) {
-            delay(10000L)
+            delay(MOCK_LONG_LOADING_DELAY_MS)
         }
 
         if (trimmed.equals("empty", ignoreCase = true)) {

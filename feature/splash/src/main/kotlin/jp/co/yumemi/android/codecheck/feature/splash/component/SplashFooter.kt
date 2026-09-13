@@ -20,8 +20,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.MaterialTheme
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.DarkActionBorder
 
 /**
  * Bottom brand footer featuring the indeterminate loading track and API label.
@@ -32,7 +35,9 @@ import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 @Composable
 fun SplashFooter(
     progressOffset: Float,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    trackColor: Color = if (MaterialTheme.colorScheme.surface != AppWhite) Color(0x14FFFFFF) else Color(0x1FFFFFFF),
+    accentColor: Color = if (MaterialTheme.colorScheme.surface != AppWhite) DarkActionBorder else AppBlue
 ) {
     Column(
         modifier = modifier,
@@ -44,7 +49,7 @@ fun SplashFooter(
                 .width(120.dp)
                 .height(3.dp)
                 .clip(RoundedCornerShape(2.dp))
-                .background(Color(0x1FFFFFFF))
+                .background(trackColor)
         ) {
             Box(
                 modifier = Modifier
@@ -52,7 +57,7 @@ fun SplashFooter(
                     .width(40.dp)
                     .height(3.dp)
                     .clip(RoundedCornerShape(2.dp))
-                    .background(AppBlue)
+                    .background(accentColor)
             )
         }
 

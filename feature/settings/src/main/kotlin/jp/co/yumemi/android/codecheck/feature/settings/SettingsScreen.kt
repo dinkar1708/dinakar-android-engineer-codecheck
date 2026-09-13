@@ -42,7 +42,6 @@ import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppNavy
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.SelectedBlueBg
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate100
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate200
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate50

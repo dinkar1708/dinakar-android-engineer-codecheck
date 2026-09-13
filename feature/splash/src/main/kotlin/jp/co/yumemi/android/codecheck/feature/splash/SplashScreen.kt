@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,7 +36,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppNavy
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.DarkAppBackground
 import jp.co.yumemi.android.codecheck.feature.splash.component.SplashBackground
 import jp.co.yumemi.android.codecheck.feature.splash.component.SplashFooter
 import jp.co.yumemi.android.codecheck.feature.splash.component.SplashLogoMark
@@ -193,11 +196,13 @@ fun SplashScreen(
         currentOnSplashFinished()
     }
 
+    val splashBg = if (MaterialTheme.colorScheme.surface != AppWhite) DarkAppBackground else AppNavy
+
     // ── Root Canvas ─────────────────────────────────────────────────────────
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(AppNavy)
+            .background(splashBg)
             .testTag("SplashScreenRoot")
     ) {
         // Ambient background glow rings

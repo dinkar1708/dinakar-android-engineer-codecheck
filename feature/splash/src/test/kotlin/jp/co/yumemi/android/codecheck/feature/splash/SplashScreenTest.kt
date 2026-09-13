@@ -93,4 +93,18 @@ class SplashScreenTest {
 
         org.junit.Assert.assertFalse("Callback must not be invoked after disposal", callbackInvoked)
     }
+
+    @Test
+    fun splashScreen_darkTheme_rendersCorrectly() {
+        composeTestRule.setContent {
+            jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme(darkTheme = true) {
+                SplashScreen(
+                    onSplashFinished = {}
+                )
+            }
+        }
+
+        composeTestRule.onNodeWithTag("SplashScreenRoot").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Repository Search").assertIsDisplayed()
+    }
 }

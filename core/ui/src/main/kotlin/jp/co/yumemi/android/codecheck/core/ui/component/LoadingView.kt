@@ -23,8 +23,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
+
 
 /**
  * Centered loading indicator matching the design palette.
@@ -34,7 +33,8 @@ fun LoadingView(
     modifier: Modifier = Modifier,
     message: String? = null
 ) {
-    val progressColor = AppBlue
+    val progressColor = MaterialTheme.colorScheme.primary
+    val textColor = MaterialTheme.colorScheme.onSurfaceVariant
 
     val infiniteTransition = rememberInfiniteTransition(label = "loading_pulse")
     val alpha by infiniteTransition.animateFloat(
@@ -67,7 +67,7 @@ fun LoadingView(
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.Medium
                     ),
-                    color = Slate500,
+                    color = textColor,
                     textAlign = TextAlign.Center
                 )
             }

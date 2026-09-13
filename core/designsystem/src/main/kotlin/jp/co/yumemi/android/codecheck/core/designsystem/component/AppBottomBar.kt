@@ -40,7 +40,6 @@ import jp.co.yumemi.android.codecheck.core.designsystem.R
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.SelectedBlueBg
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate200
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
 
@@ -55,7 +54,7 @@ enum class MainTab {
 
 /**
  * Application bottom navigation bar following the design system palette.
- * Highlights the active tab with a pill indicator ([SelectedBlueBg]) and primary blue text/icon.
+ * Highlights the active tab with a pill indicator and primary blue text/icon.
  */
 @Composable
 fun AppBottomBar(

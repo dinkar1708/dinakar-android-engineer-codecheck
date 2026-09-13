@@ -38,23 +38,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppAmber
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppGreen
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramBlueBg
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramBlueText
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramGreenBg
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramGreenText
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramSlateBg
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramSlateText
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate100
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate200
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate300
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate400
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate700
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate800
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate900
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.core.ui.util.formatForkCount
 import jp.co.yumemi.android.codecheck.core.ui.util.formatStarCount
@@ -121,12 +104,12 @@ fun RepositoryCard(
                         imageVector = Icons.Outlined.Person,
                         contentDescription = null,
                         modifier = Modifier.size(13.dp),
-                        tint = Slate400
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
                         text = ownerLogin,
                         fontSize = 13.sp,
-                        color = Slate500,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -193,13 +176,13 @@ fun RepositoryCard(
                             imageVector = Icons.Default.Star,
                             contentDescription = null,
                             modifier = Modifier.size(13.dp),
-                            tint = AppAmber
+                            tint = MaterialTheme.colorScheme.tertiary
                         )
                         Text(
                             text = formatStarCount(item.stargazersCount),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Slate800
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
 
@@ -207,7 +190,7 @@ fun RepositoryCard(
                     Text(
                         text = stringResource(R.string.search_forks_suffix, formatForkCount(item.forksCount)),
                         fontSize = 12.sp,
-                        color = Slate500
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -225,7 +208,21 @@ fun MonogramAvatar(
     modifier: Modifier = Modifier
 ) {
     val initials = remember(ownerName) { getMonogramInitials(ownerName) }
-    val style = remember(ownerName) { getMonogramStyle(ownerName) }
+    val primaryContainer = MaterialTheme.colorScheme.primaryContainer
+    val onPrimaryContainer = MaterialTheme.colorScheme.onPrimaryContainer
+    val secondaryContainer = MaterialTheme.colorScheme.secondaryContainer
+    val onSecondaryContainer = MaterialTheme.colorScheme.onSecondaryContainer
+    val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
+    val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
+
+    val style = remember(ownerName, primaryContainer, secondaryContainer, surfaceVariant) {
+        val hash = abs(ownerName.hashCode())
+        when (hash % 3) {
+            0 -> MonogramStyle(primaryContainer, onPrimaryContainer)
+            1 -> MonogramStyle(secondaryContainer, onSecondaryContainer)
+            else -> MonogramStyle(surfaceVariant, onSurfaceVariant)
+        }
+    }
 
     SubcomposeAsyncImage(
         model = imageUrl,
@@ -242,7 +239,7 @@ fun MonogramAvatar(
 }
 
 /**
- * Monogram tile showing initials with 7% background tint and colored text.
+ * Monogram tile showing initials with background tint and colored text.
  */
 @Composable
 fun MonogramTile(
@@ -272,9 +269,9 @@ fun MonogramTile(
 fun RepositoryCardSkeleton(
     modifier: Modifier = Modifier
 ) {
-    val placeholderCircle: Color = Slate100
-    val barPrimary: Color = Slate100
-    val barSecondary: Color = Slate200
+    val placeholderCircle = MaterialTheme.colorScheme.surfaceVariant
+    val barPrimary = MaterialTheme.colorScheme.surfaceVariant
+    val barSecondary = MaterialTheme.colorScheme.outline
 
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -341,24 +338,3 @@ data class MonogramStyle(
     val backgroundColor: Color,
     val textColor: Color
 )
-
-/**
- * Deterministically assigns one of the 3 derived monogram tints (Blue, Green, or Slate).
- */
-internal fun getMonogramStyle(key: String): MonogramStyle {
-    val hash = abs(key.hashCode())
-    return when (hash % 3) {
-        0 -> MonogramStyle(
-            backgroundColor = MonogramBlueBg,
-            textColor = MonogramBlueText
-        )
-        1 -> MonogramStyle(
-            backgroundColor = MonogramGreenBg,
-            textColor = MonogramGreenText
-        )
-        else -> MonogramStyle(
-            backgroundColor = MonogramSlateBg,
-            textColor = MonogramSlateText
-        )
-    }
-}

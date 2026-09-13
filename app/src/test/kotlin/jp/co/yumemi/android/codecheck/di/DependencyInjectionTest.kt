@@ -39,10 +39,13 @@ class DependencyInjectionTest {
         val searchHistoryRepo = StorageModule.provideSearchHistoryRepository()
         val starredRepo = StorageModule.provideStarredRepository()
         val preferencesRepo = StorageModule.providePreferencesRepository()
+        val mockContext = mockk<android.content.Context>(relaxed = true)
+        val persistentPreferencesRepo = StorageModule.providePreferencesRepository(mockContext)
 
         assertNotNull(searchHistoryRepo)
         assertNotNull(starredRepo)
         assertNotNull(preferencesRepo)
+        assertNotNull(persistentPreferencesRepo)
     }
 
     @Test

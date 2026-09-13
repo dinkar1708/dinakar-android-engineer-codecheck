@@ -62,21 +62,6 @@ import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppNavy
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramBlueBg
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramBlueText
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramGreenBg
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramGreenText
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramSlateBg
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.MonogramSlateText
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate200
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate300
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate400
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate50
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate600
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate700
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate800
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate900
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.core.ui.util.formatForkCount
 import jp.co.yumemi.android.codecheck.core.ui.util.formatStarCount
@@ -120,8 +105,6 @@ fun StarredContent(
 ) {
     var showClearConfirmation by remember { mutableStateOf(false) }
 
-    val isDarkTheme = MaterialTheme.colorScheme.surface != AppWhite
-
     if (showClearConfirmation) {
         AlertDialog(
             onDismissRequest = { showClearConfirmation = false },
@@ -132,13 +115,13 @@ fun StarredContent(
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
-                        .background(if (isDarkTheme) Color(0xFF451A1A) else Color(0xFFFEE2E2)),
+                        .background(MaterialTheme.colorScheme.error.copy(alpha = 0.12f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = null,
-                        tint = if (isDarkTheme) Color(0xFFF87171) else Color(0xFFDC2626),
+                        tint = MaterialTheme.colorScheme.error,
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -168,8 +151,8 @@ fun StarredContent(
                         onClearAll()
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFDC2626),
-                        contentColor = AppWhite
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError
                     ),
                     shape = RoundedCornerShape(8.dp)
                 ) {
@@ -368,7 +351,6 @@ private fun StarredCard(
     onUnstarClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val isDarkTheme = MaterialTheme.colorScheme.surface != AppWhite
     val ownerLogin = item.owner.login.ifBlank {
         if (item.name.contains("/")) item.name.substringBefore("/") else "unknown"
     }
@@ -408,7 +390,7 @@ private fun StarredCard(
                         imageVector = Icons.Outlined.Person,
                         contentDescription = null,
                         modifier = Modifier.size(13.dp),
-                        tint = Slate400
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
                         text = ownerLogin,
@@ -438,7 +420,7 @@ private fun StarredCard(
                         text = item.description.orEmpty(),
                         fontSize = 13.sp,
                         lineHeight = 18.sp,
-                        color = if (isDarkTheme) Color(0xFFA9B4C4) else Color(0xFF475569),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -484,7 +466,7 @@ private fun StarredCard(
                             text = formatStarCount(item.stargazersCount),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
-                            color = if (isDarkTheme) Color(0xFFE2E8F0) else Slate800
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
 
@@ -518,20 +500,20 @@ private fun StarredAvatar(
     ownerName: String,
     modifier: Modifier = Modifier
 ) {
-    val isDarkTheme = MaterialTheme.colorScheme.surface != AppWhite
     val initials = remember(ownerName) { getMonogramInitials(ownerName) }
-    val hash = remember(ownerName) { abs(ownerName.hashCode()) }
-    val (bgColor, textColor) = if (isDarkTheme) {
+    val primaryContainer = MaterialTheme.colorScheme.primaryContainer
+    val onPrimaryContainer = MaterialTheme.colorScheme.onPrimaryContainer
+    val secondaryContainer = MaterialTheme.colorScheme.secondaryContainer
+    val onSecondaryContainer = MaterialTheme.colorScheme.onSecondaryContainer
+    val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
+    val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
+
+    val (bgColor, textColor) = remember(ownerName, primaryContainer, secondaryContainer, surfaceVariant) {
+        val hash = abs(ownerName.hashCode())
         when (hash % 3) {
-            0 -> Pair(Color(0xFF2A3350), Color(0xFF8F9DF5))
-            1 -> Pair(Color(0xFF064E3B), Color(0xFFA7F3D0))
-            else -> Pair(Color(0xFF2B3344), Color(0xFFA9B4C4))
-        }
-    } else {
-        when (hash % 3) {
-            0 -> Pair(MonogramBlueBg, MonogramBlueText)
-            1 -> Pair(MonogramGreenBg, MonogramGreenText)
-            else -> Pair(MonogramSlateBg, MonogramSlateText)
+            0 -> Pair(primaryContainer, onPrimaryContainer)
+            1 -> Pair(secondaryContainer, onSecondaryContainer)
+            else -> Pair(surfaceVariant, onSurfaceVariant)
         }
     }
 

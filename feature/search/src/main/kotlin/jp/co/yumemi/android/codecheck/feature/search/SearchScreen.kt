@@ -34,6 +34,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.contentDescription
@@ -146,11 +147,14 @@ internal fun SearchScreen(
     val focusManager = LocalFocusManager.current
     var showFilterSheet by rememberSaveable { mutableStateOf(false) }
 
+    val isDarkTheme = MaterialTheme.colorScheme.surface != AppWhite
     val headerBgColor = AppNavy
-    val searchBoxBgColor = AppWhite
-    val searchBoxBorderColor = Slate200
-    val searchIconColor = AppBlue
-    val searchTextColor = Slate900
+    val searchBoxBgColor = if (isDarkTheme) Color(0xFF242C3C) else AppWhite
+    val searchBoxBorderColor = MaterialTheme.colorScheme.outline
+    val searchIconColor = MaterialTheme.colorScheme.primary
+    val searchTextColor = MaterialTheme.colorScheme.onSurface
+    val searchPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant
+    val clearIconTint = MaterialTheme.colorScheme.onSurfaceVariant
     val screenTitle = stringResource(R.string.search_screen_title)
 
     Scaffold(
@@ -214,7 +218,7 @@ internal fun SearchScreen(
                                     onSearch()
                                 }
                             ),
-                            cursorBrush = SolidColor(AppBlue),
+                            cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
                             decorationBox = { innerTextField ->
                                 if (query.isEmpty()) {
                                     Text(
@@ -222,7 +226,7 @@ internal fun SearchScreen(
                                         style = MaterialTheme.typography.bodyLarge.copy(
                                             fontSize = 15.sp
                                         ),
-                                        color = Slate400
+                                        color = searchPlaceholderColor
                                     )
                                 }
                                 innerTextField()
@@ -238,7 +242,7 @@ internal fun SearchScreen(
                                     imageVector = Icons.Default.Clear,
                                     contentDescription = stringResource(R.string.search_clear_content_description),
                                     modifier = Modifier.size(18.dp),
-                                    tint = Slate500
+                                    tint = clearIconTint
                                 )
                             }
                         }

@@ -26,17 +26,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate100
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate200
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate400
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
-import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate900
+import androidx.compose.material3.MaterialTheme
 import jp.co.yumemi.android.codecheck.feature.search.R
 
 /**
  * Recent searches grouped card section displaying up to 7 recent queries (MRU order).
  * Clicking an item executes a 1-tap re-search; clicking the remove icon deletes the query.
+ * Supports light and dark theme palettes.
  */
 @Composable
 fun RecentSearchesSection(
@@ -46,6 +42,13 @@ fun RecentSearchesSection(
     modifier: Modifier = Modifier
 ) {
     if (history.isEmpty()) return
+
+    val sectionTitleColor = MaterialTheme.colorScheme.onSurfaceVariant
+    val containerBg = MaterialTheme.colorScheme.surface
+    val containerBorder = MaterialTheme.colorScheme.outline
+    val dividerColor = MaterialTheme.colorScheme.outlineVariant
+    val textColor = MaterialTheme.colorScheme.onSurface
+    val iconTint = MaterialTheme.colorScheme.onSurfaceVariant
 
     Column(
         modifier = modifier
@@ -57,18 +60,18 @@ fun RecentSearchesSection(
             fontSize = 11.sp,
             fontWeight = FontWeight.Bold,
             letterSpacing = 0.05.em,
-            color = Slate500,
+            color = sectionTitleColor,
             modifier = Modifier.padding(bottom = 10.dp)
         )
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(AppWhite, shape = RoundedCornerShape(8.dp))
-                .border(1.dp, Slate200, shape = RoundedCornerShape(8.dp))
+                .background(containerBg, shape = RoundedCornerShape(8.dp))
+                .border(1.dp, containerBorder, shape = RoundedCornerShape(8.dp))
         ) {
             history.forEachIndexed { index, recentQuery ->
                 if (index > 0) {
-                    HorizontalDivider(thickness = 1.dp, color = Slate100)
+                    HorizontalDivider(thickness = 1.dp, color = dividerColor)
                 }
                 Row(
                     modifier = Modifier
@@ -81,13 +84,13 @@ fun RecentSearchesSection(
                         imageVector = Icons.Default.History,
                         contentDescription = null,
                         modifier = Modifier.size(16.dp),
-                        tint = Slate400
+                        tint = iconTint
                     )
                     Spacer(modifier = Modifier.width(14.dp))
                     Text(
                         text = recentQuery,
                         fontSize = 14.sp,
-                        color = Slate900,
+                        color = textColor,
                         modifier = Modifier.weight(1f)
                     )
                     IconButton(
@@ -98,7 +101,7 @@ fun RecentSearchesSection(
                             imageVector = Icons.Default.Close,
                             contentDescription = stringResource(R.string.search_remove_recent, recentQuery),
                             modifier = Modifier.size(16.dp),
-                            tint = Slate400
+                            tint = iconTint
                         )
                     }
                 }

@@ -3,11 +3,12 @@
 **Author:** Dinakar Prasad Maurya  
 **Project:** Yumemi Android Engineer Code Check — Enterprise Modernization  
 
-> 💡 **Usage:** Review these concise slide notes below. Once approved, copy directly into Google Slides, Keynote, or PowerPoint and export to `docs/presentation/yumemi-android-challenge-presentation.pdf`.
+> 💡 **Presentation Files:** The ready-to-present widescreen PowerPoint deck is available at [**`yumemi-android-challenge-presentation.pptx`**](./yumemi-android-challenge-presentation.pptx), and the exported presentation PDF is available at [**`yumemi-android-challenge-presentation.pptx.pdf`**](./yumemi-android-challenge-presentation.pptx.pdf). Both incorporate high-resolution screenshots from `docs/screenshots/`, video showcases from `docs/videos/`, and speaker notes for every slide.
+
 
 ---
 
-## 🎞️ Comprehensive Slide Deck (10 Slides)
+## 🎞️ Comprehensive Slide Deck (11 Slides)
 
 ---
 
@@ -43,6 +44,7 @@
 - **Native Dual Platforms:**
   - **Android:** 100% Jetpack Compose + Material 3 + StateFlow UDF
   - **iOS:** Native SwiftUI companion app (`iosApp/CodeCheck-iOS`) via Swift `async`/`await`
+  - **Visual Artifacts:** Live SwiftUI app on iPhone 17 Pro simulator ([`docs/screenshots/ios/ios-app-demo-using-kmp.png`](../screenshots/ios/ios-app-demo-using-kmp.png)) & Xcode architecture ([`docs/screenshots/ios/ios-app-using-kmp.png`](../screenshots/ios/ios-app-using-kmp.png))
 - **Speaker Note:** *"Our headless KMP architecture shares 50% of the core business, network, and caching logic with iOS while preserving 100% native UI fidelity and performance on both platforms."*
 
 ---
@@ -61,7 +63,7 @@
 - **The Modern AI Pairing Model:**
   - 🤖 **Multi-Tool Orchestration:** Gemini 1.5 (architecture/TDD), Claude Sonnet (refactoring/specs), Copilot (boilerplate)
   - 🛡️ **Zero Secret Leakage & Data Privacy:** Strictly no API tokens, keys, or credentials committed or sent to external LLMs; local development credentials isolated in `local.properties`
-  - ⚖️ **Zero-Trust Verification & Human Accountability:** 100% human accountability; every line of AI code must compile, pass 164+ tests, and survive Detekt static analysis
+  - ⚖️ **Zero-Trust Verification & Human Accountability:** 100% human accountability; every line of AI code must compile, pass 170 automated tests, and survive Detekt static analysis
   - 📚 **Living AI Skills Framework:** Executable skill definitions (`.agents/skills/`, `.claude/skills/`) continuously updated alongside code to prevent architectural drift
 - **Speaker Note:** *"We treat AI as a velocity multiplier bound by strict security guardrails: zero secrets, compliance with Yumemi AI policies, living skill governance, and 100% human accountability."*
 
@@ -69,8 +71,8 @@
 
 ### Slide 6: Quality Gates, Testing Strategy & 0-Defect Verification
 - **Quality Metrics at a Glance:**
-  - 🟢 **164+ Automated Tests** across all modules (JVM tests execute in < 2 seconds)
-  - 🟢 **83.9% Repository-Wide Line Coverage** via Kotlinx Kover (100% domain, 92.6% data)
+  - 🟢 **170 Automated Tests** across all modules (JVM tests execute in < 2 seconds)
+  - 🟢 **81.2% Repository-Wide Line Coverage** via Kotlinx Kover (100% domain, 93.3% data)
   - 🟢 **Turbine Flow Testing & Ktor MockEngine:** Deterministic coroutine testing without live network calls
   - 🟢 **0 Detekt Violations:** Strict static analysis with Compose-specific rules enforced in CI
 - **Enterprise Performance & Scale Dimensions Tested:**
@@ -79,7 +81,7 @@
   - ⚡ **High-Performance Caching & Debounce:** Thread-safe `InMemoryCache` with TTL expiration and 300ms query debounce
   - 🛡️ **Extreme Edge-Case Defense:** Resilient against 63-character language tags, 2-billion star counts, and process death
   - 📊 **Android Studio Performance Profiling:** CPU trace (0 main-thread blocks), Memory heap dumps (0 leaks), Network Inspector (cache hits & 300ms debounce verified), and Layout Inspector (Compose recomposition skipping)
-- **Speaker Note:** *"We achieved 83.9% line coverage and sub-2-second JVM test execution, empirically validating CPU, memory, network, pagination, and caching using Android Studio Profiler."*
+- **Speaker Note:** *"We achieved 81.2% line coverage and sub-2-second JVM test execution, empirically validating CPU, memory, network, pagination, and caching using Android Studio Profiler."*
 
 ---
 
@@ -113,7 +115,15 @@
 
 ---
 
-### Slide 10: Agile Delivery, Team Scalability & Strategic ROI
+### Slide 10: Live Video Showcase & Interactive Demonstrations
+- **Walkthrough Media:**
+  - 📱 **Phone Walkthrough (`docs/videos/demo.mov`, 10.4 MB):** Interactive search with 300ms debounce, seamless Light/Dark mode toggling, dynamic Japanese/English in-app localization, details with Safari/Chrome custom tabs, and offline Star bookmark sync.
+  - 💻 **Tablet & Landscape Walkthrough (`docs/videos/tablet_demo.mov`, 13.9 MB):** 2560x1600 widescreen adaptive layouts, `FlowRow` auto-wrapping, zero-layout-shift (CLS) rendering, and graceful error boundary testing.
+- **Speaker Note:** *"Both demo videos in docs/videos/ provide empirical visual proof of responsiveness, dynamic theme switching, bilingual localization, and fluid 60fps animations across phone and tablet."*
+
+---
+
+### Slide 11: Agile Delivery, Team Scalability & Strategic ROI
 - **100% Delivery Track Record:**
   - All 9 challenge tasks (GitHub #3–#11) completed across 4 agile sprints (63 Story Points)
 - **Engineered for Very Large-Scale Products:**
@@ -122,4 +132,5 @@
   - 📱 **50% Code Reuse:** Unified networking, caching, and domain logic across Android & iOS via Kotlin Multiplatform
   - ⚡ **40% Faster Delivery:** Parallel contract-first development and sub-second JVM test suites cut release cycle lead times
 - **Speaker Note:** *"This project proves that the same architecture powering high-velocity agile sprints is engineered for very large-scale production apps—handling millions of users, distributed teams, and rigorous performance demands."*
+
 

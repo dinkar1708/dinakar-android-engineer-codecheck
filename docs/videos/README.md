@@ -4,7 +4,7 @@ This directory contains demo videos referenced in the project README.
 
 ## Required Video
 
-- **`demo.mp4`** - Main application demo video
+- **`demo.mov`** (or `demo.mp4`) - Main application demo video
 
 ## Video Specifications
 
@@ -135,6 +135,6 @@ ffmpeg -i demo.mp4 -filter:v "setpts=0.66*PTS" docs/videos/demo_fast.mp4
 
 ## Status
 
-- [ ] demo.mp4
+- [x] `demo.mov` (Android Phone full walkthrough: Search, Detail, Star/Unstar, Starred Tab, Theme & Language toggles)
+- [x] `tablet_demo.mov` (Android Tablet 2560x1600 landscape walkthrough: Adaptive layout, Search, Details, Starred Tab, Settings)
 
-Once you add this file, the README video link will work!

@@ -8,34 +8,46 @@ Add the following screenshots to make the README complete:
 
 ### Main Application Screenshots (Top of README)
 
-Place these 4 images in this directory:
+Referenced directly from `app/light/` and `app/dark/`:
 
-1. **`search.png`** - Search screen showing the repository search interface
-2. **`details.png`** - Repository details screen with stats and owner info
-3. **`dark.png`** - App in dark mode (any screen)
-4. **`settings.png`** - Settings screen with theme/language toggles
+1. **`app/light/03-search-results.png`** - Search screen showing repository search interface
+2. **`app/light/05-detail-screen.png`** - Repository details screen with stats and owner info
+3. **`app/dark/03-search-results.png`** - App in dark mode (search results)
+4. **`app/light/06-settings-screen.png`** - Settings screen with theme/language toggles
 
-### iOS Screenshots
+### iOS Screenshots (Kotlin Multiplatform Companion App)
 
-5. **`ios_screenshot.png`** - iOS companion app search screen
-
-### Architecture Diagrams
-
-6. **`kmp_architecture.png`** - Kotlin Multiplatform architecture diagram (optional)
+5. **`ios/ios-app-demo-using-kmp.png`** - Native SwiftUI app running on iPhone 17 Pro simulator with Xcode scheme selector, executing live repository search.
+6. **`ios/ios-app-using-kmp.png`** - Xcode project tree and architecture showing Swift views and `shared_core.framework` integration.
 
 ### Design Specifications & AI Prototypes
 
-7. **`design_specs_collage.png`** - Collage showing Claude design HTML specs (optional)
+7. **`claude-design/`** - Interactive design demo video (`design_demo.mov`) and HTML/CSS component/screen exports (`screens/`).
 
 ### Compose Previews (Fast Development Velocity)
 
-8. Store Android Studio `@Preview` split-editor screenshots in [**`docs/screenshots/compose_preview/`**](./compose_preview/README.md).
-   - **Why Compose Previews:** Sub-second visual feedback loops without waiting for full APK builds or emulator launches; instant verification of all UI states (`Light`, `Dark`, `Loading`, `Empty`, `Error`).
+8. **`compose_preview/preview.png`** - Android Studio `@Preview` split-editor canvas showing sub-second visual feedback loops without emulator lag. Instant verification of all UI states (`Light`, `Dark`, `Loading`, `Empty`, `Error`). See [**`docs/screenshots/compose_preview/README.md`**](./compose_preview/README.md).
 
-### Android Studio Profiler & Developer Tools
+### Android Studio Profiler & Developer Inspection Suite
 
-9. Store Android Studio performance screenshots in [**`docs/screenshots/tools/`**](./tools/README.md).
-   - **Why Profiling Tools:** Telemetry proof of zero main-thread ANRs (CPU), 0 memory leaks (Heap Dump), 300ms debounce & in-memory cache hits (Network Inspector), and Compose recomposition skipping (Layout Inspector).
+9. **`tools/`** - Android Studio performance telemetry captures. See [**`docs/screenshots/tools/README.md`**](./tools/README.md).
+   - **`profiler_overview.png`** & **`profile_home.png`**: Unified telemetry dashboard & process initialization
+   - **`cpu-zero_leaks.png`**: CPU Profiler & System Trace verifying 0 main-thread blocks (<16ms frame time)
+   - **`memory_heap_dump.png`** & **`memory.png`**: Heap Dump & allocation tracking verifying 0 memory leaks
+   - **`network.png`** & **`network_thread_view.png`**: Network Inspector tracing 300ms debounce & cache hits
+
+### Developer Tooling & Build Variants
+
+10. **`dev/build_variants.png`** - Android Studio Build Variants window showing seamless 1-click switching across `dev`, `mock`, `stg`, and `prod` configurations.
+
+### CI Quality Gates & Coverage Proofs
+
+11. **`ci/ci_pipeline.png`** - GitHub Actions automated build, test, and Detekt verification pipeline.
+12. **`coverage/ci_coverage.png`** - Kotlinx Kover test coverage report showing 81.2% repository-wide line coverage.
+
+### GitHub Project & Delivery Board
+
+13. **`github-project/project-board.png`** - GitHub Projects Kanban board tracking agile sprint delivery across issues #3–#11.
 
 ## Video
 
@@ -43,7 +55,7 @@ Place these 4 images in this directory:
 
 Add to `../videos/`:
 
-- **`demo.mp4`** - Short demo video (30-60 seconds) showing:
+- **`demo.mov`** (or `demo.mp4`) - Short demo video (30-60 seconds) showing:
   - App launch (splash screen)
   - Search for repositories
   - View repository details
@@ -116,15 +128,19 @@ Use an image editor (Figma, Photoshop, or online tool) to create a grid collage 
 
 ## Status
 
-- [ ] search.png
-- [ ] details.png
-- [ ] dark.png
-- [ ] settings.png
-- [ ] ios_screenshot.png
-- [ ] kmp_architecture.png (optional)
-- [ ] design_specs_collage.png (optional)
-- [ ] compose_preview/ (Compose @Preview canvas screenshots)
-- [ ] tools/ (Android Studio CPU, Network, Memory, and Layout Inspector captures)
-- [ ] demo.mp4
+- [x] app/light/03-search-results.png
+- [x] app/light/05-detail-screen.png
+- [x] app/dark/03-search-results.png
+- [x] app/light/06-settings-screen.png
+- [x] ios/ios-app-demo-using-kmp.png & ios/ios-app-using-kmp.png (Native iOS SwiftUI companion app via KMP)
+- [x] claude-design/ (Design demo video and screen specs)
+- [x] compose_preview/preview.png (Compose @Preview canvas screenshot)
+- [x] tools/ (Android Studio CPU, Network, Memory Profiler, and Telemetry captures)
+- [x] coverage/ci_coverage.png (Kotlinx Kover code coverage report)
+- [x] ci/ci_pipeline.png (GitHub Actions CI workflow verification)
+- [x] dev/build_variants.png (Product flavors & build variant selector)
+- [x] github-project/project-board.png (GitHub Projects delivery Kanban board)
+- [x] demo.mov (Phone Walkthrough) & tablet_demo.mov (Tablet Walkthrough) in `docs/videos/`
+
 
 Once you add these files, the README will display them automatically!

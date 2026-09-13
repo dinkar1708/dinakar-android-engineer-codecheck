@@ -66,55 +66,76 @@ This project is a comprehensive solution to the **[Yumemi Android Engineer Codin
 
 This application implements **multi-module Clean Architecture** with strict separation of concerns. Modules are organized from core business logic (most important) to UI presentation layers.
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                         :app                                 │
-│               (Android App Entry Point)                      │
-│            Navigation • Hilt DI • Theme Config               │
-└─────────────────────────────────────────────────────────────┘
-                            │
-            ┌───────────────┼───────────────┐
-            │               │               │
-    ┌───────▼──────┐ ┌─────▼─────┐ ┌──────▼────────┐
-    │   :feature:  │ │  :feature: │ │   :feature:   │
-    │    search    │ │   detail   │ │    starred    │
-    └──────┬───────┘ └─────┬──────┘ └──────┬────────┘
-           │               │               │
-           │        ┌──────▼──────┐        │
-           │        │  :feature:  │        │
-           │        │   splash    │        │
-           │        └──────┬──────┘        │
-           │               │               │
-           └───────────────┼───────────────┘
-                           │
-                  ┌────────▼────────┐
-                  │    :core:ui     │
-                  │  Shared Compose │
-                  │   Components    │
-                  └────────┬────────┘
-                           │
-              ┌────────────┼────────────┐
-              │                         │
-      ┌───────▼──────────┐    ┌────────▼────────┐
-      │ :core:designsystem│    │   :core:data    │
-      │   Material 3      │    │  Repositories   │
-      │  Theme & Tokens   │    │  Cache Logic    │
-      └───────────────────┘    └────────┬────────┘
-                                        │
-                          ┌─────────────┼─────────────┐
-                          │                           │
-                  ┌───────▼────────┐        ┌─────────▼────────┐
-                  │  :core:network │        │  :core:domain    │
-                  │  Ktor Client   │        │  Use Cases       │
-                  │  API Service   │        │  Models          │
-                  └────────────────┘        │  (Pure Kotlin)   │
-                                            └──────────────────┘
-                                                     │
-                                            ┌────────▼────────┐
-                                            │  :shared-core   │
-                                            │  KMP Framework  │
-                                            │  (iOS Export)   │
-                                            └─────────────────┘
+```mermaid
+flowchart TB
+    subgraph app["🚀 Application Layer"]
+        APP[":app<br/>Android App Entry Point<br/>Navigation • Hilt DI • Theme"]
+    end
+
+    subgraph features["🎨 Feature Modules (Screens)"]
+        direction LR
+        SEARCH[":feature:search<br/>Search Screen"]
+        DETAIL[":feature:detail<br/>Detail Screen"]
+        STARRED[":feature:starred<br/>Starred Screen"]
+        SPLASH[":feature:splash<br/>Splash Screen"]
+        SETTINGS[":feature:settings<br/>Settings Screen"]
+    end
+
+    subgraph ui["🎭 UI Foundation"]
+        direction LR
+        CORE_UI[":core:ui<br/>Shared Compose<br/>Components"]
+        DESIGN[":core:designsystem<br/>Material 3<br/>Theme & Tokens"]
+    end
+
+    subgraph data["💾 Data Layer"]
+        DATA[":core:data<br/>Repositories<br/>Cache Logic"]
+    end
+
+    subgraph foundation["⚡ Core Foundation (Platform-Agnostic)"]
+        direction LR
+        NETWORK[":core:network<br/>Ktor Client<br/>API Service"]
+        DOMAIN[":core:domain<br/>⭐ Use Cases<br/>Models<br/>(Pure Kotlin)"]
+    end
+
+    subgraph kmp["📱 Multiplatform"]
+        SHARED[":shared-core<br/>KMP Framework<br/>(iOS Export)"]
+    end
+
+    APP --> SEARCH
+    APP --> DETAIL
+    APP --> STARRED
+    APP --> SPLASH
+    APP --> SETTINGS
+
+    SEARCH --> CORE_UI
+    DETAIL --> CORE_UI
+    STARRED --> CORE_UI
+    SPLASH --> CORE_UI
+    SETTINGS --> CORE_UI
+
+    CORE_UI --> DESIGN
+    CORE_UI --> DOMAIN
+
+    SEARCH --> DOMAIN
+    DETAIL --> DOMAIN
+    STARRED --> DOMAIN
+
+    DATA --> NETWORK
+    DATA --> DOMAIN
+
+    NETWORK --> DOMAIN
+
+    SHARED --> DOMAIN
+    SHARED --> NETWORK
+    SHARED --> DATA
+
+    style APP fill:#FF6B6B,stroke:#C92A2A,stroke-width:3px,color:#fff
+    style DOMAIN fill:#51CF66,stroke:#37B24D,stroke-width:3px,color:#000
+    style SHARED fill:#748FFC,stroke:#4C6EF5,stroke-width:2px,color:#fff
+    style DATA fill:#FFA94D,stroke:#FD7E14,stroke-width:2px,color:#000
+    style NETWORK fill:#FFA94D,stroke:#FD7E14,stroke-width:2px,color:#000
+    style CORE_UI fill:#4DABF7,stroke:#1C7ED6,stroke-width:2px,color:#000
+    style DESIGN fill:#4DABF7,stroke:#1C7ED6,stroke-width:2px,color:#000
 ```
 
 ### 📦 Module Details (From Core to UI)
@@ -479,7 +500,20 @@ open iosApp/CodeCheck-iOS.xcodeproj
 
 ## 🤖 AI-Assisted Development Disclosure
 
-In full transparency per [Yumemi's AI policy](https://github.com/yumemi-inc/android-engineer-codecheck#use-of-ai-services), this project leveraged **AI pair programming** (Google Gemini, Claude Code) to accelerate development while maintaining strict quality standards.
+In full transparency per [Yumemi's AI policy](https://github.com/yumemi-inc/android-engineer-codecheck#use-of-ai-services), this project leveraged **AI pair programming** to accelerate development while maintaining strict quality standards.
+
+### AI Tools Used
+
+This project utilized the following AI tools, and we **encourage teams to adopt these tools** for increased productivity:
+
+| AI Tool | Version/Model | Primary Use Case | Usage Scope |
+|:---|:---|:---|:---:|
+| **Google Gemini** | Gemini 1.5 Pro/Flash | Code generation, architecture design, test writing | 🟢 Heavy |
+| **Claude Code** | Claude Sonnet 3.5/4 | Pair programming, refactoring, code review | 🟢 Heavy |
+| **Claude AI** | Claude 3.5 Sonnet | UI/UX design specification export (HTML) | 🟡 Moderate |
+| **GitHub Copilot** | Latest | Code completion, boilerplate generation | 🟡 Moderate |
+
+> **Note:** All AI-generated code was validated through 164+ automated tests, manual code review, and CI/CD quality gates (Detekt, build verification).
 
 ### Agent Framework & Guardrails
 

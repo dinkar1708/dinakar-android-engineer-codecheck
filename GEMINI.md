@@ -1,5 +1,20 @@
 # Android Engineer Code Check — Agent Guidelines & Project Context
 
+## 🤖 AI Tools Used in This Project
+
+This project leverages multiple AI tools for accelerated development. All tools are disclosed per [Yumemi's AI policy](https://github.com/yumemi-inc/android-engineer-codecheck#use-of-ai-services):
+
+| AI Tool | Model/Version | Primary Use Case | Usage Level |
+|:---|:---|:---|:---:|
+| **Google Gemini** | Gemini 1.5 Pro/Flash | Code generation, architecture, test writing | 🟢 Heavy |
+| **Claude Code** | Claude Sonnet 3.5/4 | Pair programming, refactoring, code review | 🟢 Heavy |
+| **Claude AI** | Claude 3.5 Sonnet | UI/UX design spec export (HTML) | 🟡 Moderate |
+| **GitHub Copilot** | Latest | Code completion, boilerplate | 🟡 Moderate |
+
+> **Quality Assurance:** All AI-generated code validated via 164+ automated tests, Detekt static analysis, and CI/CD quality gates.
+
+---
+
 ## Project Overview
 This repository contains the Android Engineer Code Check solution (see [Technical References](./docs/references.md#7-github-api--assessment-standards)).
 It is an Android application for searching GitHub repositories, displaying results, and viewing repository details using GitHub's public Search API (`/search/repositories`).

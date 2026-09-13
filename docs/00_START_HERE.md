@@ -9,7 +9,7 @@
 
 | **If you want to...** | **Go to...** |
 |:---|:---|
-| **Executive Slide Deck (EM Walkthrough)** | [Executive Presentation Deck](./presentation/README.md) 📊 |
+| **Executive Slide Deck (EM Walkthrough)** | [Executive Presentation Deck](./presentation/README.md) 📊 ([Download PPTX](./presentation/yumemi-android-challenge-presentation.pptx) • [Download PDF](./presentation/yumemi-android-challenge-presentation.pptx.pdf)) |
 | **Get started quickly** | [Getting Started](./GETTING_STARTED.md) ⭐ |
 | **Understand the architecture** | [Architecture Overview](./ARCHITECTURE_OVERVIEW.md) ⭐ |
 | **UI/UX & Responsive Design** | [UI/UX Design Specification](./02_project_architecture/design/ui_ux_design_specification.md) 🎨 |

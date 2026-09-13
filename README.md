@@ -10,6 +10,7 @@ Enterprise-grade Clean Architecture • Kotlin Multiplatform • Jetpack Compose
 [![Test Coverage](https://img.shields.io/badge/Coverage-81.2%25-brightgreen)]()
 [![Tests](https://img.shields.io/badge/Tests-170%20Passing-brightgreen)]()
 [![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2B%20MVVM%20%2B%20UDF-blue)]()
+[![Presentation](https://img.shields.io/badge/Presentation-PPTX%20%7C%20PDF-orange)](./docs/presentation/README.md)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.1.0-7F52FF)]()
 [![Compose](https://img.shields.io/badge/Compose-1.7.5-4285F4)]()
 
@@ -85,9 +86,20 @@ All **9 Yumemi coding challenge issues** have been successfully completed and ve
 
 </div>
 
----
+## 📊 Executive Presentation Deck
 
-> 📊 **Executive & Reviewer Overview:** For a 3-minute leadership walkthrough, see the [**Executive Presentation Deck (`docs/presentation/README.md`)**](./docs/presentation/README.md) covering multi-platform architecture, team velocity, quality gates, and technical ROI.
+An executive slide deck and leadership walkthrough covering modernization strategy, Clean Architecture + KMP multiplatform design, sprint delivery velocity, and engineering ROI:
+
+<div align="center">
+
+| 📥 PowerPoint Presentation (`.pptx`) | 📄 Presentation Document (`.pdf`) | 📖 Online Slide Walkthrough |
+|:---:|:---:|:---:|
+| **[▶️ Download PPTX Deck](./docs/presentation/yumemi-android-challenge-presentation.pptx)** | **[▶️ Download PDF Export](./docs/presentation/yumemi-android-challenge-presentation.pptx.pdf)** | **[▶️ Read Presentation Guide](./docs/presentation/README.md)** |
+| 743 KB • 11 Widescreen Slides with Speaker Notes | 2.06 MB • High-Resolution Slide Export | Full Slide Transcripts, Context & Speaker Notes |
+
+</div>
+
+---
 
 ## 🎯 About This Project
 
@@ -594,6 +606,7 @@ Comprehensive documentation is available in [**`docs/`**](./docs/)
 | Document | Description |
 |----------|-------------|
 | **[🌟 START HERE](./docs/00_START_HERE.md)** | Solution overview and reviewer navigation guide |
+| **[📊 Executive Presentation](./docs/presentation/README.md)** | 11-slide leadership deck (**[Download PPTX](./docs/presentation/yumemi-android-challenge-presentation.pptx)** • **[Download PDF](./docs/presentation/yumemi-android-challenge-presentation.pptx.pdf)**) |
 | [Getting Started](./docs/GETTING_STARTED.md) | Build instructions and prerequisites |
 | [Architecture Overview](./docs/ARCHITECTURE_OVERVIEW.md) | System design and technology stack |
 | [Contributing Guide](./docs/CONTRIBUTING.md) | Git workflow, commit conventions, PR templates |
@@ -825,6 +838,7 @@ HTML/CSS design tokens, typography scales, and interactive screen prototypes exp
 
 ## 🔗 Links & Resources
 
+- **Executive Presentation Deck:** [Download PowerPoint (.pptx)](./docs/presentation/yumemi-android-challenge-presentation.pptx) • [Download PDF (.pdf)](./docs/presentation/yumemi-android-challenge-presentation.pptx.pdf) • [Slide Guide](./docs/presentation/README.md)
 - **GitHub Repository:** [dinkar1708/dinakar-android-engineer-codecheck](https://github.com/dinkar1708/dinakar-android-engineer-codecheck)
 - **Project Board:** [Issue Tracker](https://github.com/users/dinkar1708/projects/1/views/1)
 - **Challenge Repository:** [yumemi-inc/android-engineer-codecheck](https://github.com/yumemi-inc/android-engineer-codecheck)

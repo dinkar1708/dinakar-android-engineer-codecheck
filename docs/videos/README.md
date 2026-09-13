@@ -5,6 +5,7 @@ This directory contains demo videos referenced in the project README.
 ## Required Video
 
 - **`demo.mov`** (or `demo.mp4`) - Main application demo video
+- **Quick Demo Stream**: [Direct Stream](https://github.com/user-attachments/assets/e8485c5f-2c3d-429e-ae9c-ee2ce90e4fa8)
 
 ## Video Specifications
 
@@ -135,6 +136,7 @@ ffmpeg -i demo.mp4 -filter:v "setpts=0.66*PTS" docs/videos/demo_fast.mp4
 
 ## Status
 
+- [x] Quick Demo (Online Stream: `https://github.com/user-attachments/assets/e8485c5f-2c3d-429e-ae9c-ee2ce90e4fa8`)
 - [x] `demo.mov` (Android Phone full walkthrough: Search, Detail, Star/Unstar, Starred Tab, Theme & Language toggles)
 - [x] `tablet_demo.mov` (Android Tablet 2560x1600 landscape walkthrough: Adaptive layout, Search, Details, Starred Tab, Settings)
 

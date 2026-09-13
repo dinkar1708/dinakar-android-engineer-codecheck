@@ -19,6 +19,10 @@ Enterprise-grade Clean Architecture • Kotlin Multiplatform • Jetpack Compose
 
 ## 🎥 Demo Videos
 
+### ⚡ Quick Demo
+
+https://github.com/user-attachments/assets/e8485c5f-2c3d-429e-ae9c-ee2ce90e4fa8
+
 Visual walkthroughs demonstrating the application running live across both phone and tablet form factors:
 
 <div align="center">
@@ -839,8 +843,6 @@ See [LICENSE](./LICENSE) for details.
 <div align="center">
 
 **Built with ❤️ using Clean Architecture, Kotlin Multiplatform, and Jetpack Compose**
-
-Submitted for **Yumemi Android Engineer Position**
 
 </div>
 

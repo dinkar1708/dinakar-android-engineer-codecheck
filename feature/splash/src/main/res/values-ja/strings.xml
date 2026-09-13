@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Splash Screen -->
+    <string name="splash_title">リポジトリ検索</string>
+    <string name="splash_subtitle">GitHub 上のリポジトリを検索</string>
+    <string name="splash_api_label">GITHUB REST API V3</string>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Detail Screen -->
+    <string name="detail_top_bar_title">Repository</string>
+    <string name="detail_navigate_back">Navigate back</string>
+    <string name="detail_loading_message">Loading repository details...</string>
+    <string name="detail_avatar_content_description">%1$s avatar</string>
+    <string name="detail_stat_stars">Stars</string>
+    <string name="detail_stat_forks">Forks</string>
+    <string name="detail_stat_watchers">Watchers</string>
+    <string name="detail_stat_open_issues">Open issues</string>
+    <string name="detail_view_on_github">View on GitHub</string>
+    <string name="detail_star">Star repository</string>
+    <string name="detail_unstar">Unstar repository</string>
+    <string name="detail_meta_default_branch">Default branch</string>
+    <string name="detail_meta_last_push">Last push</string>
+    <string name="detail_meta_license">License</string>
+    <string name="detail_meta_size">Size</string>
+    <string name="detail_download">Download</string>
+    <string name="detail_meta_none">None</string>
+    <string name="detail_meta_not_available">N/A</string>
+</resources>

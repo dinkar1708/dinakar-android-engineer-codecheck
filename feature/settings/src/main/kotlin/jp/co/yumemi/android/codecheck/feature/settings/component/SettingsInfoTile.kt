@@ -1,0 +1,75 @@
+package jp.co.yumemi.android.codecheck.feature.settings.component
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
+
+/**
+ * A metadata row tile for application build and system information.
+ */
+@Composable
+fun SettingsInfoTile(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(androidx.compose.material3.MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp))
+            .border(1.dp, androidx.compose.material3.MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(8.dp))
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = label,
+            fontSize = 13.sp,
+            color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = value,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface
+        )
+    }
+}
+
+@Preview(name = "SettingsInfoTile - Light", showBackground = true)
+@Composable
+private fun SettingsInfoTileLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        SettingsInfoTile(
+            label = "Version",
+            value = "1.0-dev (Build 1)",
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+@Preview(name = "SettingsInfoTile - Dark", showBackground = true)
+@Composable
+private fun SettingsInfoTileDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        SettingsInfoTile(
+            label = "Environment",
+            value = "DEVELOPMENT",
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+

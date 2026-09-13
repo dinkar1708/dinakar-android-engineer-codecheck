@@ -19,8 +19,8 @@ flowchart LR
 ```
 
 > [!NOTE]
-> **Yumemi Code Check Context:**  
-> Evaluators appreciate transparent, disciplined, and heavy AI adoption. Using AI across the entire design-to-code pipeline demonstrates modern software engineering velocity while maintaining high architectural rigor and code quality.
+> **Engineering Evaluation Context:**  
+> In accordance with transparent, disciplined AI adoption policies (see [Technical References](../../references.md#7-github-api--assessment-standards)), using AI across the design-to-code pipeline demonstrates modern software engineering velocity while maintaining high architectural rigor and code quality.
 
 ---
 
@@ -45,7 +45,7 @@ Using the HTML/CSS specs as a reference, AI coding assistants (such as **Google 
 - **Automated Testing:** Generating companion unit and Compose UI tests alongside UI components.
 
 ### Stage 4: AI Code Review & Quality Gates
-Before merging, automated AI review agents check the code against Yumemi evaluation guidelines:
+Before merging, automated AI review agents check the code against authoritative evaluation guidelines (see [Technical References](../../references.md#7-github-api--assessment-standards)):
 - Enforcing repository review skills ([`yumemi-code-review`](file:///Users/dinakarmaurya/Documents/Personal/dinakar-android-engineer-codecheck/.agents/skills/yumemi-code-review/SKILL.md), [`review-code`](file:///Users/dinakarmaurya/Documents/Personal/dinakar-android-engineer-codecheck/.claude/skills/review-code/SKILL.md)).
 - Auditing for memory leaks, coroutine cancellation, lifecycle awareness, and clean layer boundaries.
 

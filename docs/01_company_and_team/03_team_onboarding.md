@@ -100,7 +100,7 @@ Mobile engineers operate in close alignment with backend, platform, and QA teams
    - `#qa-releases` — Build distribution notices and Firebase QA verification status.
 2. **Attend Recurring Alignment Sync-ups:**
    - **Mobile ↔ Backend Alignment Sync:** Bi-weekly session to align on upcoming API schemas, breaking change notices, and backend staging deployment schedules.
-   - **Sprint Planning & Retrospectives:** Agile ceremonies following Yumemi collaborative review and retrospective ethics.
+   - **Sprint Planning & Retrospectives:** Agile ceremonies following industry-standard collaborative review and retrospective ethics (see [Collaborative Review Culture](./09_collaborative_review_culture.md)).
 
 ## Week 2: Your First Contribution
 

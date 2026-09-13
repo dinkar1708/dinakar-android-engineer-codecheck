@@ -1,8 +1,7 @@
 # Final Release Checklist & Verification Gate
 
 **Project:** GitHub Repository Search - Android Code Check Solution  
-**Target Role:** Mobile Platform Engineering Lead / Manager  
-**Target Evaluation:** Yumemi Inc. Android Engineer Code Check  
+**Target Evaluation:** Android Engineer Code Check Solution (see [Technical References](../references.md#7-github-api--assessment-standards))  
 **Status:** Ready for Submission  
 
 ---
@@ -47,7 +46,7 @@ The project provides a comprehensive 6-Phase Agile SDLC documentation suite stru
 - [`onboarding.md`](../02_inception/team/onboarding.md) - 3-day engineering team ramp-up plan
 - [`developer_workflow_and_ticket_guide.md`](../02_inception/team/developer_workflow_and_ticket_guide.md) - Agile ticket lifecycle & PR hygiene
 - [`code_review_guidelines.md`](../02_inception/team/code_review_guidelines.md) - Code review standards and checklists
-- [`yumemi_pr_review_culture.md`](../02_inception/team/yumemi_pr_review_culture.md) - Constructive feedback practices
+- [`09_collaborative_review_culture.md`](../01_company_and_team/09_collaborative_review_culture.md) - Constructive feedback practices
 - [`definition_of_done.md`](../02_inception/team/definition_of_done.md) - Definition of Done quality gates
 
 ### Phase 03: Iteration
@@ -111,7 +110,7 @@ xcodebuild -scheme YourApp-Dev -project YourApp/YourApp.xcodeproj -destination '
 
 ## 4. Assessment Deliverables Summary
 
-All 9 Yumemi challenge issues addressed across 4 sprints:
+All 9 challenge issues addressed across 4 sprints (see [Technical References](../references.md#7-github-api--assessment-standards)):
 - Code readability, safety, and bug fixes
 - Architecture modernization (Clean Architecture, Hilt DI, UDF)
 - Multi-module structure with KMP core

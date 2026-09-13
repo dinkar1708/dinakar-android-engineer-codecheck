@@ -115,7 +115,7 @@ A companion **native SwiftUI iOS application** (`iosApp/CodeCheck-iOS.xcodeproj`
 
 **GitHub Project Board:** [Mobile Platform Engineering - Issue Tracker](https://github.com/users/dinkar1708/projects/1/views/1)
 
-The project board tracks all issues, milestones, and implementation progress across the complete SDLC lifecycle. All 9 Yumemi challenge issues plus bonus features are managed through this centralized board.
+The project board tracks all issues, milestones, and implementation progress across the complete SDLC lifecycle. All 9 code challenge issues plus bonus features are managed through this centralized board (see [Technical References](./references.md#7-github-api--assessment-standards)).
 
 ---
 

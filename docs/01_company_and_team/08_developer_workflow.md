@@ -1,7 +1,6 @@
 # Developer Execution Playbook & Ticket Workflow Guide
 
 **Maintainer:** Dinakar Prasad Maurya  
-**Target Role:** モバイルリードエンジニア / Mobile Platform Engineering Lead & Manager  
 **Scope:** Phase 2 (Inception) & Phase 3 (Iteration) Team Enablement  
 
 ---
@@ -159,11 +158,11 @@ Open [`docs/01_company_and_team/05_definition_of_done.md`](./05_definition_of_do
 - [x] Japanese and English strings localized in `res/values/strings.xml` and `res/values-ja/strings.xml`.
 - [x] No memory leaks or retained view references.
 
-### Step 7: Submit PR with Yumemi Review Badges
+### Step 7: Submit PR with Code Review Badges
 Submit a pull request referencing the ticket (`Closes #4`):
 - PR Title: `feat(search): refactor fat fragment to MVVM and UDF (#4)`
 - Use the organization's standard Pull Request template.
-- Follow Yumemi's polite review culture documented in [`09_yumemi_review_culture.md`](./09_yumemi_review_culture.md) using badges (`must`, `nits`, `memo`, `imo`).
+- Follow the collaborative review culture documented in [`09_collaborative_review_culture.md`](./09_collaborative_review_culture.md) using badges (`must`, `nits`, `memo`, `imo`).
 
 ---
 
@@ -201,4 +200,4 @@ Because of our multi-module structure and contract-first interfaces, **Engineer 
 - [Code Review SLA & Guidelines](./04_code_review_guidelines.md)
 - [Enterprise Definition of Done](./05_definition_of_done.md)
 - [Engineering Guardrails & Policies](./06_engineering_guardrails.md)
-- [Yumemi PR Review Culture](./09_yumemi_review_culture.md)
+- [Collaborative Code Review Culture](./09_collaborative_review_culture.md)

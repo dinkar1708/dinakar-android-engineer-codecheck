@@ -3,7 +3,6 @@
 **Document Type:** Pre-Coding System Design & UI/UX Specification  
 **SDLC Phase:** Phase 2 (Inception)  
 **Maintainer:** Dinakar Prasad Maurya  
-**Target Role:** Mobile Platform Engineering Lead & Manager  
 **Tooling References:** Figma Design System, Material Design 3, Apple Human Interface Guidelines  
 
 ---

@@ -1,7 +1,6 @@
 # Architecture Guide: App Modules & Component Responsibilities
 
 **Author:** Dinakar Prasad Maurya  
-**Role:** Mobile Platform Engineering Lead & Manager  
 **Context:** Enterprise Multi-Module Clean Architecture Catalog
 
 ---

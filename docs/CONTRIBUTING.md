@@ -247,7 +247,7 @@ git push origin v1.0.0
 1. **Industry Standard**: Used by Google, major open-source projects
 2. **Clear Intent**: Semantic prefixes show purpose at a glance
 3. **Automation Ready**: Works well with CI/CD tools
-4. **Yumemi Evaluation**: Demonstrates professional Git discipline ✅
+4. **Evaluation Benchmark**: Demonstrates professional Git discipline ✅
 
 ---
 

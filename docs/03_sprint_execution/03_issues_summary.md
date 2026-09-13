@@ -1,6 +1,6 @@
 # Issues Summary
 
-All **9 Yumemi challenge issues** (mapped to **GitHub Issues #3 through #11**) will be addressed through incremental PRs.
+All **9 code challenge issues** (mapped to **GitHub Issues #3 through #11**, see [Technical References](../references.md#7-github-api--assessment-standards)) are tracked and delivered through incremental PRs.
 
 ---
 
@@ -8,9 +8,9 @@ All **9 Yumemi challenge issues** (mapped to **GitHub Issues #3 through #11**) w
 
 > [!NOTE]
 > **Issue Number Mapping & Offset Rationale (+2):**  
-> This repository was initially configured as a **Private** repository. Due to GitHub Actions CI execution and billing limits on private repositories, PR #1 (build fixes) and PR #2 (foundational documentation) were created and merged before running the automated issue copying action (`copy-issues.yml`). Because GitHub allocates a single shared sequential counter for both PRs and Issues, Yumemi Challenge Issues #1 through #9 are tracked as **GitHub Issues #3 through #11**.
+> This repository was initially configured as a **Private** repository. Due to GitHub Actions CI execution and billing limits on private repositories, PR #1 (build fixes) and PR #2 (foundational documentation) were created and merged before running the automated issue copying action (`copy-issues.yml`). Because GitHub allocates a single shared sequential counter for both PRs and Issues, Challenge Issues #1 through #9 are tracked as **GitHub Issues #3 through #11**.
 
-| Yumemi Challenge | GitHub Issue | Title | Level | Status |
+| Challenge Task | GitHub Issue | Title | Level | Status |
 |:---:|:---:|:------|:-----:|:------:|
 | **#1** | [**#3**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/3) | ソースコードの可読性の向上 | 初級 | ✅ Done (PR #17) |
 | **#2** | [**#4**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/4) | ソースコードの安全性の向上 | 初級 | ✅ Done (PR #18) |
@@ -18,9 +18,9 @@ All **9 Yumemi challenge issues** (mapped to **GitHub Issues #3 through #11**) w
 | **#4** | [**#6**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/6) | Fat Fragment の回避 | 初級 | ✅ Done (PR #20) |
 | **#5** | [**#7**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/7) | プログラム構造をリファクタリング | 中級 | ✅ Done (PR #21) |
 | **#6** | [**#8**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/8) | アーキテクチャを適用 | 中級 | ✅ Done (PRs 8.1, 8.2, 8.3) |
-| **#7** | [**#9**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/9) | テストを追加 | 中級 | 🎯 Active / Next |
-| **#8** | [**#10**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/10) | UI をブラッシュアップ | ボーナス | 📋 Planned |
-| **#9** | [**#11**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/11) | 新機能を追加 | ボーナス | 📋 Planned |
+| **#7** | [**#9**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/9) | テストを追加 | 中級 | ✅ Done (PR #22) |
+| **#8** | [**#10**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/10) | UI をブラッシュアップ | ボーナス | ✅ Done (PRs #35, #36, #37) |
+| **#9** | [**#11**](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/11) | 新機能を追加 | ボーナス | ✅ Done (PRs #41, #42) |
 
 **Legend**: 初級 = Beginner, 中級 = Intermediate, ボーナス = Bonus
 

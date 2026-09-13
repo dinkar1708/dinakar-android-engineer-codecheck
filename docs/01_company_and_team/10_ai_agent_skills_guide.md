@@ -12,7 +12,7 @@ As software engineering evolves toward human-AI collaborative development, maint
 
 This project implements an **AI Agent Skills Framework** to achieve:
 1. **Zero Architecture Drift**: Guarantee that AI pairs adhere to Clean Architecture, Unidirectional Data Flow (UDF), and SOLID principles.
-2. **Automated Compliance with Yumemi Evaluation Standards**: Enforce Yumemi's Qiita review criteria, review badges (`[must]`, `[imo]`, `[nits]`, `[memo]`), and memory leak prevention.
+2. **Automated Compliance with Evaluation Standards**: Enforce authoritative review criteria (see [Technical References](../references.md#7-github-api--assessment-standards)), review badges (`[must]`, `[imo]`, `[nits]`, `[memo]`), and memory leak prevention.
 3. **Reproducible Excellence**: Provide deterministic instructions for drafting Architecture Decision Records (ADRs), Conventional Commits, and bilingual Pull Request descriptions.
 
 ---
@@ -26,7 +26,7 @@ The repository provides first-class, standardized skill configurations for:
 - **Core Guidelines**: Root [`GEMINI.md`](../../GEMINI.md).
 - **Active Skills**:
   - [`yumemi-issue-workflow`](../../.agents/skills/yumemi-issue-workflow/SKILL.md): End-to-end TDD implementation guide with atomic PR sizing (<300 lines).
-  - [`yumemi-code-review`](../../.agents/skills/yumemi-code-review/SKILL.md): Comprehensive review checklist against Yumemi Qiita evaluation criteria.
+  - [`yumemi-code-review`](../../.agents/skills/yumemi-code-review/SKILL.md): Comprehensive review checklist benchmarked against authoritative evaluation criteria.
 
 ### 2. Anthropic Claude Code (`.claude/skills/`)
 - **Format**: Official Claude Code Skill standard (`SKILL.md` with YAML frontmatter).
@@ -97,6 +97,6 @@ All AI skills reference concrete locations in the codebase. When referencing or 
 2. **When Writing an Architecture Decision**:
    Ask the AI assistant: *"Follow the `create-adr` skill to document our decision on [topic]."*
 3. **When Reviewing Code or Preparing a PR**:
-   Ask the AI assistant: *"Follow the `review-code` skill to perform a Yumemi code review on the latest git diff."*
+   Ask the AI assistant: *"Follow the `review-code` skill to perform a comprehensive code review on the latest git diff."*
 4. **When Drafting Commits & PRs**:
    Ask the AI assistant: *"Follow `write-commit` and `create-pr` to prepare the commit message and PR description."*

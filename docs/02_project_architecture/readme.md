@@ -8,7 +8,7 @@
 
 ## 🏗️ Architecture Overview
 
-This section contains the comprehensive technical blueprints for the modernization of the Yumemi code check repository into an enterprise-grade mobile application.
+This section contains the comprehensive technical blueprints for the modernization of the code check repository into an enterprise-grade mobile application (see [Technical References](../references.md#7-github-api--assessment-standards)).
 
 ```mermaid
 flowchart TD

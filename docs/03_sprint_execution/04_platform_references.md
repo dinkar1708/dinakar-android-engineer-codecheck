@@ -1,14 +1,13 @@
 # Architecture & Platform Engineering References
 
 **Maintainer:** Dinakar Prasad Maurya  
-**Target Role:** モバイルリードエンジニア / Mobile Platform Engineering Lead & Manager  
 **SDLC Phase:** Phase 1 (Concept) & Phase 2 (Inception) Architectural Foundation  
 
 ---
 
 ## 1. Executive Summary & Foundational Philosophy
 
-Modern enterprise mobile applications across global technology leaders (Google, Apple, Netflix, Slack, Block/Square) and prominent Japanese engineering organizations (LINE, Mercari, Yumemi) demand rigorous adherence to established platform conventions, defensive software engineering guardrails, and industry architectural standards. 
+Modern enterprise mobile applications across global technology leaders (Google, Apple, Netflix, Slack, Block/Square) and prominent engineering organizations (LINE, Mercari, CyberAgent) demand rigorous adherence to established platform conventions, defensive software engineering guardrails, and industry architectural standards. 
 
 This repository is architected upon four foundational pillars:
 1. **Google Official Android Architecture**: Modern Unidirectional Data Flow (UDF), Layered Clean Architecture (UI, Domain, Data), and reactive state handling via Kotlin Coroutines and StateFlow.
@@ -182,7 +181,7 @@ graph TD
   * Industry benchmarks on Retrofit, OkHttp, Moshi, and modern dependency injection.
 
 ### 5.3 Japanese & Global Mobile Engineering Standards & Case Studies
-* **Yumemi Android Engineer Code Check Evaluation Guide (Qiita - Lead Reviewer blendthink)**: [https://qiita.com/blendthink/items/aa70b8b3106fb4e3555f](https://qiita.com/blendthink/items/aa70b8b3106fb4e3555f)
+* **Upstream Code Check Evaluation Guide (Qiita Reference)**: [https://qiita.com/blendthink/items/aa70b8b3106fb4e3555f](https://qiita.com/blendthink/items/aa70b8b3106fb4e3555f) (see [Technical References](../references.md#7-github-api--assessment-standards))
   * Specific criteria for code readability (naming, conventions), code safety (null safety, lifecycle management), bug fixes, architecture, and testing.
 * **Slack Engineering - Mobile Modularization at Enterprise Scale (Project Duplo)**:
   * [Stabilize, Modularize, Modernize: Scaling Slack's Mobile Codebases](https://slack.engineering/stabilize-modularize-modernize-scaling-slacks-mobile-codebases-2/)

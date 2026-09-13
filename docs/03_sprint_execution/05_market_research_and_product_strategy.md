@@ -120,9 +120,10 @@ Our application implements a scalable multi-module Clean Architecture topology:
 - Custom Gradle convention plugins (`build-logic`) eliminate 70% of boilerplate in module build files.
 - Upgrading compiler targets (e.g., Java 17/21 compatibility) is done once in convention plugins and automatically propagates across all 8 modules.
 
-### 2. Resilient Layouts Are a Core Quality Attribute
-- Mobile interfaces must gracefully handle multilingual length expansion (e.g., German/Japanese text expansion) and user-generated data edge cases.
-- Using `@OptIn(ExperimentalLayoutApi::class) FlowRow` paired with `TextOverflow.Ellipsis` ensures intrinsic layout wrapping that never produces clipped or distorted cards.
+### 2. Resilient Layouts & Responsive Multi-Device Design
+- **Multi-Device & Dual-Orientation Testing:** Real-world mobile applications must execute consistently on both mobile phones and tablet form factors. The application UI was engineered and validated on both Medium Phone (`emulator-5554`) and Pixel Tablet (`emulator-5556`) viewports, across both **Vertical (Portrait)** and **Horizontal (Landscape)** orientations.
+- **Handling Data Variability & Dynamic Wrapping:** Mobile interfaces must gracefully handle multilingual length expansion (e.g., German/Japanese text expansion) and extreme user-generated data. Using `@OptIn(ExperimentalLayoutApi::class) FlowRow` paired with `TextOverflow.Ellipsis` ensures intrinsic layout wrapping (wrapping long tags onto a second line) so cards never suffer pathological elongation on compact screens or orientation changes.
+- **Scroll Boundaries in Landscape:** Detail and search screens bound vertical content via `verticalScroll(rememberScrollState())` and `LazyColumn`, guaranteeing that software keyboards and horizontal orientations never clip UI elements or trigger overflow errors.
 
 ### 3. Reviewer & Evaluator Empathy
 - Evaluators should never have to create personal GitHub access tokens or debug rate-limit errors to review a technical assessment.

@@ -6,15 +6,20 @@ This document explains what screenshots to capture and where to store them for p
 
 ```
 docs/screenshots/
-├── app/                    # Application UI screenshots
-│   ├── light/              # Light theme screenshots
-│   ├── dark/               # Dark theme screenshots
-│   ├── landscape/          # Landscape orientation
-│   └── portrait/           # Portrait orientation
-├── coverage/               # Test coverage reports
-│   └── code-coverage.png
-└── ci/                     # CI/CD pipeline screenshots
-    └── github-actions.png
+├── app/                        # Production Android App UI screenshots
+│   ├── light/                  # Light theme screens (Search, Detail, Starred, Settings)
+│   ├── dark/                   # Dark theme screens
+│   └── landscape/              # Multi-device & tablet landscape orientation
+├── claude-design/              # 🎨 Claude Design / AI prototyping concept mockups
+│   ├── screens/                # Full screen concept exports
+│   └── components/             # Atomic component previews (RepoCard, StatCard, Palette)
+├── comparisons/                # 🔄 Side-by-Side Visual Fidelity (Claude Design vs Compose)
+├── ios/                        # 🍏 Native iOS SwiftUI Companion App Screenshots
+│   ├── light/
+│   └── dark/
+├── demos/                      # 🎥 Walkthrough videos (MP4) and animated GIFs (e.g. app.gif)
+├── coverage/                   # 📊 Test coverage reports (Kotlinx Kover / Jacoco)
+└── ci/                         # 🚀 GitHub Actions CI pipeline execution proofs
 ```
 
 ## Required Screenshots for Documentation

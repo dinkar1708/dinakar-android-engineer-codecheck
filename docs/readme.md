@@ -91,6 +91,7 @@ This documentation structure is designed to be **platform-agnostic** and can be 
 - **New to this repository?** Start here: **[00_START_HERE.md](./00_START_HERE.md)** ⭐
 - **How to build & test locally?** See: **[GETTING_STARTED.md](./GETTING_STARTED.md)**
 - **System design & data flow:** See: **[ARCHITECTURE_OVERVIEW.md](./ARCHITECTURE_OVERVIEW.md)**
+- **Screenshots & Media Assets:** See: **[screenshots/README.md](./screenshots/README.md)** 📸
 - **Market Research & Product Strategy:** See: **[03_sprint_execution/05_market_research_and_product_strategy.md](./03_sprint_execution/05_market_research_and_product_strategy.md)** 📊
 - **Contributing & Git branching:** See: **[CONTRIBUTING.md](./CONTRIBUTING.md)**
 - **Comprehensive technical references:** See: **[03_sprint_execution/04_platform_references.md](./03_sprint_execution/04_platform_references.md)**

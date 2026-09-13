@@ -38,7 +38,7 @@ The project provides a comprehensive 6-Phase Agile SDLC documentation suite stru
 - [`004_headless_kmp_boundary.md`](../02_inception/adr/004_headless_kmp_boundary.md) - ADR: Headless KMP shared domain engine
 - [`005_product_flavors_strategy.md`](../02_inception/adr/005_product_flavors_strategy.md) - ADR: Isolated dev, mock, and prod flavors
 - [`006_jetpack_compose_migration.md`](../02_inception/adr/006_jetpack_compose_migration.md) - ADR: Declarative UI migration
-- [`screenshots_guide.md`](../02_inception/screenshots/screenshots_guide.md) - Visual proof across light, dark, and landscape
+- [`screenshots_guide.md`](../screenshots/screenshots_guide.md) - Visual proof across light, dark, and landscape
 - [`01_clean_architecture_and_udf.md`](../02_inception/architecture/01_clean_architecture_and_udf.md) - Clean architecture and MVI/UDF
 - [`02_kmp_shared_engine.md`](../02_inception/architecture/02_kmp_shared_engine.md) - KMP shared business logic specifications
 - [`03_dependency_injection_hilt.md`](../02_inception/architecture/03_dependency_injection_hilt.md) - Dependency injection setup and graph

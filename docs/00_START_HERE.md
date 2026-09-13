@@ -7,10 +7,11 @@
 
 ## Quick Navigation
 
-| If you want to... | Go to... |
+| **If you want to...** | **Go to...** |
 |:---|:---|
 | **Get started quickly** | [Getting Started](./GETTING_STARTED.md) ⭐ |
 | **Understand the architecture** | [Architecture Overview](./ARCHITECTURE_OVERVIEW.md) ⭐ |
+| **UI/UX & Responsive Design** | [UI/UX Design Specification](./02_project_architecture/design/ui_ux_design_specification.md) 🎨 |
 | **Market Research & Strategy** | [Market Research & Product Strategy](./03_sprint_execution/05_market_research_and_product_strategy.md) 📊 |
 | **iOS Companion Demo** | [Native iOS Companion (KMP)](../iosApp/README.md) 🍏 |
 | **See what's been done** | [Issues Summary](./03_sprint_execution/03_issues_summary.md) ⭐ |
@@ -44,10 +45,11 @@ This solution addresses all **9 code challenge issues** through a structured, in
 1. **Gradle 8.5 + Java 17/21 Compatibility** ✓
 2. **Multi-Module Clean Architecture** (8 distinct modules) ✓
 3. **100% Jetpack Compose** (Material 3 with light/dark theme) ✓
-4. **Hilt Dependency Injection** ✓
-5. **Comprehensive Testing** (164+ automated tests, Turbine, MockEngine, Robolectric, E2E) ✓
-6. **100% Offline Mock Flavor** (12 edge cases, deterministic testing) ✓
-7. **KMP Cross-Platform Headless Architecture** (Shared domain/network/data with native SwiftUI iOS demonstration app) ✓
+4. **Responsive & Adaptive Multi-Device Design** (Engineered and tested on Phone & Tablet across both Vertical Portrait and Horizontal Landscape orientations, featuring defensive `FlowRow` auto-wrapping) ✓
+5. **Hilt Dependency Injection** ✓
+6. **Comprehensive Testing** (164+ automated tests, Turbine, MockEngine, Robolectric, E2E) ✓
+7. **100% Offline Mock Flavor** (12 edge cases, deterministic testing) ✓
+8. **KMP Cross-Platform Headless Architecture** (Shared domain/network/data with native SwiftUI iOS demonstration app) ✓
 
 ---
 

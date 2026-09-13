@@ -84,9 +84,9 @@ Zero automated tests and untestable monolithic code structure. Needs comprehensi
 
 ## Issue #8: [GitHub #10 — UI をブラッシュアップ](https://github.com/dinkar1708/dinakar-android-engineer-codecheck/issues/10)
 
-**UI Polish**
+**UI Polish & Responsive Multi-Device Design**
 
-Uses legacy XML layouts with no dark mode or localization support. UI needs modernization with better theming and internationalization.
+Migrated legacy XML layouts to 100% Jetpack Compose with Material 3 theming, dark mode support, and dynamic runtime bilingual localization (English/日本語). Thoroughly engineered and validated for **responsive design across Mobile Phones and Tablets** in both **Vertical (Portrait) and Horizontal (Landscape)** orientations with adaptive `FlowRow` content wrapping and landscape scroll defense.
 
 ---
 
@@ -94,7 +94,7 @@ Uses legacy XML layouts with no dark mode or localization support. UI needs mode
 
 **Bonus Features**
 
-Opportunity to add production-ready enhancements: in-app browsing, repository sorting, user preferences, offline support, and testing infrastructure improvements.
+Added production-ready enhancements: persistent repository bookmarking (Starred), Chrome Custom Tabs for external GitHub URLs, bottom navigation tabs, dynamic runtime theme and language settings, 100% offline mock flavor (with 12 deterministic edge cases), and a native iOS SwiftUI companion app consuming shared KMP business logic.
 
 ---
 
@@ -104,5 +104,5 @@ Opportunity to add production-ready enhancements: in-app browsing, repository so
 - [x] CI/CD automated pipeline
 - [x] Sprint 1: Code health & readability (GitHub #3, #4, #5)
 - [x] Sprint 2: Architecture & modularity (GitHub #6, #7, #8 — PRs 8.1, 8.2, 8.3)
-- [ ] Sprint 3: Testing & UI polish (GitHub #9, #10)
-- [ ] Sprint 4: Bonus features & Release v1.0.0 (GitHub #11)
+- [x] Sprint 3: Testing & UI polish (GitHub #9, #10)
+- [x] Sprint 4: Bonus features & Release v1.0.0 (GitHub #11)

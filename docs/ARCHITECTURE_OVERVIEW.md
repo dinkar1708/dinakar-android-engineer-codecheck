@@ -48,6 +48,7 @@ This project starts as a single-module application and will evolve through PRs:
 - **UI Framework**: 100% Jetpack Compose with Material 3 design tokens.
 - **Pattern**: Unidirectional Data Flow (UDF). ViewModels expose immutable `StateFlow<UiState>` and consume user actions (`UiIntent`).
 - **Lifecycle Resilience**: Uses `SavedStateHandle` to preserve search state across process recreation.
+- **Responsive & Multi-Device Design**: Engineered and tested on Phone and Tablet viewports across both Vertical (Portrait) and Horizontal (Landscape) screens, utilizing adaptive `FlowRow` content wrapping and bounded scroll containers.
 
 ### 2. Domain Layer (Pure Kotlin)
 - **Zero Framework Coupling**: Completely free from Android framework dependencies (`android.*`).

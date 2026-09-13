@@ -37,6 +37,7 @@ Instead of relying solely on static image mockups or redline sheets, designs are
   - **Preserves Tokens:** Exact hex colors, alpha transparencies, padding, and corner radii remain unambiguous.
   - **Instant Visual Verification:** Can be previewed in any browser and inspected using developer tools before writing mobile code.
   - **Machine-Readable:** AI coding agents can read and parse HTML/CSS directly without the ambiguity of static screenshots.
+- **Repository Artifacts:** The complete interactive prototype suite is accessible under [**`docs/02_project_architecture/design/html/`**](./html/README.md) (open [**`00 Index.html`**](./html/00%20Index.html) in any browser).
 
 ### Stage 3: AI-Assisted Native Code Implementation
 Using the HTML/CSS specs as a reference, AI coding assistants (such as **Google Gemini / Antigravity CLI**, **Anthropic Claude Code**, or **Cursor / GitHub Copilot**) translate the design into native Android code:
@@ -78,5 +79,6 @@ AI acts as a force multiplier, while the human engineer retains architectural ac
 
 ## 🔗 Related Documentation
 - [UI/UX Design Specification & Architecture](./ui_ux_design_specification.md)
+- [Interactive HTML Design Prototypes (`html/`)](./html/README.md)
 - [Design System & Material 3 Theming Specification](../features/03_design_system_and_theming.md)
 - [AI Agent Skills Framework Standard](../../01_company_and_team/10_ai_agent_skills_guide.md)

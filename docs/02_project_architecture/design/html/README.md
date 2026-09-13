@@ -30,9 +30,16 @@ This directory contains all UI/UX design specifications for the application.
 ## For Developers
 
 When implementing features, reference the corresponding design file:
-- Feature specifications in `docs/04_features/` or `docs/05_specifications/` should reference these design files
+- Feature specifications in [`docs/02_project_architecture/features/`](../features/readme.md) reference these design files
 - Example: "See design: `docs/02_project_architecture/design/html/02 MainScreen.html`"
 
 ## Workflow
 
-Designer → Export HTML → Commit to this folder → Developer implements from specs
+Designer → Export HTML → Commit to this folder (`html/`) → Developer implements from specs
+
+---
+
+## 🔗 Related Documentation
+- [UI/UX Design Specification & Architecture](../ui_ux_design_specification.md)
+- [AI-Assisted Design-to-Code Workflow](../ai_assisted_design_workflow.md)
+- [Design System & Material 3 Theming Specification](../../features/03_design_system_and_theming.md)

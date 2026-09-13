@@ -36,18 +36,35 @@ In production environments, UI engineering references a centralized Figma projec
   - **Page 05 - iOS Specs:** SwiftUI Apple Human Interface screens (light and dark mode).
   - **Page 06 - Handoff & Redlines:** Exact pixel dimensions, padding, corner radii, and token keys.
 
+### 2.2 Interactive HTML/CSS Design Prototypes
+In addition to Figma, all screen and component designs are provided as interactive, standalone HTML/CSS specifications in [`./html/`](./html/README.md):
+- **[Interactive Design Portal (`00 Index.html`)](./html/00%20Index.html)**: Browser-based portal linking all screen mockups.
+- **Screen Prototypes:**
+  - [`01 SplashScreen.html`](./html/01%20SplashScreen.html) - Branded startup experience
+  - [`02 MainScreen.html`](./html/02%20MainScreen.html) - Bottom navigation frame
+  - [`03 SearchScreen.html`](./html/03%20SearchScreen.html) - Repository search & discovery
+  - [`04 StarredScreen.html`](./html/04%20StarredScreen.html) - Starred bookmarks collection
+  - [`05 DetailScreen.html`](./html/05%20DetailScreen.html) - Repository detail view
+  - [`06 SettingsScreen.html`](./html/06%20SettingsScreen.html) - Dynamic theme & language preferences
+- **Component Specifications:** [`Common_AppIcon.html`](./html/Common_AppIcon.html), [`Common_Chip.html`](./html/Common_Chip.html), [`Common_IconRow.html`](./html/Common_IconRow.html), [`Common_MetaRow.html`](./html/Common_MetaRow.html), [`Common_Palette.html`](./html/Common_Palette.html), [`Common_RepoCard.html`](./html/Common_RepoCard.html), [`Common_StatCard.html`](./html/Common_StatCard.html).
+
 ---
 
 ## 3. User Journey & Screen Navigation Flow
 
 ```mermaid
-flowchart LR
-    Splash["01. Splash Screen<br/>(Branded Startup)"] --> Search["02. Repository Search<br/>(Live Search, Filter Chips)"]
-    Search -->|Tap Repository Item| Detail["03. Repository Detail<br/>(Hero, Metrics, Language)"]
-    Search -->|Tap Settings Icon| Settings["04. Settings View<br/>(Theme, Language Switcher)"]
-    Detail -->|Tap View on GitHub| Browser["05. Chrome Custom Tabs / Safari<br/>(In-App Browser Fallback)"]
-    Detail -->|Back Navigation| Search
-    Settings -->|Back Navigation| Search
+flowchart TD
+    Splash["01. Splash Screen<br/>(Branded Startup)"] --> Main["02. Main Screen<br/>(Material 3 NavigationBar)"]
+    subgraph Tabs["Top-Level Navigation Tabs"]
+        Search["Search Tab<br/>(Live Search, Filter Chips, LazyColumn)"]
+        Starred["Starred Tab<br/>(Bookmarked Repositories, Persistence)"]
+        Settings["Settings Tab<br/>(Theme Switcher, Bilingual Locale)"]
+    end
+    Main --> Tabs
+    Search -->|Tap Repository Item| Detail["03. Repository Detail<br/>(Hero Avatar, 2x2 Metrics, FlowRow)"]
+    Starred -->|Tap Repository Item| Detail
+    Detail -->|Tap View on GitHub| Browser["04. Chrome Custom Tabs / Safari<br/>(In-App Browser Fallback)"]
+    Detail -->|Back Navigation| Main
 ```
 
 ### 3.1 State Progression by Screen
@@ -62,12 +79,29 @@ Each screen defines explicit UI states before engineering commences:
 
 ## 4. Screen-by-Screen UI Specifications
 
-### 4.1 Screen 01: Repository Search & Discovery View
+### 4.1 Screen 01: Application Splash Screen
+- **Reference Prototype:** [`01 SplashScreen.html`](./html/01%20SplashScreen.html)
+- **Branded Startup:** Centered GitHub Octocat vector logo with circular branding container.
+- **Smooth Transition:** Fades seamlessly into `MainScreen` upon initialization.
+
+---
+
+### 4.2 Screen 02: Main Screen & Bottom Navigation Bar
+- **Reference Prototype:** [`02 MainScreen.html`](./html/02%20MainScreen.html)
+- **Material 3 `NavigationBar`:**
+  - Tab 1: **Search** (`Icons.Default.Search`)
+  - Tab 2: **Starred** (`Icons.Default.Star`)
+  - Tab 3: **Settings** (`Icons.Default.Settings`)
+- **State Preservation:** Tab switching preserves scroll position and search results without recreation.
+
+---
+
+### 4.3 Screen 03: Repository Search & Discovery View
+- **Reference Prototype:** [`03 SearchScreen.html`](./html/03%20SearchScreen.html)
 
 #### Layout & Hierarchy
 - **Top App Bar:**
   - Integrated Search Field: Full-width search bar with leading search icon and trailing clear button (`X`).
-  - Settings Action: Trailing icon button navigating to application settings.
 - **Filter Chips Bar (Horizontal Scroll):**
   - Interactive filter chips allowing dynamic sorting: `All`, `Most Stars`, `Most Forks`, `Recently Updated`.
 - **Content Area:**
@@ -76,6 +110,7 @@ Each screen defines explicit UI states before engineering commences:
   - **Populated State:** High-performance lazy list rendering repository cards.
 
 #### Repository Item Card Redline Specs
+- **Reference Component:** [`Common_RepoCard.html`](./html/Common_RepoCard.html)
 - **Container:**
   - Background: `colorSurfaceContainerLow` (Light: `#F3F4F6`, Dark: `#1E222B`).
   - Corner Radius: `12dp` (`RoundedCornerShape(12.dp)`).
@@ -86,7 +121,7 @@ Each screen defines explicit UI states before engineering commences:
   - Owner Avatar: `40x40dp` circular image with placeholder circle while loading.
   - Repository Full Name: `titleMedium` (16sp, SemiBold), single line with ellipsis.
   - Description: `bodyMedium` (14sp, Regular), max 2 lines with ellipsis.
-  - Metadata Row:
+  - Metadata Row (`FlowRow`):
     - Language Dot: `8x8dp` circular color pill matching GitHub linguistic colors (e.g. Kotlin: `#A97BFF`, Swift: `#F05138`, TypeScript: `#3178C6`).
     - Language Text: `labelMedium` (12sp, Medium).
     - Star Badge: Star icon (`16dp`) + formatted count (e.g. `12.4k`) in `labelMedium`.
@@ -94,19 +129,29 @@ Each screen defines explicit UI states before engineering commences:
 
 ---
 
-### 4.2 Screen 02: Repository Detail View
+### 4.4 Screen 04: Starred Repositories (Bookmarks) View
+- **Reference Prototype:** [`04 StarredScreen.html`](./html/04%20StarredScreen.html)
+- **Content Area:**
+  - **Empty State:** Illustrated star graphic with prompt: *"No starred repositories yet. Bookmark repositories to view them offline."*
+  - **Populated State:** Lazy list of bookmarked repository cards with quick un-star action and navigation to detail.
+
+---
+
+### 4.5 Screen 05: Repository Detail View
+- **Reference Prototype:** [`05 DetailScreen.html`](./html/05%20DetailScreen.html)
 
 #### Layout & Hierarchy
 - **Top App Bar:**
   - Leading navigation icon (`ArrowBack` on Android, `< Back` chevron on iOS).
   - Title: Repository short name (`titleMedium`).
-  - Trailing Action: Share repository link.
+  - Trailing Action: Star / Unstar bookmark button and Share repository link.
 - **Header Section (Owner & Name):**
   - Large Centered Owner Avatar: `88x88dp` circular shape with a `2dp` subtle border outline.
   - Repository Name: `headlineSmall` (24sp, Bold), centered.
   - Owner Username: `titleSmall` (14sp, Medium), muted text.
   - Repository Description: `bodyLarge` (16sp, Regular), full text wrapping with proper line spacing (`24sp` line height).
 - **Metric Tiles Grid (2x2 Matrix):**
+  - Reference Component: [`Common_StatCard.html`](./html/Common_StatCard.html)
   - 4 distinct metric cards displaying critical stats:
     1. **Stars:** Star icon + numerical count + label *"Stars"*.
     2. **Watchers:** Eye icon + numerical count + label *"Watchers"*.
@@ -123,7 +168,8 @@ Each screen defines explicit UI states before engineering commences:
 
 ---
 
-### 4.3 Screen 03: Application Settings View
+### 4.6 Screen 06: Application Settings View
+- **Reference Prototype:** [`06 SettingsScreen.html`](./html/06%20SettingsScreen.html)
 
 - **Appearance Section:**
   - Dark Theme Selector: Segmented Button / Radio Group: `System Default`, `Light Mode`, `Dark Mode`.
@@ -229,6 +275,9 @@ Before coding any screen or component, engineers must verify:
 ## Related Architectural Documents
 
 - [Master Documentation Portal](../../readme.md) - Complete SDLC index
+- [Interactive HTML Design Prototypes (`html/`)](./html/README.md) - Complete HTML/CSS prototype bundle
+- [AI-Assisted Design-to-Code Workflow](./ai_assisted_design_workflow.md) - AI design-to-code pipeline
+- [Feature Spec: Design System & Theming](../features/03_design_system_and_theming.md) - Compose token implementation
 - [Architecture Blueprint: Clean Architecture & UDF](../architecture/01_clean_architecture_and_udf.md) - State management implementation
 - [Architecture Blueprint: Tech Stack Matrix](../architecture/04_tech_stack_and_libraries.md) - Library selection
 - [Developer Workflow Playbook](../../01_company_and_team/08_developer_workflow.md) - Coding and ticket lifecycle

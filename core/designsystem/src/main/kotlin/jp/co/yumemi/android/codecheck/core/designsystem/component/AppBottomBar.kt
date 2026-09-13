@@ -34,7 +34,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import jp.co.yumemi.android.codecheck.core.designsystem.R
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 
@@ -61,6 +60,8 @@ fun AppBottomBar(
         color = androidx.compose.material3.MaterialTheme.colorScheme.surface,
         modifier = modifier.fillMaxWidth()
     ) {
+        val dimensions = jp.co.yumemi.android.codecheck.core.designsystem.theme.LocalAppDimensions.current
+
         Column {
             HorizontalDivider(
                 thickness = 1.dp,
@@ -70,7 +71,7 @@ fun AppBottomBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding()
-                    .padding(vertical = 10.dp),
+                    .padding(vertical = dimensions.bottomBarVerticalPadding),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AppBottomBarItem(
@@ -107,6 +108,7 @@ private fun AppBottomBarItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val dimensions = jp.co.yumemi.android.codecheck.core.designsystem.theme.LocalAppDimensions.current
     val interactionSource = remember { MutableInteractionSource() }
 
     Column(
@@ -126,20 +128,23 @@ private fun AppBottomBarItem(
                     color = if (isSelected) androidx.compose.material3.MaterialTheme.colorScheme.primary.copy(alpha = 0.12f) else Color.Transparent,
                     shape = RoundedCornerShape(20.dp)
                 )
-                .padding(horizontal = 20.dp, vertical = 5.dp),
+                .padding(
+                    horizontal = dimensions.bottomBarPillHorizontal,
+                    vertical = dimensions.bottomBarPillVertical
+                ),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = label,
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(dimensions.iconMedium),
                 tint = if (isSelected) androidx.compose.material3.MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(dimensions.bottomBarItemSpacing))
         Text(
             text = label,
-            fontSize = 12.sp,
+            fontSize = dimensions.bottomBarLabelSize,
             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
             color = if (isSelected) androidx.compose.material3.MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
         )

@@ -1,11 +1,14 @@
 package jp.co.yumemi.android.codecheck.core.designsystem.theme
 
+import android.content.res.Configuration
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 
 // Unified ColorScheme using the definitive 6-color palette (Common_Palette.dc.html)
 private val AppColorScheme = lightColorScheme(
@@ -72,10 +75,25 @@ fun CodeCheckTheme(
     @Suppress("UNUSED_PARAMETER") dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isTablet = configuration.screenWidthDp >= 600 && configuration.screenHeightDp >= 600
+    val isCompactLandscape = isLandscape && configuration.screenHeightDp < 600 && !isTablet
+
+    val dimensions = when {
+        isCompactLandscape -> CompactLandscapeDimensions
+        isTablet -> TabletDimensions
+        else -> DefaultPhoneDimensions
+    }
+
     val colorScheme = if (darkTheme) DarkAppColorScheme else AppColorScheme
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+    CompositionLocalProvider(
+        LocalAppDimensions provides dimensions
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = Typography,
+            content = content
+        )
+    }
 }

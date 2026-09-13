@@ -49,8 +49,10 @@ fun FilterBar(
     onRemoveLanguage: () -> Unit,
     onRemoveMinStars: () -> Unit,
     onRemoveUpdatedPeriod: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier.fillMaxWidth()
 ) {
+    val dimensions = jp.co.yumemi.android.codecheck.core.designsystem.theme.LocalAppDimensions.current
+
     val barBgColor = MaterialTheme.colorScheme.surface
     val barBorderColor = MaterialTheme.colorScheme.outline
 
@@ -76,7 +78,10 @@ fun FilterBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .horizontalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp, vertical = 12.dp),
+                .padding(
+                    horizontal = dimensions.screenPaddingHorizontal,
+                    vertical = dimensions.spaceSmall
+                ),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -91,18 +96,21 @@ fun FilterBar(
                 border = BorderStroke(1.dp, filterBtnBorder)
             ) {
                 Row(
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
+                    modifier = Modifier.padding(
+                        horizontal = dimensions.spaceMedium,
+                        vertical = dimensions.spaceSmall
+                    ),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(7.dp)
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     SlidersHorizontalIcon(
-                        modifier = Modifier.size(14.dp),
+                        modifier = Modifier.size(dimensions.iconSmall),
                         tint = filterBtnContentColor,
                         handleBackground = filterBtnBg
                     )
                     Text(
                         text = stringResource(R.string.search_filter_button),
-                        fontSize = 13.sp,
+                        fontSize = dimensions.captionSize,
                         fontWeight = FontWeight.SemiBold,
                         color = filterBtnContentColor
                     )

@@ -146,6 +146,8 @@ internal fun SearchScreen(
     val focusManager = LocalFocusManager.current
     var showFilterSheet by rememberSaveable { mutableStateOf(false) }
 
+    val dimensions = jp.co.yumemi.android.codecheck.core.designsystem.theme.LocalAppDimensions.current
+
     val isDarkTheme = MaterialTheme.colorScheme.surface != AppWhite
     val headerBgColor = AppNavy
     val searchBoxBgColor = if (isDarkTheme) Color(0xFF242C3C) else AppWhite
@@ -172,7 +174,10 @@ internal fun SearchScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(headerBgColor)
-                    .padding(horizontal = 16.dp, vertical = 14.dp)
+                    .padding(
+                        horizontal = 16.dp,
+                        vertical = dimensions.spaceSmall
+                    )
             ) {
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
@@ -183,7 +188,10 @@ internal fun SearchScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 14.dp, vertical = 12.dp),
+                            .padding(
+                                horizontal = 14.dp,
+                                vertical = dimensions.spaceSmall
+                            ),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
@@ -294,7 +302,7 @@ internal fun SearchScreen(
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                             verticalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            items(4) {
+                            items(6) {
                                 RepositoryCardSkeleton()
                             }
                         }
@@ -322,7 +330,12 @@ internal fun SearchScreen(
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(start = 20.dp, end = 20.dp, top = 14.dp, bottom = 10.dp),
+                                    .padding(
+                                        start = 20.dp,
+                                        end = 20.dp,
+                                        top = dimensions.spaceSmall,
+                                        bottom = dimensions.spaceSmall
+                                    ),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {

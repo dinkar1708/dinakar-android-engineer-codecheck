@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 import jp.co.yumemi.android.codecheck.core.domain.model.Owner
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
@@ -64,6 +65,8 @@ fun RepositoryCard(
     onClick: (RepositoryItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val dimensions = jp.co.yumemi.android.codecheck.core.designsystem.theme.LocalAppDimensions.current
+
     val ownerLogin = item.owner.login.ifBlank {
         if (item.name.contains("/")) item.name.substringBefore("/") else "unknown"
     }
@@ -86,17 +89,17 @@ fun RepositoryCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(dimensions.cardPadding),
             verticalAlignment = Alignment.Top
         ) {
             // Monogram Avatar / Real Image loading
             MonogramAvatar(
                 imageUrl = item.ownerIconUrl,
                 ownerName = ownerLogin,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(dimensions.avatarSmall)
             )
 
-            Spacer(modifier = Modifier.width(14.dp))
+            Spacer(modifier = Modifier.width(dimensions.itemSpacing))
 
             Column(
                 modifier = Modifier.weight(1f)
@@ -135,7 +138,7 @@ fun RepositoryCard(
 
                 // Description
                 if (!item.description.isNullOrBlank()) {
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(dimensions.spaceSmall))
                     Text(
                         text = item.description.orEmpty(),
                         fontSize = 13.sp,
@@ -146,7 +149,7 @@ fun RepositoryCard(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(dimensions.spaceMedium))
 
                 // Data row: Language, Stars, Forks (wrapping gracefully for long metrics)
                 FlowRow(
@@ -280,9 +283,10 @@ fun MonogramTile(
 fun RepositoryCardSkeleton(
     modifier: Modifier = Modifier
 ) {
-    val placeholderCircle = MaterialTheme.colorScheme.surfaceVariant
-    val barPrimary = MaterialTheme.colorScheme.surfaceVariant
-    val barSecondary = MaterialTheme.colorScheme.outline
+    val isDarkTheme = MaterialTheme.colorScheme.surface != AppWhite
+    val placeholderCircle = if (isDarkTheme) Color(0xFF2B3344) else Color(0xFFE2E8F0)
+    val barPrimary = if (isDarkTheme) Color(0xFF2B3344) else Color(0xFFE2E8F0)
+    val barSecondary = if (isDarkTheme) Color(0xFF333C4E) else Color(0xFFCBD5E1)
 
     Card(
         modifier = modifier.fillMaxWidth(),

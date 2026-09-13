@@ -48,6 +48,7 @@ This project starts as a single-module application and will evolve through PRs:
 - **UI Framework**: 100% Jetpack Compose with Material 3 design tokens.
 - **Pattern**: Unidirectional Data Flow (UDF). ViewModels expose immutable `StateFlow<UiState>` and consume user actions (`UiIntent`).
 - **Lifecycle Resilience**: Uses `SavedStateHandle` to preserve search state across process recreation.
+- **Responsive & Multi-Device Design**: Engineered and tested on Phone and Tablet viewports across both Vertical (Portrait) and Horizontal (Landscape) screens, utilizing adaptive `FlowRow` content wrapping and bounded scroll containers.
 
 ### 2. Domain Layer (Pure Kotlin)
 - **Zero Framework Coupling**: Completely free from Android framework dependencies (`android.*`).
@@ -65,12 +66,12 @@ This project starts as a single-module application and will evolve through PRs:
 
 Rather than a big-bang rewrite, the architecture evolves incrementally across PRs:
 
-1. **Decouple UI from Logic**: Extract business logic and network calls from Fragments into ViewModels (Issue #4).
-2. **Domain & Data Separation**: Separate pure domain entities from Ktor data implementations (Issue #5).
-3. **Clean Architecture & DI**: Wire all layers using Hilt and enforce UDF with `StateFlow` (Issue #6).
-4. **UI Modernization**: Migrate XML layouts to Jetpack Compose (Issue #8).
+1. **Decouple UI from Logic**: Extract business logic and network calls from Fragments into ViewModels
+2. **Domain & Data Separation**: Separate pure domain entities from Ktor data implementations
+3. **Clean Architecture & DI**: Wire all layers using Hilt and enforce UDF with `StateFlow`
+4. **UI Modernization**: Migrate XML layouts to Jetpack Compose
 
-For the complete issue-by-issue breakdown and tracking, see **[Issues Summary](./ISSUES_SUMMARY.md)**.
+> **See [Issues Summary](./03_sprint_execution/03_issues_summary.md) for complete implementation roadmap**
 
 ---
 
@@ -83,6 +84,7 @@ For the complete issue-by-issue breakdown and tracking, see **[Issues Summary](.
 | Jetpack Compose | UI framework |
 | Hilt | Dependency injection |
 | Ktor | HTTP client |
+| Kotlin Multiplatform (KMP) | Headless logic sharing (`:shared-core`) with native iOS SwiftUI app |
 | Detekt | Static analysis |
 
 ---
@@ -99,5 +101,24 @@ Each change:
 
 ---
 
-**Current Phase**: Foundation
-**Next**: Begin Issue #1 (Code Readability)
+## Kotlin Multiplatform & Native iOS Companion Demonstration
+
+The architecture includes a headless KMP core (`:shared-core`) that packages domain models, repository contracts, Ktor networking, and query caching as a universal Apple native binary (`shared_core.framework`).
+
+A companion **native SwiftUI iOS application** (`iosApp/CodeCheck-iOS.xcodeproj`) is included in `iosApp/`:
+- **Role**: *Architectural demonstration only* (not a full-fledged iOS product) showcasing cross-platform logic reuse from Kotlin Multiplatform.
+- **Features**: Single search list screen with instant query clearing, 4 flavor schemes (`mock`, `dev`, `stg`, `prod`), and design token parity (`ColorTheme.swift`) matching Android `:core:designsystem`.
+- **Reference**: See [`iosApp/README.md`](../iosApp/README.md) for full architectural documentation, Xcode setup, and build instructions.
+
+---
+
+## Project Management
+
+**GitHub Project Board:** [Mobile Platform Engineering - Issue Tracker](https://github.com/users/dinkar1708/projects/1/views/1)
+
+The project board tracks all issues, milestones, and implementation progress across the complete SDLC lifecycle. All 9 code challenge issues plus bonus features are managed through this centralized board (see [Technical References](./references.md#7-github-api--assessment-standards)).
+
+---
+
+**Current Phase**: Implementation Complete
+**Status**: All core architecture, multi-module structure, product flavors (dev/mock/stg/prod), and KMP shared module implemented

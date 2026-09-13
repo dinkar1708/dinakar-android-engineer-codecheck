@@ -1,0 +1,53 @@
+# EditorConfig for consistent coding style across IDEs and editors
+# https://editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{kt,kts}]
+# Kotlin Code Style
+ij_kotlin_code_style_defaults = KOTLIN_OFFICIAL
+
+# Imports
+ij_kotlin_name_count_to_use_star_import = 2147483647  # Never use star imports
+ij_kotlin_name_count_to_use_star_import_for_members = 2147483647
+ij_kotlin_packages_to_use_import_on_demand = unset
+
+# Formatting
+max_line_length = 120
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+
+# Blank Lines
+ij_kotlin_blank_lines_after_class_header = 0
+ij_kotlin_blank_lines_around_block_when_branches = 0
+ij_kotlin_blank_lines_before_declaration_with_comment_or_annotation_on_separate_line = 1
+
+# Wrapping
+ij_kotlin_method_parameters_wrap = off
+ij_kotlin_continuation_indent_size = 4
+
+# Spaces
+ij_kotlin_spaces_before_comma = false
+ij_kotlin_spaces_after_comma = true
+ij_kotlin_insert_whitespaces_in_simple_one_line_method = true
+
+[*.{json,yaml,yml,toml}]
+indent_size = 2
+
+[*.{xml,html}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = off
+
+[gradle.properties]
+indent_style = unset

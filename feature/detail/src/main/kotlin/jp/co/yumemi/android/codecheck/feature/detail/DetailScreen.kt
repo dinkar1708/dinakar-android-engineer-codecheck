@@ -1,0 +1,645 @@
+package jp.co.yumemi.android.codecheck.feature.detail
+
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarBorder
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.SubcomposeAsyncImage
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppAmber
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppBlue
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppNavy
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.LocalAppDimensions
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate300
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate400
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate600
+import jp.co.yumemi.android.codecheck.core.domain.model.Owner
+import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
+import jp.co.yumemi.android.codecheck.core.ui.component.ErrorView
+import jp.co.yumemi.android.codecheck.core.ui.component.LoadingView
+import jp.co.yumemi.android.codecheck.core.ui.util.formatDecimalNumber
+import jp.co.yumemi.android.codecheck.core.ui.util.getMonogramInitials
+import jp.co.yumemi.android.codecheck.feature.detail.component.MetaRow
+
+/**
+ * Repository detail screen composable strictly adhering to the design specification:
+ * - Dark Navy header (#2D3545) with back navigation, avatar, owner handle, repo title, description, and language chip
+ * - Light background with 2x2 grid of StatCards (Stars, Forks, Watchers, Open Issues)
+ * - Full-width "View on GitHub" brand blue action button
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DetailScreen(
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    onOpenBrowser: ((String) -> Unit)? = null,
+    viewModel: DetailViewModel = hiltViewModel()
+) {
+    val context = LocalContext.current
+    val effectiveOpenBrowser = onOpenBrowser ?: remember(context) {
+        { url: String -> launchChromeCustomTab(context, url) }
+    }
+    val uiState by viewModel.uiState.collectAsState()
+    val isStarred by viewModel.isStarred.collectAsState()
+    DetailScreen(
+        uiState = uiState,
+        isStarred = isStarred,
+        onBackClick = onBackClick,
+        onToggleStar = viewModel::toggleStar,
+        onRetry = viewModel::retry,
+        modifier = modifier,
+        onOpenBrowser = effectiveOpenBrowser
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun DetailScreen(
+    uiState: DetailUiState,
+    isStarred: Boolean = false,
+    onBackClick: () -> Unit,
+    onToggleStar: () -> Unit = {},
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+    onOpenBrowser: ((String) -> Unit)? = null
+) {
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(R.string.detail_top_bar_title),
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = AppWhite
+                        )
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.detail_navigate_back),
+                            tint = AppWhite
+                        )
+                    }
+                },
+                actions = {
+                    if (uiState is DetailUiState.Success) {
+                        IconButton(onClick = onToggleStar) {
+                            Icon(
+                                imageVector = if (isStarred) Icons.Default.Star else Icons.Default.StarBorder,
+                                contentDescription = if (isStarred) {
+                                    stringResource(R.string.detail_unstar)
+                                } else {
+                                    stringResource(R.string.detail_star)
+                                },
+                                tint = if (isStarred) AppAmber else AppWhite
+                            )
+                        }
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = AppNavy,
+                    titleContentColor = AppWhite,
+                    navigationIconContentColor = AppWhite
+                )
+            )
+        }
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            when (val state = uiState) {
+                is DetailUiState.Loading -> {
+                    LoadingView(message = stringResource(R.string.detail_loading_message))
+                }
+                is DetailUiState.Error -> {
+                    ErrorView(
+                        message = state.message,
+                        onRetry = onRetry
+                    )
+                }
+                is DetailUiState.Success -> {
+                    DetailContent(
+                        repository = state.repository,
+                        onOpenBrowser = onOpenBrowser
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+internal fun DetailContent(
+    repository: RepositoryItem,
+    onOpenBrowser: ((String) -> Unit)?,
+    modifier: Modifier = Modifier
+) {
+    val dimensions = LocalAppDimensions.current
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+    ) {
+        DetailHeroHeader(repository = repository)
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensions.spaceExtraLarge),
+            verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraLarge)
+        ) {
+            DetailStatsSection(repository = repository)
+            DetailMetaSection(repository = repository)
+            if (!repository.htmlUrl.isNullOrBlank() && onOpenBrowser != null) {
+                DetailActionSection(
+                    repository = repository,
+                    onOpenBrowser = onOpenBrowser
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun DetailHeroHeader(
+    repository: RepositoryItem,
+    modifier: Modifier = Modifier
+) {
+    val dimensions = LocalAppDimensions.current
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(AppNavy)
+            .padding(
+                start = dimensions.screenPaddingHorizontal,
+                end = dimensions.screenPaddingHorizontal,
+                top = dimensions.spaceExtraSmall,
+                bottom = dimensions.screenPaddingVertical
+            )
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(dimensions.itemSpacing)
+            ) {
+                val ownerLogin = repository.owner.login.takeIf { it.isNotBlank() }
+                    ?: if (repository.name.contains("/")) repository.name.substringBefore("/") else null
+                val displayName = if (repository.name.contains("/")) repository.name.substringAfter("/") else repository.name
+
+                val initials = remember(displayName, ownerLogin) {
+                    val source = ownerLogin ?: displayName
+                    getMonogramInitials(source)
+                }
+
+                SubcomposeAsyncImage(
+                    model = repository.ownerIconUrl,
+                    contentDescription = stringResource(R.string.detail_avatar_content_description, displayName),
+                    modifier = Modifier
+                        .size(dimensions.avatarMedium)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop,
+                    loading = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Slate600),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = initials,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = AppWhite
+                            )
+                        }
+                    },
+                    error = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Slate600),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = initials,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = AppWhite
+                            )
+                        }
+                    }
+                )
+
+                Column(modifier = Modifier.weight(1f)) {
+                    if (ownerLogin != null) {
+                        Text(
+                            text = ownerLogin,
+                            fontSize = dimensions.captionSize,
+                            color = Slate400,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                    Text(
+                        text = displayName,
+                        fontSize = dimensions.detailTitleSize,
+                        fontWeight = FontWeight.Bold,
+                        color = AppWhite,
+                        lineHeight = dimensions.detailTitleLineHeight,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+
+            val description = repository.description
+            if (!description.isNullOrBlank()) {
+                Spacer(modifier = Modifier.height(dimensions.itemSpacing))
+                Text(
+                    text = description,
+                    fontSize = dimensions.captionSize,
+                    lineHeight = dimensions.captionLineHeight,
+                    color = Slate300
+                )
+            }
+
+            val language = repository.language
+            if (!language.isNullOrBlank()) {
+                Spacer(modifier = Modifier.height(dimensions.itemSpacing))
+                Surface(
+                    shape = RoundedCornerShape(20.dp),
+                    color = Slate600,
+                    contentColor = Slate300
+                ) {
+                    Text(
+                        text = language,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.padding(
+                            horizontal = 11.dp,
+                            vertical = dimensions.spaceExtraSmall
+                        )
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DetailStatsSection(
+    repository: RepositoryItem,
+    modifier: Modifier = Modifier
+) {
+    val dimensions = LocalAppDimensions.current
+    val stats = listOf(
+        Triple(stringResource(R.string.detail_stat_stars), formatDecimalNumber(repository.stargazersCount), null),
+        Triple(stringResource(R.string.detail_stat_forks), formatDecimalNumber(repository.forksCount), null),
+        Triple(stringResource(R.string.detail_stat_watchers), formatDecimalNumber(repository.watchersCount), null),
+        Triple(stringResource(R.string.detail_stat_open_issues), formatDecimalNumber(repository.openIssuesCount), MaterialTheme.colorScheme.tertiary)
+    )
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(dimensions.itemSpacing)
+    ) {
+        stats.chunked(dimensions.statGridColumns).forEach { rowStats ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(dimensions.itemSpacing)
+            ) {
+                rowStats.forEach { (label, value, valueColor) ->
+                    StatCard(
+                        label = label,
+                        value = value,
+                        valueColor = valueColor,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DetailMetaSection(
+    repository: RepositoryItem,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        MetaRow(
+            label = stringResource(R.string.detail_meta_default_branch),
+            value = repository.defaultBranch?.takeIf { it.isNotBlank() }
+                ?: stringResource(R.string.detail_meta_not_available),
+            fontFamily = FontFamily.Monospace
+        )
+        MetaRow(
+            label = stringResource(R.string.detail_meta_last_push),
+            value = DetailFormatters.formatPushDate(repository.pushedAt)
+        )
+        MetaRow(
+            label = stringResource(R.string.detail_meta_license),
+            value = repository.license?.takeIf { it.isNotBlank() }
+                ?: stringResource(R.string.detail_meta_none)
+        )
+        MetaRow(
+            label = stringResource(R.string.detail_meta_size),
+            value = DetailFormatters.formatSize(repository.size)
+        )
+    }
+}
+
+@Composable
+private fun DetailActionSection(
+    repository: RepositoryItem,
+    onOpenBrowser: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Button(
+            onClick = { onOpenBrowser(repository.htmlUrl.orEmpty()) },
+            modifier = Modifier
+                .weight(1f)
+                .height(48.dp),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = AppBlue,
+                contentColor = AppWhite
+            ),
+            contentPadding = PaddingValues(vertical = 12.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.detail_view_on_github),
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            )
+        }
+
+        val downloadUrl = remember(repository.htmlUrl, repository.defaultBranch) {
+            val branch = repository.defaultBranch?.takeIf { it.isNotBlank() } ?: "main"
+            "${repository.htmlUrl}/archive/refs/heads/$branch.zip"
+        }
+
+        Surface(
+            onClick = { onOpenBrowser(downloadUrl) },
+            modifier = Modifier.size(48.dp),
+            shape = RoundedCornerShape(8.dp),
+            color = MaterialTheme.colorScheme.surface,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Download,
+                    contentDescription = stringResource(R.string.detail_download),
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
+    }
+}
+
+/**
+ * Metric StatCard component adhering to StatCard.dc.html specification:
+ * - 8dp rounded card container with 1dp border
+ * - 11sp bold uppercase label in muted neutral
+ * - 24sp bold metric value with dynamic value color
+ */
+@Composable
+fun StatCard(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier,
+    valueColor: Color? = null
+) {
+    val dimensions = LocalAppDimensions.current
+    val containerColor = MaterialTheme.colorScheme.surface
+    val borderColor = MaterialTheme.colorScheme.outline
+    val labelColor = MaterialTheme.colorScheme.onSurfaceVariant
+    val actualValueColor = valueColor ?: MaterialTheme.colorScheme.onSurface
+
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = containerColor
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = borderColor
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensions.statCardPadding)
+        ) {
+            Text(
+                text = label.uppercase(),
+                fontSize = dimensions.statLabelSize,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.05.em,
+                color = labelColor
+            )
+            Spacer(modifier = Modifier.height(dimensions.statSpacerHeight))
+            Text(
+                text = value,
+                fontSize = dimensions.statValueSize,
+                fontWeight = FontWeight.Bold,
+                color = actualValueColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+/**
+ * Opens the given web [url] inside a Chrome Custom Tab styled with Brand Navy header (#2D3545),
+ * falling back to the standard system browser if Custom Tabs cannot be opened.
+ */
+internal fun launchChromeCustomTab(context: Context, url: String) {
+    if (url.isBlank()) return
+    try {
+        val customTabsIntent = CustomTabsIntent.Builder()
+            .setShowTitle(true)
+            .setDefaultColorSchemeParams(
+                CustomTabColorSchemeParams.Builder()
+                    .setToolbarColor(AppNavy.toArgb())
+                    .build()
+            )
+            .build()
+        if (context !is Activity) {
+            customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        customTabsIntent.launchUrl(context, Uri.parse(url))
+    } catch (_: Exception) {
+        try {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            if (context !is Activity) {
+                browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(browserIntent)
+        } catch (_: Exception) {
+            // Silently ignore if no browser application can handle the intent
+        }
+    }
+}
+
+@Preview(name = "Detail - Success Light", showBackground = true)
+@Composable
+private fun DetailScreenSuccessLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        DetailScreen(
+            uiState = DetailUiState.Success(previewDetailRepository),
+            isStarred = false,
+            onBackClick = {},
+            onToggleStar = {},
+            onRetry = {},
+            onOpenBrowser = {}
+        )
+    }
+}
+
+@Preview(name = "Detail - Success Dark (Starred)", showBackground = true)
+@Composable
+private fun DetailScreenSuccessDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        DetailScreen(
+            uiState = DetailUiState.Success(previewDetailRepository),
+            isStarred = true,
+            onBackClick = {},
+            onToggleStar = {},
+            onRetry = {},
+            onOpenBrowser = {}
+        )
+    }
+}
+
+@Preview(name = "Detail - Loading", showBackground = true)
+@Composable
+private fun DetailScreenLoadingPreview() {
+    CodeCheckTheme {
+        DetailScreen(
+            uiState = DetailUiState.Loading,
+            isStarred = false,
+            onBackClick = {},
+            onToggleStar = {},
+            onRetry = {},
+            onOpenBrowser = {}
+        )
+    }
+}
+
+@Preview(name = "Detail - Error", showBackground = true)
+@Composable
+private fun DetailScreenErrorPreview() {
+    CodeCheckTheme {
+        DetailScreen(
+            uiState = DetailUiState.Error("Failed to fetch repository details. Please try again."),
+            isStarred = false,
+            onBackClick = {},
+            onToggleStar = {},
+            onRetry = {},
+            onOpenBrowser = {}
+        )
+    }
+}
+
+private val previewDetailRepository = RepositoryItem(
+    name = "jetbrains/kotlin",
+    owner = Owner(login = "jetbrains", avatarUrl = "https://avatars.githubusercontent.com/u/262714"),
+    language = "Kotlin",
+    stargazersCount = 47200,
+    watchersCount = 47200,
+    forksCount = 5700,
+    openIssuesCount = 180,
+    description = "The Kotlin Programming Language. Official repository for Kotlin.",
+    htmlUrl = "https://github.com/jetbrains/kotlin",
+    updatedAt = "2024-03-01T12:00:00Z",
+    defaultBranch = "master",
+    pushedAt = "2024-03-01T11:45:00Z",
+    license = "Apache-2.0",
+    size = 184520
+)
+

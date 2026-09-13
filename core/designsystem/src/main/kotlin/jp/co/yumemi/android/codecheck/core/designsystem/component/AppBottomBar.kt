@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.HorizontalDivider
@@ -48,6 +49,7 @@ import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
  */
 enum class MainTab {
     SEARCH,
+    BOOKMARKS,
     SETTINGS
 }
 
@@ -82,6 +84,13 @@ fun AppBottomBar(
                     icon = Icons.Default.Search,
                     isSelected = currentTab == MainTab.SEARCH,
                     onClick = { onTabSelected(MainTab.SEARCH) },
+                    modifier = Modifier.weight(1f)
+                )
+                AppBottomBarItem(
+                    label = stringResource(R.string.tab_bookmarks),
+                    icon = Icons.Default.Bookmark,
+                    isSelected = currentTab == MainTab.BOOKMARKS,
+                    onClick = { onTabSelected(MainTab.BOOKMARKS) },
                     modifier = Modifier.weight(1f)
                 )
                 AppBottomBarItem(
@@ -154,6 +163,17 @@ private fun AppBottomBarSearchPreview() {
     }
 }
 
+@Preview(name = "AppBottomBar - Bookmarks Selected", showBackground = true)
+@Composable
+private fun AppBottomBarBookmarksPreview() {
+    CodeCheckTheme {
+        AppBottomBar(
+            currentTab = MainTab.BOOKMARKS,
+            onTabSelected = {}
+        )
+    }
+}
+
 @Preview(name = "AppBottomBar - Settings Selected", showBackground = true)
 @Composable
 private fun AppBottomBarSettingsPreview() {
@@ -164,3 +184,4 @@ private fun AppBottomBarSettingsPreview() {
         )
     }
 }
+

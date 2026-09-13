@@ -1,4 +1,6 @@
 <resources>
     <string name="tab_search">検索</string>
+    <string name="tab_bookmarks">ブックマーク</string>
     <string name="tab_settings">設定</string>
+
 </resources>

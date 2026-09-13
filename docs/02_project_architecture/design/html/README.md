@@ -31,7 +31,7 @@ This directory contains all UI/UX design specifications for the application.
 
 When implementing features, reference the corresponding design file:
 - Feature specifications in `docs/04_features/` or `docs/05_specifications/` should reference these design files
-- Example: "See design: `docs/03_design/02_MainScreen.html`"
+- Example: "See design: `docs/02_project_architecture/design/html/02 MainScreen.html`"
 
 ## Workflow
 

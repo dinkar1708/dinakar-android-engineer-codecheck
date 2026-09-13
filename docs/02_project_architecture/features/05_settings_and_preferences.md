@@ -43,12 +43,25 @@ graph TD
 
 ## 3. UI Component Architecture & Packaging
 
+The Settings feature is isolated in its own `:feature:settings` module:
+
 ```text
-ui/features/settings/
-├── SettingsScreen.kt       # Screen Composable rendering the 3 sections and footer
-├── SettingsViewModel.kt    # State holder managing themeMode and language StateFlow
-├── SettingsUiState.kt      # Immutable state model and AppThemeMode / AppLanguage enums
-└── components/             # Feature-scoped components
-    ├── SettingsOptionTile.kt # Selectable card row with RadioButton indicator
-    └── SettingsInfoTile.kt   # Metadata key-value row with optional badge
+feature/settings/
+├── build.gradle.kts
+└── src/
+    ├── main/
+    │   ├── kotlin/jp/co/yumemi/android/codecheck/feature/settings/
+    │   │   ├── SettingsScreen.kt          # Screen Composable rendering the sections and footer
+    │   │   ├── SettingsViewModel.kt       # State holder managing themeMode and language StateFlow
+    │   │   ├── SettingsUiState.kt         # Immutable state model, AppThemeMode & AppLanguage enums
+    │   │   └── component/
+    │   │       ├── SettingsOptionTile.kt  # Selectable card row with RadioButton indicator
+    │   │       └── SettingsInfoTile.kt    # Metadata key-value row with optional badge
+    │   └── res/
+    │       ├── values/strings.xml         # English localization
+    │       └── values-ja/strings.xml      # Japanese localization
+    └── test/
+        └── kotlin/jp/co/yumemi/android/codecheck/feature/settings/
+            └── SettingsViewModelTest.kt   # Unit tests with Turbine & MockK
 ```
+

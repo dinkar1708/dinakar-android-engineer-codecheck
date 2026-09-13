@@ -41,7 +41,12 @@ class SearchRepositoriesUseCaseTest {
         override suspend fun getRepositoryDetails(owner: String, repo: String): RepositoryItem {
             throw UnsupportedOperationException()
         }
+
+        override suspend fun getRepositoryById(id: Long): RepositoryItem {
+            throw UnsupportedOperationException()
+        }
     }
+
 
     @Test
     fun invoke_withBlankQuery_returnsEmptySearchResultWithoutCallingRepository() = runTest {

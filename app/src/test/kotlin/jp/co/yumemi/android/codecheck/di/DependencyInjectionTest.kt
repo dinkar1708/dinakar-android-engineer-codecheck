@@ -33,4 +33,14 @@ class DependencyInjectionTest {
         assertNotNull(searchUseCase)
         assertNotNull(detailsUseCase)
     }
+
+    @Test
+    fun storageModule_providesStorageRepositories() {
+        val searchHistoryRepo = StorageModule.provideSearchHistoryRepository()
+        val bookmarkRepo = StorageModule.provideBookmarkRepository()
+
+        assertNotNull(searchHistoryRepo)
+        assertNotNull(bookmarkRepo)
+    }
 }
+

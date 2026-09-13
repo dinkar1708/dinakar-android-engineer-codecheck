@@ -31,8 +31,8 @@ fun SettingsInfoTile(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(AppWhite, shape = RoundedCornerShape(8.dp))
-            .border(1.dp, Slate200, shape = RoundedCornerShape(8.dp))
+            .background(androidx.compose.material3.MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp))
+            .border(1.dp, androidx.compose.material3.MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(8.dp))
             .padding(horizontal = 16.dp, vertical = 14.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -40,13 +40,13 @@ fun SettingsInfoTile(
         Text(
             text = label,
             fontSize = 13.sp,
-            color = Slate600
+            color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
             text = value,
             fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold,
-            color = Slate900
+            color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface
         )
     }
 }

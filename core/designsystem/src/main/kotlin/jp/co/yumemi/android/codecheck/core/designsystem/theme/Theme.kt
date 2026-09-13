@@ -38,8 +38,30 @@ private val AppColorScheme = lightColorScheme(
     onError = AppWhite
 )
 
-// For now, both modes share AppColorScheme per design requirements
-private val DarkAppColorScheme = AppColorScheme
+private val DarkAppColorScheme = darkColorScheme(
+    primary = Color(0xFF6366F1), // Bright accessible indigo in dark mode
+    onPrimary = AppWhite,
+    primaryContainer = Color(0xFF1E293B),
+    onPrimaryContainer = Color(0xFF93C5FD),
+    secondary = AppGreen,
+    onSecondary = AppWhite,
+    secondaryContainer = Color(0xFF064E3B),
+    onSecondaryContainer = Color(0xFFA7F3D0),
+    tertiary = AppAmber,
+    onTertiary = AppWhite,
+    tertiaryContainer = Color(0xFF78350F),
+    onTertiaryContainer = Color(0xFFFDE68A),
+    background = Slate900,
+    onBackground = Slate50,
+    surface = Color(0xFF1E293B),
+    onSurface = Slate50,
+    surfaceVariant = Color(0xFF334155),
+    onSurfaceVariant = Slate300,
+    outline = Color(0xFF334155),
+    outlineVariant = Color(0xFF1E293B),
+    error = Color(0xFFEF4444),
+    onError = AppWhite
+)
 
 /**
  * Global Material 3 theme for Yumemi Android Engineer CodeCheck.
@@ -51,13 +73,13 @@ private val DarkAppColorScheme = AppColorScheme
  */
 @Composable
 fun CodeCheckTheme(
-    @Suppress("UNUSED_PARAMETER") darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = isSystemInDarkTheme(),
     @Suppress("UNUSED_PARAMETER") dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    // Both light and dark modes share AppColorScheme for now; dark mode will be activated in a future update
+    val colorScheme = if (darkTheme) DarkAppColorScheme else AppColorScheme
     MaterialTheme(
-        colorScheme = AppColorScheme,
+        colorScheme = colorScheme,
         typography = Typography,
         content = content
     )

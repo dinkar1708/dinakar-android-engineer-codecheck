@@ -63,14 +63,14 @@ fun AppBottomBar(
     onTabSelected: (MainTab) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Surface(
-        color = AppWhite,
+    androidx.compose.material3.Surface(
+        color = androidx.compose.material3.MaterialTheme.colorScheme.surface,
         modifier = modifier.fillMaxWidth()
     ) {
         Column {
             HorizontalDivider(
                 thickness = 1.dp,
-                color = Slate200
+                color = androidx.compose.material3.MaterialTheme.colorScheme.outline
             )
             Row(
                 modifier = Modifier
@@ -139,7 +139,7 @@ private fun AppBottomBarItem(
                 imageVector = icon,
                 contentDescription = label,
                 modifier = Modifier.size(20.dp),
-                tint = if (isSelected) AppBlue else Slate500
+                tint = if (isSelected) androidx.compose.material3.MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
@@ -147,7 +147,7 @@ private fun AppBottomBarItem(
             text = label,
             fontSize = 12.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
-            color = if (isSelected) AppBlue else Slate500
+            color = if (isSelected) androidx.compose.material3.MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

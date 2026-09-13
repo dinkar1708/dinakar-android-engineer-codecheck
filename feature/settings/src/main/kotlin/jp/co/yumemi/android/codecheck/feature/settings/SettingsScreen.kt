@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -78,7 +79,7 @@ fun SettingsContent(
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = Slate50
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -116,8 +117,8 @@ fun SettingsContent(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(AppWhite, shape = RoundedCornerShape(8.dp))
-                        .border(1.dp, Slate200, shape = RoundedCornerShape(8.dp))
+                        .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp))
+                        .border(1.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(8.dp))
                 ) {
                     SettingsOptionTile(
                         title = stringResource(R.string.follow_system),
@@ -125,14 +126,14 @@ fun SettingsContent(
                         selected = uiState.language == AppLanguage.SYSTEM,
                         onClick = { onLanguageSelected(AppLanguage.SYSTEM) }
                     )
-                    HorizontalDivider(thickness = 1.dp, color = Slate100)
+                    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
                     SettingsOptionTile(
                         title = stringResource(R.string.english),
                         subtitle = "English",
                         selected = uiState.language == AppLanguage.EN,
                         onClick = { onLanguageSelected(AppLanguage.EN) }
                     )
-                    HorizontalDivider(thickness = 1.dp, color = Slate100)
+                    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
                     SettingsOptionTile(
                         title = stringResource(R.string.japanese),
                         subtitle = "日本語",
@@ -152,8 +153,8 @@ fun SettingsContent(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(AppWhite, shape = RoundedCornerShape(8.dp))
-                        .border(1.dp, Slate200, shape = RoundedCornerShape(8.dp))
+                        .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp))
+                        .border(1.dp, MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(8.dp))
                 ) {
                     SettingsOptionTile(
                         title = stringResource(R.string.follow_system),
@@ -161,14 +162,14 @@ fun SettingsContent(
                         selected = uiState.themeMode == AppThemeMode.SYSTEM,
                         onClick = { onThemeSelected(AppThemeMode.SYSTEM) }
                     )
-                    HorizontalDivider(thickness = 1.dp, color = Slate100)
+                    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
                     SettingsOptionTile(
                         title = stringResource(R.string.theme_light),
                         subtitle = "Light mode appearance",
                         selected = uiState.themeMode == AppThemeMode.LIGHT,
                         onClick = { onThemeSelected(AppThemeMode.LIGHT) }
                     )
-                    HorizontalDivider(thickness = 1.dp, color = Slate100)
+                    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
                     SettingsOptionTile(
                         title = stringResource(R.string.theme_dark),
                         subtitle = "Dark mode appearance",
@@ -235,7 +236,7 @@ private fun SettingsSectionHeader(
             text = title,
             fontSize = 15.sp,
             fontWeight = FontWeight.Bold,
-            color = Slate900
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }

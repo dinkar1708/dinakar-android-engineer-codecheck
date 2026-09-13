@@ -48,19 +48,18 @@ val ScrimOverlay = AppNavy.copy(alpha = 0.60f) // Bottom sheet scrim (60%)
 
 // ═══════════════════════════════════════════════════════════════════
 // DARK THEME SPECIFICATION
-// Per design spec: light and dark mode currently use the exact same color palette.
-// Custom dark theme palette will be configured in a future update.
+// Custom dark theme palette adhering to dark mode standards
 // ═══════════════════════════════════════════════════════════════════
-val DarkAppBackground = Slate50          // Uses same background as light mode for now
-val DarkCardSurface = AppWhite           // Uses same card surface as light mode for now
-val DarkBorder = Slate200                // Uses same border as light mode for now
-val DarkActionBlue = AppBlue             // Uses same action blue as light mode for now
-val DarkGreen = AppGreen                  // Positive, match (unchanged)
-val DarkAmber = AppAmber                  // Stars, review (unchanged)
+val DarkAppBackground = Slate900
+val DarkCardSurface = Color(0xFF1E293B)   // Slate800
+val DarkBorder = Color(0xFF334155)        // Slate700
+val DarkActionBlue = Color(0xFF6366F1)    // Accessible action indigo/blue
+val DarkGreen = AppGreen                  // Positive, match
+val DarkAmber = AppAmber                  // Stars, review
 
-// Text tokens for dark mode (matching light mode palette for now)
-val TextPrimaryDark = Slate900
-val TextSecondaryDark = Slate600
+// Text tokens for dark mode
+val TextPrimaryDark = Slate50
+val TextSecondaryDark = Slate300
 
 // ═══════════════════════════════════════════════════════════════════
 // SEMANTIC CONVENIENCE TOKENS

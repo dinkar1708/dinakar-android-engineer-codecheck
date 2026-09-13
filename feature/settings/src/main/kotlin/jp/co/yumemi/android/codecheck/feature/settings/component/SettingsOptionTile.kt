@@ -46,12 +46,12 @@ fun SettingsOptionTile(
                 text = title,
                 fontSize = 14.sp,
                 fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Medium,
-                color = if (selected) AppBlue else Slate800
+                color = if (selected) androidx.compose.material3.MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.onSurface
             )
             Text(
                 text = subtitle,
                 fontSize = 12.sp,
-                color = Slate600,
+                color = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 2.dp)
             )
         }
@@ -60,7 +60,7 @@ fun SettingsOptionTile(
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = null,
-                tint = AppBlue,
+                tint = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(18.dp)
             )
         }

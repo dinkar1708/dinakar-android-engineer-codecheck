@@ -9,7 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 
 /**
  * Modern chip component following Material 3 design principles.
@@ -149,3 +151,36 @@ fun CustomChip(
         )
     }
 }
+
+@Preview(name = "Chips - Light", showBackground = true)
+@Composable
+private fun ChipsLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        androidx.compose.foundation.layout.Row(
+            modifier = Modifier.padding(16.dp),
+            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+        ) {
+            PrimaryChip(text = "Kotlin")
+            SecondaryChip(text = "Android")
+            OutlineChip(text = "v1.0.0")
+            TertiaryChip(text = "Active")
+        }
+    }
+}
+
+@Preview(name = "Chips - Dark", showBackground = true)
+@Composable
+private fun ChipsDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        androidx.compose.foundation.layout.Row(
+            modifier = Modifier.padding(16.dp),
+            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+        ) {
+            PrimaryChip(text = "Kotlin")
+            SecondaryChip(text = "Android")
+            OutlineChip(text = "v1.0.0")
+            TertiaryChip(text = "Active")
+        }
+    }
+}
+

@@ -20,9 +20,11 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.MaterialTheme
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 import jp.co.yumemi.android.codecheck.core.domain.model.SearchSort
 import androidx.compose.ui.res.stringResource
 import jp.co.yumemi.android.codecheck.feature.search.R
@@ -109,3 +111,26 @@ fun SortTabs(
         }
     }
 }
+
+@Preview(name = "SortTabs - Best Match Light", showBackground = true)
+@Composable
+private fun SortTabsBestMatchLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        SortTabs(
+            selectedSort = SearchSort.BEST_MATCH,
+            onSortSelected = {}
+        )
+    }
+}
+
+@Preview(name = "SortTabs - Most Stars Dark", showBackground = true)
+@Composable
+private fun SortTabsMostStarsDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        SortTabs(
+            selectedSort = SearchSort.STARS,
+            onSortSelected = {}
+        )
+    }
+}
+

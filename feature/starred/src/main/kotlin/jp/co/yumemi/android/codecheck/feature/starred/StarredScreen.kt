@@ -628,3 +628,17 @@ private fun StarredScreenEmptyDarkPreview() {
         )
     }
 }
+
+@Preview(name = "Starred - Loading", showBackground = true)
+@Composable
+private fun StarredScreenLoadingPreview() {
+    CodeCheckTheme {
+        StarredContent(
+            uiState = StarredUiState.Loading,
+            onRepositoryClick = {},
+            onUnstar = {},
+            onClearAll = {}
+        )
+    }
+}
+

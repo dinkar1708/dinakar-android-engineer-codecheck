@@ -12,9 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.AppWhite
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate200
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate600
 import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate900
@@ -50,3 +52,28 @@ fun SettingsInfoTile(
         )
     }
 }
+
+@Preview(name = "SettingsInfoTile - Light", showBackground = true)
+@Composable
+private fun SettingsInfoTileLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        SettingsInfoTile(
+            label = "Version",
+            value = "1.0-dev (Build 1)",
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+@Preview(name = "SettingsInfoTile - Dark", showBackground = true)
+@Composable
+private fun SettingsInfoTileDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        SettingsInfoTile(
+            label = "Environment",
+            value = "DEVELOPMENT",
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+

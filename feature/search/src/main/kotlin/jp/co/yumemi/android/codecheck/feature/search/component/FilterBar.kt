@@ -29,8 +29,10 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 import jp.co.yumemi.android.codecheck.feature.search.R
 import jp.co.yumemi.android.codecheck.core.domain.model.SearchFilter
 
@@ -217,3 +219,52 @@ fun SlidersHorizontalIcon(
         drawCircle(tint, radius = 2.5.dp.toPx(), center = Offset(w * 0.45f, y3), style = androidx.compose.ui.graphics.drawscope.Stroke(width = stroke))
     }
 }
+
+@Preview(name = "FilterBar - Default", showBackground = true)
+@Composable
+private fun FilterBarDefaultPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        FilterBar(
+            filter = SearchFilter(),
+            onOpenFilterSheet = {},
+            onRemoveLanguage = {},
+            onRemoveMinStars = {},
+            onRemoveUpdatedPeriod = {}
+        )
+    }
+}
+
+@Preview(name = "FilterBar - Active Filters Light", showBackground = true)
+@Composable
+private fun FilterBarActiveLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        FilterBar(
+            filter = SearchFilter(
+                language = "Kotlin",
+                minStars = 1000
+            ),
+            onOpenFilterSheet = {},
+            onRemoveLanguage = {},
+            onRemoveMinStars = {},
+            onRemoveUpdatedPeriod = {}
+        )
+    }
+}
+
+@Preview(name = "FilterBar - Active Filters Dark", showBackground = true)
+@Composable
+private fun FilterBarActiveDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        FilterBar(
+            filter = SearchFilter(
+                language = "Kotlin",
+                minStars = 1000
+            ),
+            onOpenFilterSheet = {},
+            onRemoveLanguage = {},
+            onRemoveMinStars = {},
+            onRemoveUpdatedPeriod = {}
+        )
+    }
+}
+

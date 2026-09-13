@@ -23,8 +23,10 @@ import androidx.compose.ui.res.stringResource
 import jp.co.yumemi.android.codecheck.feature.search.R
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 
 
 /**
@@ -88,3 +90,28 @@ fun LoadMoreButton(
         }
     }
 }
+
+@Preview(name = "LoadMoreButton - Idle", showBackground = true)
+@Composable
+private fun LoadMoreButtonIdlePreview() {
+    CodeCheckTheme(darkTheme = false) {
+        LoadMoreButton(
+            isLoading = false,
+            onClick = {},
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+@Preview(name = "LoadMoreButton - Loading", showBackground = true)
+@Composable
+private fun LoadMoreButtonLoadingPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        LoadMoreButton(
+            isLoading = true,
+            onClick = {},
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+

@@ -35,9 +35,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
+import jp.co.yumemi.android.codecheck.core.domain.model.Owner
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
 import jp.co.yumemi.android.codecheck.core.ui.util.formatForkCount
 import jp.co.yumemi.android.codecheck.core.ui.util.formatStarCount
@@ -338,3 +341,62 @@ data class MonogramStyle(
     val backgroundColor: Color,
     val textColor: Color
 )
+
+@Preview(name = "RepositoryCard - Light", showBackground = true)
+@Composable
+private fun RepositoryCardLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        RepositoryCard(
+            item = RepositoryItem(
+                name = "jetbrains/kotlin",
+                owner = Owner(login = "jetbrains", avatarUrl = "https://avatars.githubusercontent.com/u/262714"),
+                language = "Kotlin",
+                stargazersCount = 47200,
+                watchersCount = 47200,
+                forksCount = 5700,
+                openIssuesCount = 180,
+                description = "The Kotlin Programming Language. Official repository for Kotlin."
+            ),
+            onClick = {},
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+@Preview(name = "RepositoryCard - Dark", showBackground = true)
+@Composable
+private fun RepositoryCardDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        RepositoryCard(
+            item = RepositoryItem(
+                name = "jetbrains/kotlin",
+                owner = Owner(login = "jetbrains", avatarUrl = "https://avatars.githubusercontent.com/u/262714"),
+                language = "Kotlin",
+                stargazersCount = 47200,
+                watchersCount = 47200,
+                forksCount = 5700,
+                openIssuesCount = 180,
+                description = "The Kotlin Programming Language. Official repository for Kotlin."
+            ),
+            onClick = {},
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+@Preview(name = "RepositoryCardSkeleton - Light", showBackground = true)
+@Composable
+private fun RepositoryCardSkeletonLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        RepositoryCardSkeleton(modifier = Modifier.padding(16.dp))
+    }
+}
+
+@Preview(name = "RepositoryCardSkeleton - Dark", showBackground = true)
+@Composable
+private fun RepositoryCardSkeletonDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        RepositoryCardSkeleton(modifier = Modifier.padding(16.dp))
+    }
+}
+

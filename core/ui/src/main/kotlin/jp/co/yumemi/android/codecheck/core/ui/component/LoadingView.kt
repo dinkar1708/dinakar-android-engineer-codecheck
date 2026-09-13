@@ -22,7 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import jp.co.yumemi.android.codecheck.core.designsystem.theme.CodeCheckTheme
 
 
 /**
@@ -74,3 +76,20 @@ fun LoadingView(
         }
     }
 }
+
+@Preview(name = "LoadingView - Light", showBackground = true)
+@Composable
+private fun LoadingViewLightPreview() {
+    CodeCheckTheme(darkTheme = false) {
+        LoadingView(message = "Fetching repositories...")
+    }
+}
+
+@Preview(name = "LoadingView - Dark", showBackground = true)
+@Composable
+private fun LoadingViewDarkPreview() {
+    CodeCheckTheme(darkTheme = true) {
+        LoadingView(message = "Searching...")
+    }
+}
+

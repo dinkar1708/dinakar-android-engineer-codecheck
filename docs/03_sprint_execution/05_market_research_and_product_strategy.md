@@ -160,4 +160,3 @@ Our application implements a scalable multi-module Clean Architecture topology:
 - [Sprint Execution Roadmap](file:///Users/dinakarmaurya/Documents/Personal/2-dinakar-android-engineer-codecheck/docs/03_sprint_execution/01_execution_roadmap.md)
 - [How to Proceed & Issue Mapping](file:///Users/dinakarmaurya/Documents/Personal/2-dinakar-android-engineer-codecheck/docs/03_sprint_execution/02_how_to_proceed_and_issue_mapping.md)
 - [Architecture Overview](file:///Users/dinakarmaurya/Documents/Personal/2-dinakar-android-engineer-codecheck/docs/ARCHITECTURE_OVERVIEW.md)
-- [Reviewer Guide (Japanese)](file:///Users/dinakarmaurya/Documents/Personal/2-dinakar-android-engineer-codecheck/docs/00_START_HERE_JA.md)

@@ -36,7 +36,6 @@ open iosApp/CodeCheck-iOS.xcodeproj
 ## 📚 Documentation
 
 - **[Start Here](./docs/00_START_HERE.md)** ⭐ - Solution overview and reviewer navigation
-- **[日本語サマリー (Japanese Reviewer Guide)](./docs/00_START_HERE_JA.md)** 🇯🇵 - 日本語によるプロジェクト概要、技術選定、および評価ポイント
 - **[Getting Started](./docs/GETTING_STARTED.md)** - Build, run, and prerequisite instructions
 - **[Architecture Overview](./docs/ARCHITECTURE_OVERVIEW.md)** - System design and technology choices
 - **[iOS Companion App Guide](./iosApp/README.md)** 🍏 - Native SwiftUI companion powered by KMP

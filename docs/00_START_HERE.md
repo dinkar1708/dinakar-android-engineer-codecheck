@@ -9,7 +9,6 @@
 
 | If you want to... | Go to... |
 |:---|:---|
-| **Japanese Reviewer Guide** | [日本語サマリー (Japanese Executive Summary)](./00_START_HERE_JA.md) 🇯🇵 |
 | **Get started quickly** | [Getting Started](./GETTING_STARTED.md) ⭐ |
 | **Understand the architecture** | [Architecture Overview](./ARCHITECTURE_OVERVIEW.md) ⭐ |
 | **Market Research & Strategy** | [Market Research & Product Strategy](./03_sprint_execution/05_market_research_and_product_strategy.md) 📊 |

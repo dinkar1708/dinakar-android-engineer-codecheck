@@ -9,18 +9,17 @@ description: >-
 A structured, end-to-end procedure for tackling any issue in the Yumemi Android Engineer Code Check challenge.
 
 ## 📱 Current Codebase Context
-**Current Implementation State (Post-PR 8.3 / Issue #8 Completed):**
+**Current Implementation State (Post-Sprint 4 / All 9 Challenge Tasks Completed):**
 - **Build Infrastructure:** Composite `build-logic` with convention plugins (`AndroidApplication`, `AndroidLibrary`, `AndroidFeature`, `KotlinMultiplatform`, `AndroidHilt`).
 - **Dependency Management:** Centralized Version Catalog (`gradle/libs.versions.toml`).
-- **Multi-Module Layout:**
+- **Static Analysis:** Detekt 1.23.6 (`config/detekt/detekt.yml`) + Android Lint (`lintDebug`).
+- **Multi-Module Layout (11 Modules):**
   - KMP Core Modules: `:core:domain` (pure Kotlin), `:core:network` (Ktor), `:core:data` (caching), `:shared-core` (umbrella framework).
-  - Android Core Modules: `:core:designsystem` (M3 tokens), `:core:ui` (shared composables).
-  - Feature Modules: `:feature:search` (Compose SearchScreen + SearchViewModel), `:feature:detail` (Compose DetailScreen + DetailViewModel).
-  - Persistence & Testing (Next - Issue #9): `:core:database` (offline Room/SQLDelight) and `:core:testing` (Turbine + MockEngine).
-- **Application Shell (`:app`):** Single-Activity (`MainActivity : ComponentActivity`) with Hilt DI (`@AndroidEntryPoint`) + Compose Navigation (`AppNavHost`).
-
-**Target Architecture:**
-- Jetpack Compose + StateFlow UDF + Hilt + Multi-Module Clean Architecture + KMP Type 2 (shared business logic, native UI).
+  - Core UI Modules: `:core:designsystem` (M3 tokens), `:core:ui` (shared composables with dual-theme `@Preview`s).
+  - Feature Modules: `:feature:splash`, `:feature:search`, `:feature:detail`, `:feature:settings`, `:feature:starred`.
+  - Application Shell (`:app`): Single-Activity (`MainActivity : ComponentActivity`) with Hilt DI (`@AndroidEntryPoint`) + Compose Navigation (`AppNavHost`).
+- **Target Architecture:**
+  - Jetpack Compose + StateFlow UDF + Hilt + Multi-Module Clean Architecture + KMP Type 2 (shared business logic, native UI).
 
 ---
 
@@ -100,13 +99,16 @@ Always execute these verification commands before presenting changes:
 # 2. Run Android Lint Checks
 ./gradlew lintDebug
 
-# 3. Verify Code Coverage (Target >= 80% line coverage)
+# 3. Run Detekt Static Analysis
+./gradlew detektAll
+
+# 4. Verify Code Coverage (Target >= 80% line coverage)
 ./gradlew koverHtmlReportDebug
 
-# 4. Assemble Debug APK
+# 5. Assemble Debug APK
 ./gradlew clean assembleDebug
 
-# 5. Run Live E2E Instrumented Test on Emulator (When app/src/androidTest is touched)
+# 6. Run Live E2E Instrumented Test on Emulator (When app/src/androidTest is touched)
 ./gradlew :app:connectedAndroidTest
 ```
 
@@ -129,6 +131,10 @@ Always execute these verification commands before presenting changes:
 - **Guide 2: Compose View Testing**: `docs/02_project_architecture/testing/02_compose_ui_testing.md`
 - **Guide 3: Integration & E2E Testing**: `docs/02_project_architecture/testing/03_integration_and_e2e_testing.md`
 - **Test Traceability Matrix**: `docs/02_project_architecture/testing/04_test_cases_matrix.md`
+- **Detekt Configuration**: `config/detekt/detekt.yml`
+- **Code Commenting & Documentation Standards**: `docs/01_company_and_team/12_code_commenting_and_documentation_standards.md`
+- **UI & UX Design Specification**: `docs/02_project_architecture/design/ui_ux_design_specification.md`
+- **Contributing Guide**: `docs/CONTRIBUTING.md`
 - **Sprint Delivery Roadmap**: `docs/03_sprint_execution/01_execution_roadmap.md`
 - **Issue-to-Ticket Mapping**: `docs/03_sprint_execution/02_how_to_proceed_and_issue_mapping.md`
 - **Authoritative Issue Specifications**: `docs/03_sprint_execution/03_issues_summary.md`

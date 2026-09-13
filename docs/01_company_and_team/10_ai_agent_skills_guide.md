@@ -79,7 +79,13 @@ All AI skills reference concrete locations in the codebase. When referencing or 
 | **Data Layer (Caching & Impl)** | [`core/data/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/data/repository/GitHubRepositoryImpl.kt`](../../core/data/src/commonMain/kotlin/jp/co/yumemi/android/codecheck/core/data/repository/GitHubRepositoryImpl.kt) | `review-code`, `yumemi-issue-workflow` |
 | **Search Feature (UI & ViewModel)** | [`feature/search/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/search/`](../../feature/search/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/search/) | `review-code`, `yumemi-issue-workflow` |
 | **Detail Feature (UI & ViewModel)** | [`feature/detail/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/detail/`](../../feature/detail/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/detail/) | `review-code`, `yumemi-issue-workflow` |
+| **Settings Feature (UI & ViewModel)**| [`feature/settings/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/settings/`](../../feature/settings/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/settings/) | `review-code`, `yumemi-issue-workflow` |
+| **Starred Feature (UI & ViewModel)** | [`feature/starred/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/starred/`](../../feature/starred/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/starred/) | `review-code`, `yumemi-issue-workflow` |
+| **Design System & Tokens** | [`core/designsystem/src/main/kotlin/jp/co/yumemi/android/codecheck/core/designsystem/`](../../core/designsystem/src/main/kotlin/jp/co/yumemi/android/codecheck/core/designsystem/) | `review-code`, `yumemi-code-review` |
 | **Design System & AI Workflow** | [`docs/02_project_architecture/design/ai_assisted_design_workflow.md`](../02_project_architecture/design/ai_assisted_design_workflow.md) | `review-code`, `yumemi-code-review` |
+| **Static Analysis (Detekt Config)**| [`config/detekt/detekt.yml`](../../config/detekt/detekt.yml) | `review-code`, `yumemi-code-review` |
+| **Commenting & KDoc Standards** | [`docs/01_company_and_team/12_code_commenting_and_documentation_standards.md`](./12_code_commenting_and_documentation_standards.md) | `review-code`, `write-commit` |
+| **Contributing Guide & Commits** | [`docs/CONTRIBUTING.md`](../CONTRIBUTING.md) | `write-commit`, `create-pr` |
 | **Application Shell & DI** | [`app/src/main/kotlin/jp/co/yumemi/android/codecheck/`](../../app/src/main/kotlin/jp/co/yumemi/android/codecheck/) | `create-pr`, `review-code` |
 | **ADR Storage** | [`docs/02_project_architecture/adr/`](../02_project_architecture/adr/) | `create-adr`, `create-documentation` |
 | **Sprint & Issue Roadmap**| [`docs/03_sprint_execution/`](../03_sprint_execution/) | `yumemi-issue-workflow`, `create-documentation` |

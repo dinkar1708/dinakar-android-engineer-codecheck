@@ -94,15 +94,15 @@ graph TD
 ## 3. Comprehensive App Modules Catalog
 
 ### 1. `:app` — Application Shell & Assembly Root
-* **Namespace:** `jp.co.yumemi.android.code_check`
+* **Namespace:** `jp.co.yumemi.android.codecheck`
 * **Plugin Applied:** `codecheck.android.application`, `codecheck.android.compose`, `codecheck.android.hilt`
 * **Primary Responsibility:**
   * Application entry point and runtime container.
   * Hosts the `@HiltAndroidApp` application class (`CodeCheckApplication.kt`).
-  * Hosts `TopActivity.kt` and the root Compose `NavHost` navigating between `:feature:search`, `:feature:detail`, and `:feature:settings`.
+  * Hosts `MainActivity.kt` and the root Compose `NavHost` navigating between `:feature:search`, `:feature:detail`, and `:feature:settings`.
   * Manages Android product flavor configurations (`dev`, `mock`, `stg`, `prod`) and dynamic Hilt dependency bindings.
 * **Dependencies:**
-  * Implementation: All `feature:*` modules, all `core:*` modules, `:shared`.
+  * Implementation: All `feature:*` modules, all `core:*` modules, `:shared-core`.
 * **Testing:**
   * Hosts End-to-End instrumentation tests (`SearchE2ETest.kt`) with `CustomTestRunner.kt`.
 

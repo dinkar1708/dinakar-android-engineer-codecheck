@@ -15,20 +15,26 @@
 # Clean project
 ./gradlew clean
 
-# Build shared Kotlin Multiplatform module
-./gradlew :shared:assemble
+# Build shared Kotlin Multiplatform umbrella module
+./gradlew :shared-core:assemble
 
-# Run all unit tests (:shared and :app)
-./gradlew testDebugUnitTest
+# Run all unit tests across all modules
+./gradlew test
 
-# Assemble Debug APK
+# Or run unit tests for dev debug flavor
+./gradlew testDevDebugUnitTest
+
+# Assemble Dev Debug APK
+./gradlew assembleDevDebug
+
+# Assemble all Debug APK flavors (dev, mock, stg, prod)
 ./gradlew assembleDebug
 
 # Output APK path:
-# app/build/outputs/apk/debug/app-debug.apk
+# app/build/outputs/apk/dev/debug/app-dev-debug.apk
 
 # Run full quality gate check (Lint + Unit Tests)
-./gradlew lintDebug testDebugUnitTest
+./gradlew lintDevDebug testDevDebugUnitTest
 ```
 
 ---

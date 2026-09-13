@@ -63,16 +63,25 @@ Welcome to the Mobile Engineering team! This guide will help you get started and
 Across our mobile projects, code is structured following modular Clean Architecture. Below is an illustrative reference structure (using our GitHub Repository Search application as a concrete example):
 
 ```
-app/src/main/kotlin/jp/co/yumemi/android/code_check/  # Example Reference Module
-├── ui/                      # Declarative Presentation Layer (Compose / SwiftUI)
-│   ├── features/            # Feature screens & ViewModels
-│   │   ├── search/          # Search feature (query, debouncing, results list)
-│   │   ├── detail/          # Detail feature (repository statistics, web link)
-│   │   └── settings/        # Settings feature (language, theme toggles)
-│   ├── theme/               # Design System tokens, typography, and color schemes
-│   └── navigation/          # Jetpack Navigation graph and routing
-├── di/                      # Dependency Injection modules (Hilt)
-└── TopActivity.kt           # Single-Activity entry point
+├── app/                                 # Application shell & DI assembly
+│   └── src/main/kotlin/jp/co/yumemi/android/codecheck/
+│       ├── di/                          # Flavor-specific Hilt modules
+│       ├── navigation/                  # Root NavHost & bottom navigation
+│       └── MainActivity.kt              # Single-Activity entry point
+├── core/
+│   ├── domain/                          # Pure Kotlin domain models & repository contracts
+│   ├── network/                         # Ktor HTTP client & GitHub API service
+│   ├── data/                            # Repository implementations & in-memory caching
+│   ├── designsystem/                    # Material 3 tokens, typography & theme
+│   └── ui/                              # Reusable Compose UI components (Loading, Error, Empty)
+├── feature/
+│   ├── splash/                          # Startup splash screen
+│   ├── search/                          # Repository search screen & SearchViewModel
+│   ├── detail/                          # Repository details & WebView/Chrome Custom Tabs
+│   ├── starred/                         # Bookmarked / starred repositories collection
+│   └── settings/                        # Dynamic theme mode & language toggle
+├── shared-core/                         # Headless KMP umbrella module (exports iOS framework)
+└── iosApp/                              # Native iOS companion app (SwiftUI)
 ```
 
 ### Run the App *(Example Validation Workflow)*
@@ -151,7 +160,7 @@ Pick one of these beginner-friendly tasks on your assigned project (illustrated 
 
 - [ ] I read and understood the code I'm changing
 - [ ] I tested my change manually on the emulator
-- [ ] I ran `./gradlew testDebugUnitTest` and all tests pass
+- [ ] I ran `./gradlew testDevDebugUnitTest` (or `./gradlew test`) and all tests pass
 - [ ] I ran `./gradlew lintDebug` with no new warnings
 - [ ] I filled out the PR template completely
 - [ ] I tagged my mentor for review

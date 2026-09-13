@@ -9,9 +9,11 @@
 
 | **If you want to...** | **Go to...** |
 |:---|:---|
+| **Executive Slide Deck (EM Walkthrough)** | [Executive Presentation Deck](./presentation/README.md) 📊 |
 | **Get started quickly** | [Getting Started](./GETTING_STARTED.md) ⭐ |
 | **Understand the architecture** | [Architecture Overview](./ARCHITECTURE_OVERVIEW.md) ⭐ |
 | **UI/UX & Responsive Design** | [UI/UX Design Specification](./02_project_architecture/design/ui_ux_design_specification.md) 🎨 |
+| **Performance Profiling Guide** | [Android Studio Profiler & Benchmarks](./02_project_architecture/testing/05_performance_profiling_and_benchmarks.md) ⚡ |
 | **Market Research & Strategy** | [Market Research & Product Strategy](./03_sprint_execution/05_market_research_and_product_strategy.md) 📊 |
 | **iOS Companion Demo** | [Native iOS Companion (KMP)](../iosApp/README.md) 🍏 |
 | **See what's been done** | [Issues Summary](./03_sprint_execution/03_issues_summary.md) ⭐ |

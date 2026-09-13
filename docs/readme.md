@@ -88,6 +88,7 @@ This documentation structure is designed to be **platform-agnostic** and can be 
 
 ## ⚡ Quick Navigation Links
 
+- **Executive Presentation Deck (EM Walkthrough):** See: **[presentation/README.md](./presentation/README.md)** 📊
 - **New to this repository?** Start here: **[00_START_HERE.md](./00_START_HERE.md)** ⭐
 - **How to build & test locally?** See: **[GETTING_STARTED.md](./GETTING_STARTED.md)**
 - **System design & data flow:** See: **[ARCHITECTURE_OVERVIEW.md](./ARCHITECTURE_OVERVIEW.md)**

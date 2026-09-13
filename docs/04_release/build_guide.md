@@ -83,31 +83,31 @@ adb install -r app/build/outputs/apk/prod/debug/app-prod-debug.apk
 
 ### 5. Build Shared Library AAR:
 ```bash
-./gradlew :shared:assembleDebug
+./gradlew :shared-core:assembleDebug
 ```
-- **Output Artifact**: `shared/build/outputs/aar/shared-debug.aar`
+- **Output Artifact**: `shared-core/build/outputs/aar/shared-core-debug.aar`
 
 ---
 
 ## 3. iOS Framework Artifacts
 
-The `:shared` Kotlin Multiplatform module compiles native frameworks directly from macOS:
+The `:shared-core` Kotlin Multiplatform module compiles native frameworks directly from macOS:
 
 ### 1. Build Apple Silicon Simulator Framework:
 ```bash
-./gradlew :shared:linkDebugFrameworkIosSimulatorArm64
+./gradlew :shared-core:linkDebugFrameworkIosSimulatorArm64
 ```
-- **Output**: `shared/build/bin/iosSimulatorArm64/debugFramework/shared.framework`
+- **Output**: `shared-core/build/bin/iosSimulatorArm64/debugFramework/shared_core.framework`
 
 ### 2. Build Physical Device Framework:
 ```bash
-./gradlew :shared:linkReleaseFrameworkIosArm64
+./gradlew :shared-core:linkReleaseFrameworkIosArm64
 ```
-- **Output**: `shared/build/bin/iosArm64/releaseFramework/shared.framework`
+- **Output**: `shared-core/build/bin/iosArm64/releaseFramework/shared_core.framework`
 
 ### 3. Build All iOS Frameworks:
 ```bash
-./gradlew :shared:assemble
+./gradlew :shared-core:assemble
 ```
-- Produces `shared.framework` across all 3 configured Apple targets (`iosArm64`, `iosSimulatorArm64`, `iosX64`).
+- Produces `shared_core.framework` across configured Apple targets (`iosSimulatorArm64`, `iosArm64`, `iosX64`).
 - Can be dragged and dropped directly into Xcode or wrapped in an `XCFramework` for CocoaPods / Swift Package Manager distribution.

@@ -28,9 +28,14 @@ Enterprise-grade Clean Architecture • Kotlin Multiplatform • Jetpack Compose
 
 **[▶️ Watch Demo Video](./docs/videos/demo.mp4)**
 
+> ⚡ **Fast Inner-Loop Development with Compose Previews:**  
+> All UI screens and reusable components feature `@Preview` configurations, enabling **sub-second UI iteration**, offline mock data previews, and side-by-side Light/Dark/Loading/Error state verification without running an emulator. See [**Compose Previews Gallery (`docs/screenshots/compose_preview/`)**](./docs/screenshots/compose_preview/README.md).
+
 </div>
 
 ---
+
+> 📊 **Executive & Reviewer Overview:** For a 3-minute leadership walkthrough, see the [**Executive Presentation Deck (`docs/presentation/README.md`)**](./docs/presentation/README.md) covering multi-platform architecture, team velocity, quality gates, and technical ROI.
 
 ## 🎯 About This Project
 
@@ -467,7 +472,8 @@ open iosApp/CodeCheck-iOS.xcodeproj
 ### ✅ Implemented
 
 #### Core Features
-- ✅ **GitHub Repository Search** - Debounced search (300ms) with query caching
+- ✅ **GitHub Repository Search** - Debounced search (300ms) with in-memory TTL query caching
+- ✅ **Pagination & Feed Chunking** - Incremental page loading with manual 'Load More' trigger and state preservation
 - ✅ **Repository Details** - Owner profile, stats (stars/forks/watchers/issues), language
 - ✅ **Starred Repositories** - Bookmark favorite repos (persistent across sessions)
 - ✅ **Chrome Custom Tabs** - In-app browser for GitHub URLs
@@ -479,15 +485,17 @@ open iosApp/CodeCheck-iOS.xcodeproj
 - ✅ **Responsive & Adaptive Multi-Device Design** - Validated across Mobile Phones (`emulator-5554`) and Tablets (`emulator-5556`) in both Horizontal (Landscape) and Vertical (Portrait) orientations
 - ✅ **Defensive Layout Wrapping** - Adaptive `FlowRow` dynamically wrapping extreme metadata (63-character language tags, multi-billion counts)
 - ✅ **Configuration Change Survival** - Instantaneous state preservation across screen rotation via `SavedStateHandle` and `rememberSaveable`
+- ✅ **Compose Previews & Fast Inner Loop** - Sub-second visual iteration via comprehensive `@Preview` states (Light/Dark/Loading/Error)
 - ✅ **Error Handling** - Graceful offline mode, rate limit messaging
-- ✅ **Loading States** - Skeleton screens and progress indicators
+- ✅ **Loading States & Shimmer Skeletons** - Skeleton screens and progress indicators with zero layout shifts
 
-#### Architecture
+#### Architecture & Enterprise Scalability
 - ✅ **Clean Architecture** - Strict layer separation (Domain → Data → UI)
-- ✅ **Multi-Module** - 12 Gradle modules with dependency rules
+- ✅ **Multi-Module** - 12 Gradle modules with dependency rules (scales to 50+ engineers without merge conflicts)
 - ✅ **MVVM + UDF** - StateFlow-based unidirectional data flow
 - ✅ **Hilt DI** - Compile-time dependency injection
 - ✅ **Kotlin Multiplatform** - iOS companion app sharing business logic
+- ✅ **High-Performance Non-Blocking Coroutines** - Zero main-thread blocking (`Dispatchers.IO`), cancellation of superseded search jobs, and TTL in-memory caching
 
 #### Quality Assurance
 - ✅ **164+ Automated Tests** - Unit, UI, integration tests

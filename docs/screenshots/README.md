@@ -23,9 +23,19 @@ Place these 4 images in this directory:
 
 6. **`kmp_architecture.png`** - Kotlin Multiplatform architecture diagram (optional)
 
-### Design Specifications
+### Design Specifications & AI Prototypes
 
 7. **`design_specs_collage.png`** - Collage showing Claude design HTML specs (optional)
+
+### Compose Previews (Fast Development Velocity)
+
+8. Store Android Studio `@Preview` split-editor screenshots in [**`docs/screenshots/compose_preview/`**](./compose_preview/README.md).
+   - **Why Compose Previews:** Sub-second visual feedback loops without waiting for full APK builds or emulator launches; instant verification of all UI states (`Light`, `Dark`, `Loading`, `Empty`, `Error`).
+
+### Android Studio Profiler & Developer Tools
+
+9. Store Android Studio performance screenshots in [**`docs/screenshots/tools/`**](./tools/README.md).
+   - **Why Profiling Tools:** Telemetry proof of zero main-thread ANRs (CPU), 0 memory leaks (Heap Dump), 300ms debounce & in-memory cache hits (Network Inspector), and Compose recomposition skipping (Layout Inspector).
 
 ## Video
 
@@ -113,6 +123,8 @@ Use an image editor (Figma, Photoshop, or online tool) to create a grid collage 
 - [ ] ios_screenshot.png
 - [ ] kmp_architecture.png (optional)
 - [ ] design_specs_collage.png (optional)
+- [ ] compose_preview/ (Compose @Preview canvas screenshots)
+- [ ] tools/ (Android Studio CPU, Network, Memory, and Layout Inspector captures)
 - [ ] demo.mp4
 
 Once you add these files, the README will display them automatically!

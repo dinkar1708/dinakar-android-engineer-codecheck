@@ -69,4 +69,27 @@ class DtoMappersTest {
         assertNull(domain.language)
         assertNull(domain.description)
     }
+
+    @Test
+    fun repositoryItemDto_toDomain_mapsMetadataFields() {
+        val dto = RepositoryItemDto(
+            name = "fff",
+            fullName = "dmtrKovalenko/fff",
+            defaultBranch = "main",
+            pushedAt = "2026-09-02T08:15:00Z",
+            license = jp.co.yumemi.android.codecheck.core.network.model.LicenseDto(
+                key = "mit",
+                name = "MIT License",
+                spdxId = "MIT"
+            ),
+            size = 4300L
+        )
+
+        val domain = dto.toDomain()
+
+        assertEquals("main", domain.defaultBranch)
+        assertEquals("2026-09-02T08:15:00Z", domain.pushedAt)
+        assertEquals("MIT", domain.license)
+        assertEquals(4300L, domain.size)
+    }
 }

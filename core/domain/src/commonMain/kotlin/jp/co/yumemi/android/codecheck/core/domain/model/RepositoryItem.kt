@@ -15,7 +15,11 @@ data class RepositoryItem(
     val openIssuesCount: Long = 0L,
     val description: String? = null,
     val htmlUrl: String? = null,
-    val updatedAt: String? = null
+    val updatedAt: String? = null,
+    val defaultBranch: String? = null,
+    val pushedAt: String? = null,
+    val license: String? = null,
+    val size: Long = 0L
 ) {
     /**
      * Convenience property exposing the owner avatar URL for presentation layers.

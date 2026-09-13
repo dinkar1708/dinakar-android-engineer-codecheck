@@ -1,15 +1,21 @@
-# Feature Specification: Repository Detail Screen
+# Feature Specification: Repository Detail Screen (Screen 04)
 
 ## 1. Overview & User Journey
-The **Repository Detail Screen** provides in-depth inspection of a selected GitHub repository. It displays the owner branding, repository name, language, core engagement metrics (Stars, Watchers, Forks, Open Issues), and enables the user to seamlessly transition to the live repository on GitHub via Chrome Custom Tabs.
+The **Repository Detail Screen (Screen 04)** provides in-depth inspection of a selected GitHub repository. Adhering to the unified design specification (`04 Detail Screen.dc.html`), it features a brand Dark Navy hero banner (`#2D3545`), a 2x2 headline metrics grid, an extended metadata table of 4 cards, and integrated actions including branded Chrome Custom Tabs and a companion repository zip download button.
 
 ```mermaid
 graph TD
     A[Search Results Item] -->|Tap Card| B(Detail Screen)
-    B --> C[Owner Avatar & Identity Header]
-    B --> D[Engagement Metrics Grid]
-    B --> E[Language Specification]
-    B -->|Tap 'Open in Browser'| F[Chrome Custom Tabs / External Browser]
+    B --> C[Brand Navy Hero Banner #2D3545]
+    C --> C1[Avatar / Monogram Initials + Owner Handle + Repo Title]
+    C --> C2[Description & Language Chip]
+    B --> D[2x2 Headline Metrics Grid]
+    D --> D1[Stars, Forks, Watchers, Open Issues Amber]
+    B --> E[4 Extended Metadata Rows]
+    E --> E1[Default branch Monospace, Last push, License, Size]
+    B --> F[Interactive Action Buttons Row]
+    F -->|Tap 'View on GitHub'| G[Chrome Custom Tabs #2D3545 Toolbar]
+    F -->|Tap Download Button| H[Direct Zip Archive Download]
     B -->|Tap TopBar Back Arrow| A
 ```
 
@@ -17,57 +23,62 @@ graph TD
 
 ## 2. Screen Specifications & Metrics
 
-### 1. Identity Header:
-- **Owner Avatar**: Circular image (96dp diameter) loaded via Coil with smooth crossfade and error placeholder.
-- **Repository Full Name**: Styled with `MaterialTheme.typography.headlineSmall`, bold font weight.
-- **Owner Username**: Subtitle styled with `MaterialTheme.typography.bodyMedium`.
+### 1. Brand Navy Hero Banner (`#2D3545`):
+- **Pinned TopAppBar**: Pinned at the top with container color `#2D3545` (`AppNavy`) and title "Repository".
+- **Natural Scroll Collapse**: The hero banner is integrated into the vertical scroll hierarchy (`Modifier.verticalScroll(rememberScrollState())`). As the user scrolls up, the hero section smoothly scrolls under the pinned navy TopAppBar, providing a clean collapsed navigation experience.
+- **Owner Avatar**: 56dp circular avatar loaded via Coil with smooth crossfade and automatic monogram fallback initials (`getMonogramInitials`).
+- **Owner Handle**: 13sp `Slate400` (`#94A3B8`).
+- **Repository Title**: 24sp bold `AppWhite` (`#FFFFFF`).
+- **Description**: 13sp `Slate300` (`#CBD5E1`), 20sp line height. Omitted if null or blank.
+- **Language Chip**: Pill surface container in `Slate600` (`#475569`) with 12sp `Slate300` text.
 
-### 2. Metrics Cards Grid:
-Individual metric cards display repository health statistics:
-- **Stars Count**: Labeled `Stars` (or `言語` / `スター数` in Japanese), accompanied by StarYellow icon.
-- **Watchers Count**: Labeled `Watchers` (`閲覧者数`), displaying watcher count.
-- **Forks Count**: Labeled `Forks` (`フォーク数`), accompanied by ForkBlue icon.
-- **Open Issues Count**: Labeled `Open Issues` (`未解決の課題数`), displaying issue count.
-- **Language**: Labeled `Language` (`言語`), displaying repository language or fallback string "Unknown".
+### 2. Headline Metrics (2x2 StatCard Grid):
+- **Stars**: Label `STARS`, value in `Slate900` (`#0F172A`).
+- **Forks**: Label `FORKS`, value in `Slate900` (`#0F172A`).
+- **Watchers**: Label `WATCHERS`, value in `Slate900` (`#0F172A`).
+- **Open Issues**: Label `OPEN ISSUES`, value in `AppAmber` (`#B45309`) — distinctive warning color drawing attention to open items.
 
-### 3. External Browser Integration (Chrome Custom Tabs):
-- Primary action button: **"Open in Browser"** with `OpenInBrowser` icon.
-- Implementation: Uses Android Jetpack `CustomTabsIntent` for an in-app browser experience, with fallback to standard `Intent.ACTION_VIEW` if no custom tabs provider is available:
-```kotlin
-val url = item.htmlUrl
-if (!url.isNullOrBlank()) {
-    val customTabs = CustomTabsIntent.Builder().build()
-    try {
-        customTabs.launchUrl(context, Uri.parse(url))
-    } catch (e: Exception) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        context.startActivity(intent)
-    }
-}
-```
+### 3. Extended Metadata Rows (4 Cards):
+Adheres strictly to the `MetaRow.dc.html` specification (8dp rounded card container with 1dp `Slate200` border, 13sp `Slate500` label, and 13sp `Slate800` SemiBold value):
+- **Default branch**: Rendered with monospace font (`FontFamily.Monospace`). Fallback: `N/A`.
+- **Last push**: Formatted to `YYYY-MM-DD` via `DetailFormatters.formatPushDate`. Fallback: `—`.
+- **License**: SPDX identifier (e.g., `MIT`, `Apache-2.0`) or formal name. Fallback: `None`.
+- **Size**: Formatted disk size in KB, MB, or GB via `DetailFormatters.formatSize` (e.g., `4.2 MB`). Fallback: `0 KB`.
+
+### 4. Interactive Action Buttons:
+- **"View on GitHub" Button**: Full-height (48dp) brand blue action button (`AppBlue` `#3B50DF`), launching Chrome Custom Tabs.
+- **Companion Download Button**: 48dp x 48dp square button with 1dp `Slate300` border and `Icons.Default.Download` icon, directly targeting:
+  ```kotlin
+  "${repository.htmlUrl}/archive/refs/heads/${repository.defaultBranch ?: "main"}.zip"
+  ```
+- **Chrome Custom Tabs**: Configured with `#2D3545` brand navy toolbar color matching the header, with automatic fallback to system browser (`Intent.ACTION_VIEW`):
+  ```kotlin
+  val customTabsIntent = CustomTabsIntent.Builder()
+      .setShowTitle(true)
+      .setDefaultColorSchemeParams(
+          CustomTabColorSchemeParams.Builder()
+              .setToolbarColor(AppNavy.toArgb())
+              .build()
+      )
+      .build()
+  ```
 
 ---
 
 ## 3. UI Component Architecture & Packaging
 
-Following the Clean Architecture component rules:
-
 ```text
-ui/features/detail/
-├── DetailScreen.kt         # Screen container with Scaffold & TopAppBar
-└── components/             # Feature-specific small views (used ONLY by Detail)
-    ├── OwnerHeader.kt      # Avatar, owner name, and full repository name
-    ├── MetricCard.kt       # Reusable card tile displaying numeric metric + label
-    └── BrowserButton.kt    # Button initiating Chrome Custom Tabs intent
+feature/detail/src/main/kotlin/jp/co/yumemi/android/codecheck/feature/detail/
+├── DetailScreen.kt              # Scaffold, TopAppBar, DetailContent, StatCard, CustomTab launcher
+├── DetailViewModel.kt           # DetailUiState holder and navigation argument processor
+├── DetailFormatters.kt          # Pure formatters: formatSize, formatPushDate
+└── component/
+    └── MetaRow.kt               # Reusable MetaRow component (8dp rounded card, label + value)
 ```
-
-### Component Placement Rule:
-- `MetricCard` and `OwnerHeader` are packaged inside `ui/features/detail/components/` because their layouts and constraints are specialized for detail viewing.
-- If a metric card is later reused in user profile screens, it can be promoted to `ui/components/MetricCard.kt`.
 
 ---
 
-## 4. Accessibility & Responsiveness
-- **Screen Reader Support**: Every metric card announces both the title and numeric value as a semantic unit.
-- **Scrollable Viewport**: Wrapped in `Modifier.verticalScroll(rememberScrollState())` to ensure usability on compact devices and in landscape orientation.
-- **Dark Mode Support**: Card background colors utilize `MaterialTheme.colorScheme.surfaceVariant` for optimal contrast against dark surfaces.
+## 4. Accessibility & Localization
+- **Multi-locale Support**: Full English (`values/strings.xml`) and Japanese (`values-ja/strings.xml`) localized strings for all labels and fallback values.
+- **Screen Reader Semantics**: Clear content descriptions for the back navigation button, owner avatar monogram, and download companion action.
+- **Responsive Layout**: Designed for seamless scrolling on small screen sizes and split-screen multitasking.

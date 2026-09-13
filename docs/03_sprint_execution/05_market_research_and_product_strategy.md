@@ -81,7 +81,7 @@ We benchmarked four architectural patterns commonly found in modern Android deve
 | **Offline Resilience** | None | Ad-hoc mocks | None | **Product Flavors (`mock` / `dev` / `prod`)** |
 | **Cross-Platform** | Android only | Android only | Android only | **KMP Shared Core + Native SwiftUI iOS App** |
 | **Static Code Analysis** | Basic Lint | Android Lint | Android Lint | **Detekt 1.23.6 (0 Violations) + Android Lint** |
-| **Automated Testing** | Sparse unit tests | ViewModel tests | Unit tests | **164+ Tests (Turbine, Robolectric, E2E, Swift)** |
+| **Automated Testing** | Sparse unit tests | ViewModel tests | Unit tests | **170 Tests (Turbine, Robolectric, E2E, Swift)** |
 | **Dynamic Localization** | OS locale only | OS locale only | OS locale only | **In-App Dynamic Japanese/English Switching** |
 
 ---
@@ -151,7 +151,7 @@ Our application implements a scalable multi-module Clean Architecture topology:
 |:---|:---:|:---|
 | **PR Review Time** | < 24 hours | Prevents developer blocking and stale branch conflicts |
 | **PR Sizing** | < 300 lines | Accelerates review cycles from 5+ iterations to 1–2 |
-| **Code Coverage** | > 80% line coverage | Ensures refactoring safety and regression prevention (currently 83.9%) |
+| **Code Coverage** | > 80% line coverage | Ensures refactoring safety and regression prevention (currently 81.2%) |
 | **CI Build Success Rate** | > 95% | Eliminates flaky tests and establishes high deployment confidence |
 | **Search Response SLA** | < 500ms p95 | Achieved via in-memory query caching and debounced input flow |
 

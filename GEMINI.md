@@ -11,7 +11,7 @@ This project leverages multiple AI tools for accelerated development. All tools 
 | **Claude AI** | Claude 3.5 Sonnet | UI/UX design spec export (HTML) | 🟡 Moderate |
 | **GitHub Copilot** | Latest | Code completion, boilerplate | 🟡 Moderate |
 
-> **Quality Assurance:** All AI-generated code validated via 164+ automated tests, Detekt static analysis, and CI/CD quality gates.
+> **Quality Assurance:** All AI-generated code validated via 170 automated tests, Detekt static analysis, and CI/CD quality gates.
 
 ---
 

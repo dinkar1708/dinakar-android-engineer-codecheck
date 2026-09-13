@@ -37,10 +37,10 @@ class DependencyInjectionTest {
     @Test
     fun storageModule_providesStorageRepositories() {
         val searchHistoryRepo = StorageModule.provideSearchHistoryRepository()
-        val bookmarkRepo = StorageModule.provideBookmarkRepository()
+        val starredRepo = StorageModule.provideStarredRepository()
 
         assertNotNull(searchHistoryRepo)
-        assertNotNull(bookmarkRepo)
+        assertNotNull(starredRepo)
     }
 }
 

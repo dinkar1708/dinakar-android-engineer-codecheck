@@ -66,7 +66,7 @@ dependencies {
     implementation(project(":feature:search"))
     implementation(project(":feature:detail"))
     implementation(project(":feature:settings"))
-    implementation(project(":feature:bookmarks"))
+    implementation(project(":feature:starred"))
 
 
     // Compose

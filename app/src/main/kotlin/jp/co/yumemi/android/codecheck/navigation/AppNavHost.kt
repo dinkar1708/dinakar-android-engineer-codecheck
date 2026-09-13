@@ -10,11 +10,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
-import jp.co.yumemi.android.codecheck.feature.bookmarks.BookmarksViewModel
 import jp.co.yumemi.android.codecheck.feature.detail.DetailScreen
 import jp.co.yumemi.android.codecheck.feature.search.SearchScreen
 import jp.co.yumemi.android.codecheck.feature.search.SearchViewModel
 import jp.co.yumemi.android.codecheck.feature.settings.SettingsViewModel
+import jp.co.yumemi.android.codecheck.feature.starred.StarredViewModel
 import jp.co.yumemi.android.codecheck.feature.splash.SplashScreen
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -56,11 +56,11 @@ fun AppNavHost(
 
         composable(Screen.Main.route) {
             val searchViewModel = hiltViewModel<SearchViewModel>()
-            val bookmarksViewModel = hiltViewModel<BookmarksViewModel>()
+            val starredViewModel = hiltViewModel<StarredViewModel>()
             val settingsViewModel = hiltViewModel<SettingsViewModel>()
             MainScreen(
                 searchViewModel = searchViewModel,
-                bookmarksViewModel = bookmarksViewModel,
+                starredViewModel = starredViewModel,
                 settingsViewModel = settingsViewModel,
                 onRepositoryClick = { item: RepositoryItem ->
                     val (owner, repo) = extractOwnerAndRepo(item)

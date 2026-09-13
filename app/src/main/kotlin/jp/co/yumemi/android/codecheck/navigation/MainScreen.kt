@@ -13,23 +13,23 @@ import androidx.compose.ui.Modifier
 import jp.co.yumemi.android.codecheck.core.designsystem.component.AppBottomBar
 import jp.co.yumemi.android.codecheck.core.designsystem.component.MainTab
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
-import jp.co.yumemi.android.codecheck.feature.bookmarks.BookmarksScreen
-import jp.co.yumemi.android.codecheck.feature.bookmarks.BookmarksViewModel
 import jp.co.yumemi.android.codecheck.feature.search.SearchScreen
 import jp.co.yumemi.android.codecheck.feature.search.SearchViewModel
 import jp.co.yumemi.android.codecheck.feature.settings.SettingsScreen
 import jp.co.yumemi.android.codecheck.feature.settings.SettingsViewModel
+import jp.co.yumemi.android.codecheck.feature.starred.StarredScreen
+import jp.co.yumemi.android.codecheck.feature.starred.StarredViewModel
 
 /**
  * Main application screen hosting the 3 bottom navigation tabs:
  * 1. Search (Home)
- * 2. Bookmarks (Offline saved repositories)
+ * 2. Starred (Offline saved repositories)
  * 3. Settings (Theme, Language, App Info)
  */
 @Composable
 fun MainScreen(
     searchViewModel: SearchViewModel,
-    bookmarksViewModel: BookmarksViewModel,
+    starredViewModel: StarredViewModel,
     settingsViewModel: SettingsViewModel,
     onRepositoryClick: (RepositoryItem) -> Unit,
     modifier: Modifier = Modifier,
@@ -58,9 +58,9 @@ fun MainScreen(
                         onRepositoryClick = onRepositoryClick
                     )
                 }
-                MainTab.BOOKMARKS -> {
-                    BookmarksScreen(
-                        viewModel = bookmarksViewModel,
+                MainTab.STARRED -> {
+                    StarredScreen(
+                        viewModel = starredViewModel,
                         onRepositoryClick = onRepositoryClick
                     )
                 }

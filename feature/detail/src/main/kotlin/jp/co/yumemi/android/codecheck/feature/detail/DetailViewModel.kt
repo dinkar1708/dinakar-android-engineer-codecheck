@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.co.yumemi.android.codecheck.core.domain.model.RepositoryItem
-import jp.co.yumemi.android.codecheck.core.domain.repository.BookmarkRepository
+import jp.co.yumemi.android.codecheck.core.domain.repository.StarredRepository
 import jp.co.yumemi.android.codecheck.core.domain.usecase.GetRepositoryDetailsUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -26,20 +26,20 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val getRepositoryDetailsUseCase: GetRepositoryDetailsUseCase,
-    private val bookmarkRepository: BookmarkRepository,
+    private val starredRepository: StarredRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<DetailUiState>(DetailUiState.Loading)
     val uiState: StateFlow<DetailUiState> = _uiState.asStateFlow()
 
-    val isBookmarked: StateFlow<Boolean> = _uiState.flatMapLatest { state ->
+    val isStarred: StateFlow<Boolean> = _uiState.flatMapLatest { state ->
         if (state is DetailUiState.Success) {
             val item = state.repository
             if (item.id != 0L) {
-                bookmarkRepository.isBookmarked(item.id)
+                starredRepository.isStarred(item.id)
             } else {
-                bookmarkRepository.isBookmarked(item.name)
+                starredRepository.isStarred(item.name)
             }
         } else {
             flowOf(false)
@@ -100,12 +100,12 @@ class DetailViewModel @Inject constructor(
     }
 
     /**
-     * Toggles the bookmark status for the currently loaded repository.
+     * Toggles the starred status for the currently loaded repository.
      */
-    fun toggleBookmark() {
+    fun toggleStar() {
         val currentState = _uiState.value as? DetailUiState.Success ?: return
         viewModelScope.launch {
-            bookmarkRepository.toggleBookmark(currentState.repository)
+            starredRepository.toggleStar(currentState.repository)
         }
     }
 }

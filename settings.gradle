@@ -35,6 +35,6 @@ include ':feature:splash'
 include ':feature:search'
 include ':feature:detail'
 include ':feature:settings'
-include ':feature:bookmarks'
+include ':feature:starred'
 
 

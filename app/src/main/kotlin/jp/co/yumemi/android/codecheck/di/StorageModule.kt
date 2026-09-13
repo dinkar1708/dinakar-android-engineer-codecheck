@@ -5,8 +5,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import jp.co.yumemi.android.codecheck.core.data.di.DataModule
-import jp.co.yumemi.android.codecheck.core.domain.repository.BookmarkRepository
 import jp.co.yumemi.android.codecheck.core.domain.repository.SearchHistoryRepository
+import jp.co.yumemi.android.codecheck.core.domain.repository.StarredRepository
 import javax.inject.Singleton
 
 /**
@@ -24,7 +24,7 @@ object StorageModule {
 
     @Provides
     @Singleton
-    fun provideBookmarkRepository(): BookmarkRepository {
-        return DataModule.provideBookmarkRepository()
+    fun provideStarredRepository(): StarredRepository {
+        return DataModule.provideStarredRepository()
     }
 }

@@ -41,9 +41,9 @@ object DataModule {
     }
 
     /**
-     * Provide a singleton or instance of [jp.co.yumemi.android.codecheck.core.domain.repository.BookmarkRepository].
+     * Provide a singleton or instance of [jp.co.yumemi.android.codecheck.core.domain.repository.StarredRepository].
      */
-    fun provideBookmarkRepository(): jp.co.yumemi.android.codecheck.core.domain.repository.BookmarkRepository {
-        return jp.co.yumemi.android.codecheck.core.data.repository.DefaultBookmarkRepository()
+    fun provideStarredRepository(): jp.co.yumemi.android.codecheck.core.domain.repository.StarredRepository {
+        return jp.co.yumemi.android.codecheck.core.data.repository.DefaultStarredRepository()
     }
 }

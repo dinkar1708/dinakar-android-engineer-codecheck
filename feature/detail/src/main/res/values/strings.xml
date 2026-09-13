@@ -10,6 +10,6 @@
     <string name="detail_stat_watchers">Watchers</string>
     <string name="detail_stat_open_issues">Open issues</string>
     <string name="detail_view_on_github">View on GitHub</string>
-    <string name="detail_add_bookmark">Add to bookmarks</string>
-    <string name="detail_remove_bookmark">Remove from bookmarks</string>
+    <string name="detail_star">Star repository</string>
+    <string name="detail_unstar">Unstar repository</string>
 </resources>

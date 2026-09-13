@@ -19,8 +19,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -83,12 +83,12 @@ fun DetailScreen(
     viewModel: DetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val isBookmarked by viewModel.isBookmarked.collectAsState()
+    val isStarred by viewModel.isStarred.collectAsState()
     DetailScreen(
         uiState = uiState,
-        isBookmarked = isBookmarked,
+        isStarred = isStarred,
         onBackClick = onBackClick,
-        onToggleBookmark = viewModel::toggleBookmark,
+        onToggleStar = viewModel::toggleStar,
         onRetry = viewModel::retry,
         modifier = modifier,
         onOpenBrowser = onOpenBrowser
@@ -99,9 +99,9 @@ fun DetailScreen(
 @Composable
 internal fun DetailScreen(
     uiState: DetailUiState,
-    isBookmarked: Boolean = false,
+    isStarred: Boolean = false,
     onBackClick: () -> Unit,
-    onToggleBookmark: () -> Unit = {},
+    onToggleStar: () -> Unit = {},
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
     onOpenBrowser: ((String) -> Unit)? = null
@@ -131,15 +131,15 @@ internal fun DetailScreen(
                 },
                 actions = {
                     if (uiState is DetailUiState.Success) {
-                        IconButton(onClick = onToggleBookmark) {
+                        IconButton(onClick = onToggleStar) {
                             Icon(
-                                imageVector = if (isBookmarked) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
-                                contentDescription = if (isBookmarked) {
-                                    stringResource(R.string.detail_remove_bookmark)
+                                imageVector = if (isStarred) Icons.Default.Star else Icons.Default.StarBorder,
+                                contentDescription = if (isStarred) {
+                                    stringResource(R.string.detail_unstar)
                                 } else {
-                                    stringResource(R.string.detail_add_bookmark)
+                                    stringResource(R.string.detail_star)
                                 },
-                                tint = if (isBookmarked) AppAmber else AppWhite
+                                tint = if (isStarred) AppAmber else AppWhite
                             )
                         }
                     }

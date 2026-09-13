@@ -15,9 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -49,7 +49,7 @@ import jp.co.yumemi.android.codecheck.core.designsystem.theme.Slate500
  */
 enum class MainTab {
     SEARCH,
-    BOOKMARKS,
+    STARRED,
     SETTINGS
 }
 
@@ -87,10 +87,10 @@ fun AppBottomBar(
                     modifier = Modifier.weight(1f)
                 )
                 AppBottomBarItem(
-                    label = stringResource(R.string.tab_bookmarks),
-                    icon = Icons.Default.Bookmark,
-                    isSelected = currentTab == MainTab.BOOKMARKS,
-                    onClick = { onTabSelected(MainTab.BOOKMARKS) },
+                    label = stringResource(R.string.tab_starred),
+                    icon = Icons.Default.Star,
+                    isSelected = currentTab == MainTab.STARRED,
+                    onClick = { onTabSelected(MainTab.STARRED) },
                     modifier = Modifier.weight(1f)
                 )
                 AppBottomBarItem(
@@ -163,12 +163,12 @@ private fun AppBottomBarSearchPreview() {
     }
 }
 
-@Preview(name = "AppBottomBar - Bookmarks Selected", showBackground = true)
+@Preview(name = "AppBottomBar - Starred Selected", showBackground = true)
 @Composable
-private fun AppBottomBarBookmarksPreview() {
+private fun AppBottomBarStarredPreview() {
     CodeCheckTheme {
         AppBottomBar(
-            currentTab = MainTab.BOOKMARKS,
+            currentTab = MainTab.STARRED,
             onTabSelected = {}
         )
     }
